@@ -5,14 +5,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import org.b3studios.bible.adapter.ChapterButtonAdapter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,7 +38,7 @@ public class ChapterChooser extends Activity {
         setContentView(R.layout.chapter_chooser);
         GridView gw = (GridView) findViewById(R.id.grid_view);
 
-        gw.setAdapter(new ButtonAdapterChapter(this));
+        gw.setAdapter(new ChapterButtonAdapter(this));
 
         gw.setOnItemClickListener(new OnItemClickListener() {
 

@@ -12,6 +12,8 @@ import android.widget.GridView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
+import org.b3studios.bible.adapter.BookButtonAdapter;
+
 import java.util.List;
 
 public class BookChooser extends Activity {
@@ -31,7 +33,7 @@ public class BookChooser extends Activity {
         setContentView(R.layout.book_chooser);
         GridView gw = (GridView) findViewById(R.id.grid_view);
 
-        gw.setAdapter(new ButtonAdapterBook(this));
+        gw.setAdapter(new BookButtonAdapter(this));
 
         gw.setOnItemClickListener(new OnItemClickListener() {
 

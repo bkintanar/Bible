@@ -1,4 +1,4 @@
-package org.b3studios.bible;
+package org.b3studios.bible.adapter;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -10,18 +10,20 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 
+import org.b3studios.bible.Bible;
+
 import java.util.List;
 
 /**
  * Created by bkintanar on 12/28/13.
  */
-public class ButtonAdapterBook extends BaseAdapter {
+public class BookButtonAdapter extends BaseAdapter {
 
     private Context mContext;
 
     private List<String> bookNames;
 
-    public ButtonAdapterBook(Context c) {
+    public BookButtonAdapter(Context c) {
 
         bookNames = Bible.getBookNames();
 

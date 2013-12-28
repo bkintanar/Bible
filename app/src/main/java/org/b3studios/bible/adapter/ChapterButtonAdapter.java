@@ -1,4 +1,4 @@
-package org.b3studios.bible;
+package org.b3studios.bible.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 
+import org.b3studios.bible.Bible;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +18,7 @@ import java.util.List;
 /**
  * Created by bkintanar on 12/28/13.
  */
-public class ButtonAdapterChapter extends BaseAdapter {
+public class ChapterButtonAdapter extends BaseAdapter {
 
     private Context mContext;
 
@@ -24,7 +26,7 @@ public class ButtonAdapterChapter extends BaseAdapter {
 
     private int chapterCount;
 
-    public ButtonAdapterChapter(Context c) {
+    public ChapterButtonAdapter(Context c) {
 
         mContext = c;
 
