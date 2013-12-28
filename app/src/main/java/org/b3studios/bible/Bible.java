@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,9 +18,19 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class Bible extends Activity {
+import org.b3studios.bible.adapter.TitleNavigationAdapter;
 
-    // TODO Get these values from config
+public class Bible extends Activity implements ActionBar.OnNavigationListener {
+
+    // action bar
+    private ActionBar actionBar;
+
+    // Title navigation Spinner data
+    private ArrayList<SpinnerNavItem> navSpinner;
+
+    // Navigation adapter
+    private TitleNavigationAdapter adapter;
+
     private static String KEY_BIBLE_VERSION = "kjv";
     private static String KEY_BIBLE_BOOK = "01O";
     private static int KEY_BIBLE_CHAPTER = 1;
@@ -39,7 +50,25 @@ public class Bible extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        updateTitle();
+        actionBar = getActionBar();
+
+        // Hide the action bar title
+        actionBar.setDisplayShowTitleEnabled(false);
+
+        // Enabling Spinner dropdown navigation
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
+        // Spinner title navigation data
+        navSpinner = new ArrayList<SpinnerNavItem>();
+        navSpinner.add(new SpinnerNavItem("King James Version", R.drawable.ic_launcher));
+        navSpinner.add(new SpinnerNavItem("Ang Dating Biblia (Tagalog)", R.drawable.ic_launcher));
+        navSpinner.add(new SpinnerNavItem("Ang Biblia (Cebuano)", R.drawable.ic_launcher));
+
+        // title drop down adapter
+        adapter = new TitleNavigationAdapter(getApplicationContext(), navSpinner);
+
+        // assigning the spinner navigation
+        actionBar.setListNavigationCallbacks(adapter, this);
 
         setTv((TextView) findViewById(R.id.main_text));
                         
@@ -77,6 +106,24 @@ public class Bible extends Activity {
         goToChapter(0);
     }
 
+    /**
+     * Actionbar navigation item select listener
+     * */
+    @Override
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+        // Action to be taken after selecting a spinner item
+
+        String[] sVersion = {"kjv", "adb", "ceb"};
+
+        setKEY_BIBLE_VERSION(sVersion[itemPosition]);
+
+        goToChapter(0);
+
+        return false;
+    }
+
+
+
     @Override
     public void onResume() {
 
@@ -106,61 +153,10 @@ public class Bible extends Activity {
 
                 return true;
 
-            case R.id.action_kjv:
-
-                setKEY_BIBLE_VERSION("kjv");
-
-                updateTitle();
-
-                goToChapter(0);
-
-                return true;
-
-            case R.id.action_adb:
-
-                setKEY_BIBLE_VERSION("adb");
-
-                updateTitle();
-
-                goToChapter(0);
-
-                return true;
-
-            case R.id.action_ceb:
-
-                setKEY_BIBLE_VERSION("ceb");
-
-                updateTitle();
-
-                goToChapter(0);
-
-                return true;
-
             default:
 
                 return super.onOptionsItemSelected(item);
         }
-
-    }
-
-    public void updateTitle() {
-
-        String version = getKEY_BIBLE_VERSION();
-
-        if (version == "kjv") {
-
-            this.setTitle("King James Version");
-
-        } else if (version == "adb") {
-
-            this.setTitle("Ang Dating Biblia (Tagalog)");
-
-        } else if (version == "ceb") {
-
-            this.setTitle("Ang Biblia (Cebuano)");
-
-        }
-
 
     }
 

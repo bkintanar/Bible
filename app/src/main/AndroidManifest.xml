@@ -20,14 +20,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Menu"
-            android:label="@string/title_activity_u_bible" >
-            <intent-filter>
-                <action android:name="android.intent.action.MENU" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".BookChooser"
             android:label="Select a Book" >
             <intent-filter>
