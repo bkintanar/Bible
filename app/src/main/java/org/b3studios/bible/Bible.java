@@ -20,7 +20,7 @@ import android.widget.TextView;
 public class Bible extends Activity implements OnClickListener {
 
     // TODO Get these values from config
-    private static String KEY_BIBLE_VERSION = "ceb";
+    private static String KEY_BIBLE_VERSION = "kjv";
     private static String KEY_BIBLE_BOOK = "01O";
     private static int KEY_BIBLE_CHAPTER = 1;
     public static int CURRENT_MAX_CHAPTERS = 50;
@@ -38,6 +38,8 @@ public class Bible extends Activity implements OnClickListener {
     	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        updateTitle();
 
         setTv((TextView) findViewById(R.id.main_text));
                         
@@ -75,59 +77,7 @@ public class Bible extends Activity implements OnClickListener {
         return true;
     }
     
-    public void setDefaultDataTextView(TextView tv) {
-    	
-        InputStream    is;
-        BufferedReader r;
-        String 		   passage;
-        int 		   verse 	= 0;
-        StringBuilder  chapter  = new StringBuilder();
-                
-    	try {
-
-            is = getAssets().open("data/"+ getKEY_BIBLE_VERSION() +"/"+ getKEY_BIBLE_BOOK() +"/"+ getKEY_BIBLE_CHAPTER());
-			r  = new BufferedReader(new InputStreamReader(is));
-
-            while ((passage = r.readLine()) != null) {
-
-                chapter.append("<strong>").append(++verse).append("</strong> ").append(passage).append("<br />");
-	        }
-	         
-	        tv.setText(Html.fromHtml(chapter.toString()));
-	         	         	         		            
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
-    }
-    
-    public List<String> initBookNames() {
-
-        InputStream    is;
-        BufferedReader r;
-        String 		   bookTitle;
-	    
-	    List<String> items = new ArrayList<String>();
-        
-    	try {
-
-			 is = getAssets().open("data/book_names.txt");
-			 r  = new BufferedReader(new InputStreamReader(is));
-			 
-	         while ((bookTitle = r.readLine()) != null) {
-
-	        	 items.add(bookTitle);
-	         }
-	         	         	         	         		            
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
-    	
-    	return items;
-    }
-
-	@Override
+    @Override
 	public void onClick(View v) {
 
 		if (v.getId() == R.id.previous_button) {
@@ -158,13 +108,117 @@ public class Bible extends Activity implements OnClickListener {
 
                 return true;
 
+            case R.id.action_kjv:
+
+                setKEY_BIBLE_VERSION("kjv");
+
+                updateTitle();
+
+                goToChapter(0);
+
+                return true;
+
+            case R.id.action_adb:
+
+                setKEY_BIBLE_VERSION("adb");
+
+                updateTitle();
+
+                goToChapter(0);
+
+                return true;
+
+            case R.id.action_ceb:
+
+                setKEY_BIBLE_VERSION("ceb");
+
+                updateTitle();
+
+                goToChapter(0);
+
+                return true;
+
             default:
 
                 return super.onOptionsItemSelected(item);
         }
+
     }
-	
-	public void setCurrentMaxChapters(int i) {
+
+    public void updateTitle() {
+
+        String version = getKEY_BIBLE_VERSION();
+
+        if (version == "kjv") {
+
+            this.setTitle("King James Version");
+
+        } else if (version == "adb") {
+
+            this.setTitle("Ang Dating Biblia (Tagalog)");
+
+        } else if (version == "ceb") {
+
+            this.setTitle("Ang Biblia (Cebuano)");
+
+        }
+
+
+    }
+
+    public void setDefaultDataTextView(TextView tv) {
+
+        InputStream    is;
+        BufferedReader r;
+        String 		   passage;
+        int 		   verse 	= 0;
+        StringBuilder  chapter  = new StringBuilder();
+
+        try {
+
+            is = getAssets().open("data/"+ getKEY_BIBLE_VERSION() +"/"+ getKEY_BIBLE_BOOK() +"/"+ getKEY_BIBLE_CHAPTER());
+            r  = new BufferedReader(new InputStreamReader(is));
+
+            while ((passage = r.readLine()) != null) {
+
+                chapter.append("<strong>").append(++verse).append("</strong> ").append(passage).append("<br />");
+            }
+
+            tv.setText(Html.fromHtml(chapter.toString()));
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    public List<String> initBookNames() {
+
+        InputStream    is;
+        BufferedReader r;
+        String 		   bookTitle;
+
+        List<String> items = new ArrayList<String>();
+
+        try {
+
+            is = getAssets().open("data/book_names.txt");
+            r  = new BufferedReader(new InputStreamReader(is));
+
+            while ((bookTitle = r.readLine()) != null) {
+
+                items.add(bookTitle);
+            }
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+
+        return items;
+    }
+
+    public void setCurrentMaxChapters(int i) {
 		
 		int currentIndex;
 				

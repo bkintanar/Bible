@@ -1,4 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_kjv"
+        android:title="@string/menu_kjv"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+    <item android:id="@+id/action_adb"
+        android:title="@string/menu_adb"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+    <item android:id="@+id/action_ceb"
+        android:title="@string/menu_ceb"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
     <item android:id="@+id/action_about"
         android:title="@string/menu_about"
         android:orderInCategory="100"
