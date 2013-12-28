@@ -17,7 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class Bible extends Activity implements OnClickListener {
+public class Bible extends Activity {
 
     // TODO Get these values from config
     private static String KEY_BIBLE_VERSION = "kjv";
@@ -50,12 +50,28 @@ public class Bible extends Activity implements OnClickListener {
         Button nextBtn     = (Button) findViewById(R.id.next_button);
         
         setBookTextView((TextView) findViewById(R.id.current_book));
+
+        // Set listeners
+        getBookTextView().setOnClickListener( new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent chooser = new Intent("org.b3studios.bible.BOOKCHOOSER");
+                startActivity(chooser);
+            }
+        });
         
-        getBookTextView().setOnClickListener(this);
-        
-        // Set button listeners
-        previousBtn.setOnClickListener(this);
-        nextBtn.setOnClickListener(this);
+        previousBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToChapter(PREVIOUS);
+            }
+        });
+        nextBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToChapter(NEXT);
+            }
+        });
         
         // go to the default view
         goToChapter(0);
@@ -76,24 +92,6 @@ public class Bible extends Activity implements OnClickListener {
 
         return true;
     }
-    
-    @Override
-	public void onClick(View v) {
-
-		if (v.getId() == R.id.previous_button) {
-
-			goToChapter(PREVIOUS);
-		}
-		if (v.getId() == R.id.next_button) {
-
-            goToChapter(NEXT);
-		}
-		if (v.getId() == R.id.current_book) {
-
-            Intent chooser = new Intent("org.b3studios.bible.BOOKCHOOSER");
-            startActivity(chooser);
-		}
-	}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
