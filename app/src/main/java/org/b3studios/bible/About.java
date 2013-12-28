@@ -1,10 +1,13 @@
 package org.b3studios.bible;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -23,6 +26,11 @@ public class About extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.about);
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        this.setTitle("About uBible");
 
         Context context = getApplicationContext(); // or activity.getApplicationContext()
         PackageManager packageManager = context.getPackageManager();
@@ -60,5 +68,16 @@ public class About extends Activity {
                 tvVersionName.setText("Version " + myVersionName + " (" + gitCommit.substring(32) + ")");
             }
         }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        Intent myIntent = new Intent(getApplicationContext(), Bible.class);
+        startActivityForResult(myIntent, 0);
+
+        finish();
+
+        return true;
+
     }
 }

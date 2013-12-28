@@ -52,8 +52,6 @@ public class BookChooser extends Activity {
         });
     }
 
-
-
     public boolean onOptionsItemSelected(MenuItem item){
 
         Intent myIntent = new Intent(getApplicationContext(), Bible.class);
