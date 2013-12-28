@@ -28,7 +28,8 @@
         android:id="@+id/tvVersionNumber"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.03"
-        android:gravity="bottom" />
+        android:gravity="bottom"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,7 +38,9 @@
         android:text="© 2014 b3 Studios"
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.03" />
+        android:layout_weight="0.03"
+        android:textStyle="bold"
+        android:textIsSelectable="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,7 +48,8 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Send feedback"
         android:id="@+id/textView2"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:linksClickable="false" />
 
     <TextView
         android:layout_width="wrap_content"
