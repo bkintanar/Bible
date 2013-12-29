@@ -19,27 +19,24 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.b3studios.bible.adapter.TitleNavigationAdapter;
+import org.b3studios.bible.model.Setting;
+import org.b3studios.bible.model.SpinnerNavItem;
 
 public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
     // action bar
-    private ActionBar actionBar;
+    protected ActionBar actionBar;
 
     // Title navigation Spinner data
-    private ArrayList<SpinnerNavItem> navSpinner;
+    protected ArrayList<SpinnerNavItem> navSpinner;
 
     // Navigation adapter
-    private TitleNavigationAdapter adapter;
+    protected TitleNavigationAdapter adapter;
 
-    private static String KEY_BIBLE_VERSION = "kjv";
-    private static String KEY_BIBLE_BOOK = "01O";
-    private static int KEY_BIBLE_CHAPTER = 1;
-    public static int CURRENT_MAX_CHAPTERS = 50;
+    public static Setting setting = new Setting();
     
     public static TextView tv;
     public static TextView bookTextView;
-    private static List<String> booksList;
-    private static List<String> bookNames;
 
     public int PREVIOUS = -1;
     public int NEXT     = 1;
@@ -71,9 +68,9 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
         actionBar.setListNavigationCallbacks(adapter, this);
 
         setTv((TextView) findViewById(R.id.main_text));
-                        
-        setBooksList(listAssetFiles("data/" + getKEY_BIBLE_VERSION()));
-        setBookNames(initBookNames());
+
+        setting.setBooksList(listAssetFiles("data/" + setting.getCurrentTranslation()));
+        setting.setBookNames(initBookNames());
         
         Button previousBtn = (Button) findViewById(R.id.previous_button);
         Button nextBtn     = (Button) findViewById(R.id.next_button);
@@ -111,11 +108,10 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
      * */
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-        // Action to be taken after selecting a spinner item
 
         String[] sVersion = {"kjv", "adb", "ceb"};
 
-        setKEY_BIBLE_VERSION(sVersion[itemPosition]);
+        setting.setCurrentTranslation(sVersion[itemPosition]);
 
         goToChapter(0);
 
@@ -170,7 +166,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
         try {
 
-            is = getAssets().open("data/"+ getKEY_BIBLE_VERSION() +"/"+ getKEY_BIBLE_BOOK() +"/"+ getKEY_BIBLE_CHAPTER());
+            is = getAssets().open("data/"+ setting.getCurrentTranslation() +"/"+ setting.getCurrentBook() +"/"+ setting.getCurrentChapter());
             r  = new BufferedReader(new InputStreamReader(is));
 
             while ((passage = r.readLine()) != null) {
@@ -216,56 +212,56 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 		
 		int currentIndex;
 				
-		if (getKEY_BIBLE_CHAPTER() + 1 > getCURRENT_MAX_CHAPTERS() && i == +1) {
+		if (setting.getCurrentChapter() + 1 > setting.getCurrentMaxChapters() && i == +1) {
 
-			setKEY_BIBLE_CHAPTER(1);
+            setting.setCurrentChapter(1);
 			
-			currentIndex = getBooksList().indexOf(getKEY_BIBLE_BOOK());
+			currentIndex = setting.getBooksList().indexOf(setting.getCurrentBook());
 
 			// Reached last book, wrap to the first book
-			if (currentIndex + 1 == getBooksList().size()) {
+			if (currentIndex + 1 == setting.getBooksList().size()) {
 				currentIndex = -1;
 			}
 			
 			// Get next book
-			setKEY_BIBLE_BOOK(getBooksList().get(currentIndex + 1));
+            setting.setCurrentBook(setting.getBooksList().get(currentIndex + 1));
 			
 			// Get the number of chapters
 			setMaxChapters(i);
 			
-			Log.i("DEBUG", "Book changed to: " + getKEY_BIBLE_BOOK());
+			Log.i("DEBUG", "Book changed to: " + setting.getCurrentBook());
 		}
-		else if (getKEY_BIBLE_CHAPTER() -1 == 0 && i == -1) {
+		else if (setting.getCurrentChapter() -1 == 0 && i == -1) {
 
-			currentIndex = getBooksList().indexOf(getKEY_BIBLE_BOOK());
+			currentIndex = setting.getBooksList().indexOf(setting.getCurrentBook());
 
 			// Reached first book, wrap to the last book
 			if (currentIndex - 1 < 0)
 			{
-				currentIndex = getBooksList().size();
+				currentIndex = setting.getBooksList().size();
 			}
 			
 			// Get previous book
-			setKEY_BIBLE_BOOK(getBooksList().get(currentIndex - 1));
+            setting.setCurrentBook(setting.getBooksList().get(currentIndex - 1));
 			
 			// Get the number of chapters
 			setMaxChapters(i);
 														
-			Log.i("DEBUG", "Book changed to: " + getKEY_BIBLE_BOOK());
+			Log.i("DEBUG", "Book changed to: " + setting.getCurrentBook());
 		}
 	}
 	
 	private void setMaxChapters(int i) {
 
-	    List<String> chaptersList =  listAssetFiles("data/" + getKEY_BIBLE_VERSION() + "/"+ getKEY_BIBLE_BOOK());
-		
-		setCURRENT_MAX_CHAPTERS(chaptersList.size());
+	    List<String> chaptersList =  listAssetFiles("data/" + setting.getCurrentTranslation() + "/"+ setting.getCurrentBook());
+
+        setting.setCurrentMaxChapters(chaptersList.size());
 		
 		if (i == -1) {
-			setKEY_BIBLE_CHAPTER(chaptersList.size());
+            setting.setCurrentChapter(chaptersList.size());
 		}
 		else {
-			setKEY_BIBLE_CHAPTER(1);
+            setting.setCurrentChapter(1);
 		}
 	}
 
@@ -274,22 +270,22 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 		int index;
 		
 		// Check if current chapter is the first or the last chapter of the current book.		
-		if ((getKEY_BIBLE_CHAPTER() + 1 > getCURRENT_MAX_CHAPTERS() && i == 1) || (getKEY_BIBLE_CHAPTER() - 1 == 0 && i == -1))
+		if ((setting.getCurrentChapter() + 1 > setting.getCurrentMaxChapters() && i == 1) || (setting.getCurrentChapter() - 1 == 0 && i == -1))
         {
 	        setCurrentMaxChapters(i);
         }
 		else
 		{
-			setKEY_BIBLE_CHAPTER(getKEY_BIBLE_CHAPTER() + i);
+            setting.setCurrentChapter(setting.getCurrentChapter() + i);
 		}
 		
-		index = getBooksList().indexOf(getKEY_BIBLE_BOOK());
+		index = setting.getBooksList().indexOf(setting.getCurrentBook());
 		
 		setBookTextView((TextView) findViewById(R.id.current_book));
 		
-		getBookTextView().setText(getBookNames().get(index) + " " + getKEY_BIBLE_CHAPTER());
+		getBookTextView().setText(setting.getBookNames().get(index) + " " + setting.getCurrentChapter());
 		
-		Log.i("DEBUG", "Displaying: " + getBookNames().get(index) + " " + getKEY_BIBLE_CHAPTER());
+		Log.i("DEBUG", "Displaying: " + setting.getBookNames().get(index) + " " + setting.getCurrentChapter());
 		
 		setDefaultDataTextView(getTv());
 	}
@@ -319,14 +315,6 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
     // Getters and Setters
 
-    public int getCURRENT_MAX_CHAPTERS() {
-        return CURRENT_MAX_CHAPTERS;
-    }
-
-    public void setCURRENT_MAX_CHAPTERS(int CURRENT_MAX_CHAPTERS) {
-        this.CURRENT_MAX_CHAPTERS = CURRENT_MAX_CHAPTERS;
-    }
-
     public TextView getTv() {
         return tv;
     }
@@ -342,45 +330,4 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
     public void setBookTextView(TextView bookTextView) {
         this.bookTextView = bookTextView;
     }
-
-    public static List<String> getBooksList() {
-        return booksList;
-    }
-
-    public void setBooksList(List<String> booksList) {
-        this.booksList = booksList;
-    }
-
-    public static List<String> getBookNames() {
-        return bookNames;
-    }
-
-    public void setBookNames(List<String> bookNames) {
-        this.bookNames = bookNames;
-    }
-
-    public static String getKEY_BIBLE_VERSION() {
-        return KEY_BIBLE_VERSION;
-    }
-
-    public static void setKEY_BIBLE_VERSION(String KEY_BIBLE_VERSION) {
-        Bible.KEY_BIBLE_VERSION = KEY_BIBLE_VERSION;
-    }
-
-    public static String getKEY_BIBLE_BOOK() {
-        return KEY_BIBLE_BOOK;
-    }
-
-    public static void setKEY_BIBLE_BOOK(String KEY_BIBLE_BOOK) {
-        Bible.KEY_BIBLE_BOOK = KEY_BIBLE_BOOK;
-    }
-
-    public static int getKEY_BIBLE_CHAPTER() {
-        return KEY_BIBLE_CHAPTER;
-    }
-
-    public static void setKEY_BIBLE_CHAPTER(int KEY_BIBLE_CHAPTER) {
-        Bible.KEY_BIBLE_CHAPTER = KEY_BIBLE_CHAPTER;
-    }
-
 }

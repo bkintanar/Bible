@@ -1,4 +1,4 @@
-package org.b3studios.bible;
+package org.b3studios.bible.model;
 
 /**
  * Created by bkintanar on 12/29/13.

@@ -30,11 +30,11 @@ public class ChapterButtonAdapter extends BaseAdapter {
 
         mContext = c;
 
-        bookName = Bible.getKEY_BIBLE_BOOK();
+        bookName = Bible.setting.getCurrentBook();
 
         chapterCount =  getChapterList(bookName);
 
-        Bible.CURRENT_MAX_CHAPTERS = chapterCount;
+        Bible.setting.setCurrentMaxChapters(chapterCount);
 
         Log.i("DEBUG", "" + chapterCount);
 
@@ -48,7 +48,7 @@ public class ChapterButtonAdapter extends BaseAdapter {
 
         try {
 
-            list = mContext.getAssets().list("data/" + Bible.getKEY_BIBLE_VERSION() + "/"+ bookName);
+            list = mContext.getAssets().list("data/" + Bible.setting.getCurrentTranslation() + "/"+ bookName);
 
             if (list.length > 0) {
 

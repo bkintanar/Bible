@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ChapterChooser extends Activity {
 
-    private List<String> bookNames = Bible.getBookNames();
+    private List<String> bookNames = Bible.setting.getBookNames();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class ChapterChooser extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        String title = bookNames.get(Bible.getBooksList().indexOf(Bible.getKEY_BIBLE_BOOK()));
+        String title = bookNames.get(Bible.setting.getBooksList().indexOf(Bible.setting.getCurrentBook()));
 
         this.setTitle(title);
 
@@ -46,7 +46,7 @@ public class ChapterChooser extends Activity {
 
 //                Toast.makeText(getBaseContext(), bookNames.get(position), Toast.LENGTH_SHORT).show();
 
-                Bible.setKEY_BIBLE_CHAPTER(position + 1);
+                Bible.setting.setCurrentChapter(position + 1);
 
                 InputStream is;
                 BufferedReader r;
@@ -56,7 +56,7 @@ public class ChapterChooser extends Activity {
 
                 try {
 
-                    is = getAssets().open("data/"+ Bible.getKEY_BIBLE_VERSION() +"/"+ Bible.getKEY_BIBLE_BOOK() +"/"+ Bible.getKEY_BIBLE_CHAPTER());
+                    is = getAssets().open("data/"+ Bible.setting.getCurrentTranslation() +"/"+ Bible.setting.getCurrentBook() +"/"+ Bible.setting.getCurrentChapter());
                     r  = new BufferedReader(new InputStreamReader(is));
 
                     while ((passage = r.readLine()) != null) {
@@ -72,9 +72,9 @@ public class ChapterChooser extends Activity {
 
                     Bible.tv.setText(Html.fromHtml(chapter.toString()));
 
-                    int index = Bible.getBooksList().indexOf(Bible.getKEY_BIBLE_BOOK());
+                    int index = Bible.setting.getBooksList().indexOf(Bible.setting.getCurrentBook());
 
-                    Bible.bookTextView.setText(Bible.getBookNames().get(index) + " " + Bible.getKEY_BIBLE_CHAPTER());
+                    Bible.bookTextView.setText(Bible.setting.getBookNames().get(index) + " " + Bible.setting.getCurrentChapter());
 
                     finish();
                 }

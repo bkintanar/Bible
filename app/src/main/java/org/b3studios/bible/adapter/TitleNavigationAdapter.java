@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.b3studios.bible.R;
-import org.b3studios.bible.SpinnerNavItem;
+import org.b3studios.bible.model.SpinnerNavItem;
 
 import java.util.ArrayList;
 

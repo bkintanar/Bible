@@ -25,7 +25,7 @@ public class BookButtonAdapter extends BaseAdapter {
 
     public BookButtonAdapter(Context c) {
 
-        bookNames = Bible.getBookNames();
+        bookNames = Bible.setting.getBookNames();
 
         mContext = c;
     }

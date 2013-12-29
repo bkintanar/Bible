@@ -18,7 +18,7 @@ import java.util.List;
 
 public class BookChooser extends Activity {
 
-    private List<String> bookNames = Bible.getBookNames();
+    private List<String> bookNames = Bible.setting.getBookNames();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +41,9 @@ public class BookChooser extends Activity {
 
                 Toast.makeText(getBaseContext(), bookNames.get(position), Toast.LENGTH_SHORT).show();
 
-                Bible.setKEY_BIBLE_BOOK(Bible.getBooksList().get(position));
+                Bible.setting.setCurrentBook(Bible.setting.getBooksList().get(position));
 
-                Log.i("DEBUG", "Book changed to: " + Bible.getKEY_BIBLE_BOOK());
+                Log.i("DEBUG", "Book changed to: " + Bible.setting.getCurrentBook());
 
                 // create new activity
                 Intent chapterChooser = new Intent("org.b3studios.bible.CHAPTERCHOOSER");
