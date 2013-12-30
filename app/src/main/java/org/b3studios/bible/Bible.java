@@ -2,12 +2,14 @@ package org.b3studios.bible;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -41,6 +43,8 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
     public int PREVIOUS = -1;
     public int NEXT     = 1;
 
+    public static final String PREFS_NAME = "UserBibleInfo";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	
@@ -66,6 +70,9 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
         // assigning the spinner navigation
         actionBar.setListNavigationCallbacks(adapter, this);
+
+        // load preferences stored in device
+        loadSharedPreferences();
 
         setTv((TextView) findViewById(R.id.main_text));
 
@@ -101,6 +108,49 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
         
         // go to the default view
         goToChapter(0);
+    }
+
+    private void loadSharedPreferences() {
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+        boolean hasSettingsStored = settings.getBoolean("hasSettingsStored", false);
+
+        Log.i("DEBUG", "hasSettingsStored: " + hasSettingsStored);
+
+        if (hasSettingsStored) {
+
+            String[] sVersion = {"kjv", "adb", "ceb"};
+
+            int index = Arrays.asList(sVersion).indexOf(settings.getString("currentTranslation", ""));
+
+            // has user settings stored, load them
+            setting.setCurrentTranslation(settings.getString("currentTranslation", ""));
+            setting.setCurrentBook(settings.getString("currentBook", ""));
+            setting.setCurrentChapter(settings.getInt("currentChapter", 0));
+            setting.setCurrentMaxChapters(settings.getInt("currentMaxChapters", 0));
+
+            actionBar.setSelectedNavigationItem(index);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+
+        super.onStop();
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.putString("currentTranslation", Bible.setting.getCurrentTranslation());
+        editor.putString("currentBook", Bible.setting.getCurrentBook());
+        editor.putInt("currentChapter", Bible.setting.getCurrentChapter());
+        editor.putInt("currentMaxChapters", Bible.setting.getCurrentMaxChapters());
+
+        editor.putBoolean("hasSettingsStored", true);
+
+        // Commit the edits!
+        editor.commit();
     }
 
     /**
