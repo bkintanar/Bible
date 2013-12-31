@@ -20,19 +20,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BookChooser"
+            android:name=".BookSelector"
             android:label="Select a Book" >
             <intent-filter>
-                <action android:name="org.b3studios.bible.BOOKCHOOSER" />
+                <action android:name="org.b3studios.bible.BOOKSELECTOR" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
         </activity>
         <activity
-            android:name=".ChapterChooser"
+            android:name=".ChapterSelector"
             android:label="Select a Chapter" >
             <intent-filter>
-                <action android:name="org.b3studios.bible.CHAPTERCHOOSER" />
+                <action android:name="org.b3studios.bible.CHAPTERSELECTOR" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 

@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.b3studios.bible.R;
@@ -16,13 +15,11 @@ import java.util.ArrayList;
 
 public class TitleNavigationAdapter extends BaseAdapter {
 
-    private ImageView imgIcon;
     private TextView txtTitle;
     private ArrayList<SpinnerNavItem> spinnerNavItem;
     private Context context;
 
-    public TitleNavigationAdapter(Context context,
-                                  ArrayList<SpinnerNavItem> spinnerNavItem) {
+    public TitleNavigationAdapter(Context context, ArrayList<SpinnerNavItem> spinnerNavItem) {
         this.spinnerNavItem = spinnerNavItem;
         this.context = context;
     }
@@ -50,11 +47,8 @@ public class TitleNavigationAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.list_item_title_navigation, null);
         }
 
-        imgIcon = (ImageView) convertView.findViewById(R.id.imgIcon);
         txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
 
-        imgIcon.setImageResource(spinnerNavItem.get(position).getIcon());
-        imgIcon.setVisibility(View.GONE);
         txtTitle.setText(spinnerNavItem.get(position).getTitle());
         return convertView;
     }
@@ -68,10 +62,8 @@ public class TitleNavigationAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.list_item_title_navigation, null);
         }
 
-        imgIcon = (ImageView) convertView.findViewById(R.id.imgIcon);
         txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
 
-        imgIcon.setImageResource(spinnerNavItem.get(position).getIcon());
         txtTitle.setText(spinnerNavItem.get(position).getTitle());
         return convertView;
     }

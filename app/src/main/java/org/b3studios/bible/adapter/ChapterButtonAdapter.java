@@ -15,26 +15,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by bkintanar on 12/28/13.
- */
 public class ChapterButtonAdapter extends BaseAdapter {
 
     private Context mContext;
-
-    private String bookName;
-
+    private String bookName = Bible.settings.getCurrentBook();;
     private int chapterCount;
 
     public ChapterButtonAdapter(Context c) {
 
         mContext = c;
 
-        bookName = Bible.setting.getCurrentBook();
-
-        chapterCount =  getChapterList(bookName);
-
-        Bible.setting.setCurrentMaxChapters(chapterCount);
+        chapterCount = getChapterList(bookName);
 
         Log.i("DEBUG", "" + chapterCount);
 
@@ -48,7 +39,7 @@ public class ChapterButtonAdapter extends BaseAdapter {
 
         try {
 
-            list = mContext.getAssets().list("data/" + Bible.setting.getCurrentTranslation() + "/"+ bookName);
+            list = mContext.getAssets().list("data/" + Bible.settings.getCurrentTranslation() + "/"+ bookName);
 
             if (list.length > 0) {
 

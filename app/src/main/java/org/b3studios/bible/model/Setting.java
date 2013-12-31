@@ -2,9 +2,6 @@ package org.b3studios.bible.model;
 
 import java.util.List;
 
-/**
- * Created by bkintanar on 12/29/13.
- */
 public class Setting {
 
     private String currentTranslation = "kjv";

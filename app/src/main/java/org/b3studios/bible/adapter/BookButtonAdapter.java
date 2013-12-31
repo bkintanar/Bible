@@ -1,9 +1,7 @@
 package org.b3studios.bible.adapter;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -14,18 +12,13 @@ import org.b3studios.bible.Bible;
 
 import java.util.List;
 
-/**
- * Created by bkintanar on 12/28/13.
- */
 public class BookButtonAdapter extends BaseAdapter {
 
     private Context mContext;
 
-    private List<String> bookNames;
+    private List<String> bookNames = Bible.settings.getBookNames();
 
     public BookButtonAdapter(Context c) {
-
-        bookNames = Bible.setting.getBookNames();
 
         mContext = c;
     }
@@ -48,7 +41,6 @@ public class BookButtonAdapter extends BaseAdapter {
         return position;
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 

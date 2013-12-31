@@ -1,8 +1,5 @@
 package org.b3studios.bible.model;
 
-/**
- * Created by bkintanar on 12/29/13.
- */
 public class SpinnerNavItem {
 
     private String title;

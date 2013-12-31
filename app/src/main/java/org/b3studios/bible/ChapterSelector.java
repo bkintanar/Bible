@@ -19,9 +19,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-public class ChapterChooser extends Activity {
+public class ChapterSelector extends Activity {
 
-    private List<String> bookNames = Bible.setting.getBookNames();
+    private List<String> bookNames = Bible.settings.getBookNames();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +31,11 @@ public class ChapterChooser extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        String title = bookNames.get(Bible.setting.getBooksList().indexOf(Bible.setting.getCurrentBook()));
+        String title = bookNames.get(Bible.settings.getBooksList().indexOf(Bible.settings.getCurrentBook()));
 
         this.setTitle(title);
 
-        setContentView(R.layout.chapter_chooser);
+        setContentView(R.layout.chapter_selector);
         GridView gw = (GridView) findViewById(R.id.grid_view);
 
         gw.setAdapter(new ChapterButtonAdapter(this));
@@ -46,7 +46,7 @@ public class ChapterChooser extends Activity {
 
 //                Toast.makeText(getBaseContext(), bookNames.get(position), Toast.LENGTH_SHORT).show();
 
-                Bible.setting.setCurrentChapter(position + 1);
+                Bible.settings.setCurrentChapter(position + 1);
 
                 InputStream is;
                 BufferedReader r;
@@ -56,7 +56,7 @@ public class ChapterChooser extends Activity {
 
                 try {
 
-                    is = getAssets().open("data/"+ Bible.setting.getCurrentTranslation() +"/"+ Bible.setting.getCurrentBook() +"/"+ Bible.setting.getCurrentChapter());
+                    is = getAssets().open("data/"+ Bible.settings.getCurrentTranslation() +"/"+ Bible.settings.getCurrentBook() +"/"+ Bible.settings.getCurrentChapter());
                     r  = new BufferedReader(new InputStreamReader(is));
 
                     while ((passage = r.readLine()) != null) {
@@ -70,11 +70,11 @@ public class ChapterChooser extends Activity {
 
                 } finally {
 
-                    Bible.tv.setText(Html.fromHtml(chapter.toString()));
+                    Bible.mainTextView.setText(Html.fromHtml(chapter.toString()));
 
-                    int index = Bible.setting.getBooksList().indexOf(Bible.setting.getCurrentBook());
+                    int index = Bible.settings.getBooksList().indexOf(Bible.settings.getCurrentBook());
 
-                    Bible.bookTextView.setText(Bible.setting.getBookNames().get(index) + " " + Bible.setting.getCurrentChapter());
+                    Bible.bookTextView.setText(Bible.settings.getBookNames().get(index) + " " + Bible.settings.getCurrentChapter());
 
                     finish();
                 }
@@ -85,7 +85,7 @@ public class ChapterChooser extends Activity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Intent myIntent = new Intent("org.b3studios.bible.BOOKCHOOSER");
+        Intent myIntent = new Intent("org.b3studios.bible.BOOKSELECTOR");
         startActivityForResult(myIntent, 0);
 
         finish();

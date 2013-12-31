@@ -16,9 +16,9 @@ import org.b3studios.bible.adapter.BookButtonAdapter;
 
 import java.util.List;
 
-public class BookChooser extends Activity {
+public class BookSelector extends Activity {
 
-    private List<String> bookNames = Bible.setting.getBookNames();
+    private List<String> bookNames = Bible.settings.getBookNames();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class BookChooser extends Activity {
 
         this.setTitle("Select a Book");
 
-        setContentView(R.layout.book_chooser);
+        setContentView(R.layout.book_selector);
         GridView gw = (GridView) findViewById(R.id.grid_view);
 
         gw.setAdapter(new BookButtonAdapter(this));
@@ -41,12 +41,12 @@ public class BookChooser extends Activity {
 
                 Toast.makeText(getBaseContext(), bookNames.get(position), Toast.LENGTH_SHORT).show();
 
-                Bible.setting.setCurrentBook(Bible.setting.getBooksList().get(position));
+                Bible.settings.setCurrentBook(Bible.settings.getBooksList().get(position));
 
-                Log.i("DEBUG", "Book changed to: " + Bible.setting.getCurrentBook());
+                Log.i("DEBUG", "Book changed to: " + Bible.settings.getCurrentBook());
 
                 // create new activity
-                Intent chapterChooser = new Intent("org.b3studios.bible.CHAPTERCHOOSER");
+                Intent chapterChooser = new Intent(getApplicationContext(), ChapterSelector.class);
                 startActivity(chapterChooser);
 
                 finish();

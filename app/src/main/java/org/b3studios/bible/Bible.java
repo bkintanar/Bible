@@ -35,15 +35,17 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
     // Navigation adapter
     protected TitleNavigationAdapter adapter;
 
-    public static Setting setting = new Setting();
+    public static Setting settings = new Setting();
     
-    public static TextView tv;
+    public static TextView mainTextView;
     public static TextView bookTextView;
 
     public int PREVIOUS = -1;
     public int NEXT     = 1;
 
     public static final String PREFS_NAME = "UserBibleInfo";
+
+    String[] sVersion = {"kjv", "adb", "ceb"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,22 +76,22 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
         // load preferences stored in device
         loadSharedPreferences();
 
-        setTv((TextView) findViewById(R.id.main_text));
+        settings.setBooksList(listAssetFiles("data/" + settings.getCurrentTranslation()));
+        settings.setBookNames(initBookNames());
 
-        setting.setBooksList(listAssetFiles("data/" + setting.getCurrentTranslation()));
-        setting.setBookNames(initBookNames());
-        
+        // Get components from XML
+        setMainTextView((TextView) findViewById(R.id.main_text));
+        setBookTextView((TextView) findViewById(R.id.current_book));
+
         Button previousBtn = (Button) findViewById(R.id.previous_button);
         Button nextBtn     = (Button) findViewById(R.id.next_button);
-        
-        setBookTextView((TextView) findViewById(R.id.current_book));
 
         // Set listeners
         getBookTextView().setOnClickListener( new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent chooser = new Intent("org.b3studios.bible.BOOKCHOOSER");
-                startActivity(chooser);
+                Intent selector = new Intent("org.b3studios.bible.BOOKSELECTOR");
+                startActivity(selector);
             }
         });
         
@@ -106,7 +108,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
             }
         });
         
-        // go to the default view
+        // display default view
         goToChapter(0);
     }
 
@@ -116,19 +118,15 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
         boolean hasSettingsStored = settings.getBoolean("hasSettingsStored", false);
 
-        Log.i("DEBUG", "hasSettingsStored: " + hasSettingsStored);
-
         if (hasSettingsStored) {
-
-            String[] sVersion = {"kjv", "adb", "ceb"};
 
             int index = Arrays.asList(sVersion).indexOf(settings.getString("currentTranslation", ""));
 
             // has user settings stored, load them
-            setting.setCurrentTranslation(settings.getString("currentTranslation", ""));
-            setting.setCurrentBook(settings.getString("currentBook", ""));
-            setting.setCurrentChapter(settings.getInt("currentChapter", 0));
-            setting.setCurrentMaxChapters(settings.getInt("currentMaxChapters", 0));
+            Bible.settings.setCurrentTranslation(settings.getString("currentTranslation", ""));
+            Bible.settings.setCurrentBook(settings.getString("currentBook", ""));
+            Bible.settings.setCurrentChapter(settings.getInt("currentChapter", 0));
+            Bible.settings.setCurrentMaxChapters(settings.getInt("currentMaxChapters", 0));
 
             actionBar.setSelectedNavigationItem(index);
         }
@@ -142,10 +140,10 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
 
-        editor.putString("currentTranslation", Bible.setting.getCurrentTranslation());
-        editor.putString("currentBook", Bible.setting.getCurrentBook());
-        editor.putInt("currentChapter", Bible.setting.getCurrentChapter());
-        editor.putInt("currentMaxChapters", Bible.setting.getCurrentMaxChapters());
+        editor.putString("currentTranslation", Bible.settings.getCurrentTranslation());
+        editor.putString("currentBook", Bible.settings.getCurrentBook());
+        editor.putInt("currentChapter", Bible.settings.getCurrentChapter());
+        editor.putInt("currentMaxChapters", Bible.settings.getCurrentMaxChapters());
 
         editor.putBoolean("hasSettingsStored", true);
 
@@ -159,21 +157,17 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 
-        String[] sVersion = {"kjv", "adb", "ceb"};
-
-        setting.setCurrentTranslation(sVersion[itemPosition]);
+        settings.setCurrentTranslation(sVersion[itemPosition]);
 
         goToChapter(0);
 
         return false;
     }
 
-
-
     @Override
     public void onResume() {
 
-        setDefaultDataTextView(tv);
+        setDefaultDataTextView(mainTextView);
 
         super.onResume();
     }
@@ -216,7 +210,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
         try {
 
-            is = getAssets().open("data/"+ setting.getCurrentTranslation() +"/"+ setting.getCurrentBook() +"/"+ setting.getCurrentChapter());
+            is = getAssets().open("data/"+ settings.getCurrentTranslation() +"/"+ settings.getCurrentBook() +"/"+ settings.getCurrentChapter());
             r  = new BufferedReader(new InputStreamReader(is));
 
             while ((passage = r.readLine()) != null) {
@@ -262,56 +256,54 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 		
 		int currentIndex;
 				
-		if (setting.getCurrentChapter() + 1 > setting.getCurrentMaxChapters() && i == +1) {
+		if (settings.getCurrentChapter() + 1 > settings.getCurrentMaxChapters() && i == +1) {
 
-            setting.setCurrentChapter(1);
+            settings.setCurrentChapter(1);
 			
-			currentIndex = setting.getBooksList().indexOf(setting.getCurrentBook());
+			currentIndex = settings.getBooksList().indexOf(settings.getCurrentBook());
 
 			// Reached last book, wrap to the first book
-			if (currentIndex + 1 == setting.getBooksList().size()) {
+			if (currentIndex + 1 == settings.getBooksList().size()) {
 				currentIndex = -1;
 			}
 			
 			// Get next book
-            setting.setCurrentBook(setting.getBooksList().get(currentIndex + 1));
+            settings.setCurrentBook(settings.getBooksList().get(currentIndex + 1));
 			
 			// Get the number of chapters
 			setMaxChapters(i);
 			
-			Log.i("DEBUG", "Book changed to: " + setting.getCurrentBook());
+			Log.i("DEBUG", "Book changed to: " + settings.getCurrentBook());
 		}
-		else if (setting.getCurrentChapter() -1 == 0 && i == -1) {
+		else if (settings.getCurrentChapter() -1 == 0 && i == -1) {
 
-			currentIndex = setting.getBooksList().indexOf(setting.getCurrentBook());
+			currentIndex = settings.getBooksList().indexOf(settings.getCurrentBook());
 
 			// Reached first book, wrap to the last book
 			if (currentIndex - 1 < 0)
 			{
-				currentIndex = setting.getBooksList().size();
+				currentIndex = settings.getBooksList().size();
 			}
 			
 			// Get previous book
-            setting.setCurrentBook(setting.getBooksList().get(currentIndex - 1));
+            settings.setCurrentBook(settings.getBooksList().get(currentIndex - 1));
 			
 			// Get the number of chapters
 			setMaxChapters(i);
-														
-			Log.i("DEBUG", "Book changed to: " + setting.getCurrentBook());
 		}
 	}
 	
 	private void setMaxChapters(int i) {
 
-	    List<String> chaptersList =  listAssetFiles("data/" + setting.getCurrentTranslation() + "/"+ setting.getCurrentBook());
+	    List<String> chaptersList =  listAssetFiles("data/" + settings.getCurrentTranslation() + "/"+ settings.getCurrentBook());
 
-        setting.setCurrentMaxChapters(chaptersList.size());
+        settings.setCurrentMaxChapters(chaptersList.size());
 		
 		if (i == -1) {
-            setting.setCurrentChapter(chaptersList.size());
+            settings.setCurrentChapter(chaptersList.size());
 		}
 		else {
-            setting.setCurrentChapter(1);
+            settings.setCurrentChapter(1);
 		}
 	}
 
@@ -320,24 +312,24 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 		int index;
 		
 		// Check if current chapter is the first or the last chapter of the current book.		
-		if ((setting.getCurrentChapter() + 1 > setting.getCurrentMaxChapters() && i == 1) || (setting.getCurrentChapter() - 1 == 0 && i == -1))
+		if ((settings.getCurrentChapter() + 1 > settings.getCurrentMaxChapters() && i == 1) || (settings.getCurrentChapter() - 1 == 0 && i == -1))
         {
 	        setCurrentMaxChapters(i);
         }
 		else
 		{
-            setting.setCurrentChapter(setting.getCurrentChapter() + i);
+            settings.setCurrentChapter(settings.getCurrentChapter() + i);
 		}
 		
-		index = setting.getBooksList().indexOf(setting.getCurrentBook());
+		index = settings.getBooksList().indexOf(settings.getCurrentBook());
 		
 		setBookTextView((TextView) findViewById(R.id.current_book));
 		
-		getBookTextView().setText(setting.getBookNames().get(index) + " " + setting.getCurrentChapter());
+		getBookTextView().setText(settings.getBookNames().get(index) + " " + settings.getCurrentChapter());
 		
-		Log.i("DEBUG", "Displaying: " + setting.getBookNames().get(index) + " " + setting.getCurrentChapter());
+		Log.i("DEBUG", "Displaying: " + settings.getBookNames().get(index) + " " + settings.getCurrentChapter() + " " + settings.getCurrentTranslation().toUpperCase());
 		
-		setDefaultDataTextView(getTv());
+		setDefaultDataTextView(getMainTextView());
 	}
 	
 	public List<String> listAssetFiles(String path) {
@@ -365,12 +357,12 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
     // Getters and Setters
 
-    public TextView getTv() {
-        return tv;
+    public TextView getMainTextView() {
+        return mainTextView;
     }
 
-    public void setTv(TextView tv) {
-        this.tv = tv;
+    public void setMainTextView(TextView mainTextView) {
+        this.mainTextView = mainTextView;
     }
 
     public TextView getBookTextView() {
