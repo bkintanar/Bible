@@ -68,6 +68,7 @@
         android:layout_weight="0.13"
         android:gravity="bottom"
         android:text="@string/about_text"
-        android:autoLink="all" />
+        android:autoLink="all"
+        android:padding="5dp" />
 
 </LinearLayout>
