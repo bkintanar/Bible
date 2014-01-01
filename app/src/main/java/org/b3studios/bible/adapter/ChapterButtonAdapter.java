@@ -1,7 +1,6 @@
 package org.b3studios.bible.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -18,7 +17,7 @@ import java.util.List;
 public class ChapterButtonAdapter extends BaseAdapter {
 
     private Context mContext;
-    private String bookName = Bible.settings.getCurrentBook();;
+    private String bookName = Bible.settings.getCurrentBook();
     private int chapterCount;
 
     public ChapterButtonAdapter(Context c) {
@@ -26,8 +25,6 @@ public class ChapterButtonAdapter extends BaseAdapter {
         mContext = c;
 
         chapterCount = getChapterList(bookName);
-
-        Log.i("DEBUG", "" + chapterCount);
 
     }
 

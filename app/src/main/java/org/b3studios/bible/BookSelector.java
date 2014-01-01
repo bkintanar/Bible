@@ -4,12 +4,11 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import org.b3studios.bible.adapter.BookButtonAdapter;
@@ -42,8 +41,6 @@ public class BookSelector extends Activity {
                 Toast.makeText(getBaseContext(), bookNames.get(position), Toast.LENGTH_SHORT).show();
 
                 Bible.settings.setCurrentBook(Bible.settings.getBooksList().get(position));
-
-                Log.i("DEBUG", "Book changed to: " + Bible.settings.getCurrentBook());
 
                 // create new activity
                 Intent chapterChooser = new Intent(getApplicationContext(), ChapterSelector.class);

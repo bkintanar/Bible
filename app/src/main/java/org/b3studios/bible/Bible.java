@@ -1,18 +1,11 @@
 package org.b3studios.bible;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +16,15 @@ import android.widget.TextView;
 import org.b3studios.bible.adapter.TitleNavigationAdapter;
 import org.b3studios.bible.model.Setting;
 import org.b3studios.bible.model.SpinnerNavItem;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
@@ -272,10 +274,8 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 			
 			// Get the number of chapters
 			setMaxChapters(i);
-			
-			Log.i("DEBUG", "Book changed to: " + settings.getCurrentBook());
-		}
-		else if (settings.getCurrentChapter() -1 == 0 && i == -1) {
+
+		} else if (settings.getCurrentChapter() -1 == 0 && i == -1) {
 
 			currentIndex = settings.getBooksList().indexOf(settings.getCurrentBook());
 
@@ -327,7 +327,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 		
 		getBookTextView().setText(settings.getBookNames().get(index) + " " + settings.getCurrentChapter());
 		
-		Log.i("DEBUG", "Displaying: " + settings.getBookNames().get(index) + " " + settings.getCurrentChapter() + " " + settings.getCurrentTranslation().toUpperCase());
+//		Log.i("DEBUG", "Displaying: " + settings.getBookNames().get(index) + " " + settings.getCurrentChapter() + " " + settings.getCurrentTranslation().toUpperCase());
 		
 		setDefaultDataTextView(getMainTextView());
 	}

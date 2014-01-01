@@ -10,6 +10,7 @@
     <string name="menu_adb">Ang Dating Biblia (Tagalog)</string>
     <string name="menu_ceb">Ang Biblia (Cebuano)</string>
     <string name="title_activity_u_bible">uBible</string>
+    <string name="about_text">uBible is built because we saw the lack of intuitive Cebuano translated Bible available in the Google Play Store. uBible is a project done by the Youth of the Pentecostals of Mandaue City, United Pentecostal Church Philippines, Inc. \n\nLike us at https://facebook.com/upcmandaue or\nfollow us over at https://twitter.com/upcmandaue</string>
     <string name="main_text"/>
 
 </resources>

@@ -1,7 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.b3studios.bible"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0"
+    android:debuggable="false">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -12,39 +14,40 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".Bible"
+            android:name="org.b3studios.bible.Bible"
             android:label="@string/title_activity_u_bible" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".BookSelector"
+            android:name="org.b3studios.bible.BookSelector"
             android:label="Select a Book" >
             <intent-filter>
                 <action android:name="org.b3studios.bible.BOOKSELECTOR" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
         <activity
-            android:name=".ChapterSelector"
+            android:name="org.b3studios.bible.ChapterSelector"
             android:label="Select a Chapter" >
             <intent-filter>
                 <action android:name="org.b3studios.bible.CHAPTERSELECTOR" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
         <activity
-            android:name=".About"
+            android:name="org.b3studios.bible.About"
             android:label="About" >
             <intent-filter>
                 <action android:name="org.b3studios.bible.ABOUT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
     </application>
 
