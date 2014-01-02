@@ -1,5 +1,9 @@
 package org.b3studios.bible.model;
 
+import android.graphics.Typeface;
+
+import org.b3studios.bible.Bible;
+
 import java.util.List;
 
 public class Setting {
@@ -9,8 +13,12 @@ public class Setting {
     private int currentChapter = 1;
     private int currentMaxChapters = 50;
 
+    private int mainViewTextSize = 18;
+
     private List<String> bookNames;
     private List<String> booksList;
+
+    private Typeface[] typefaces = {Typeface.SANS_SERIF, Typeface.SERIF, Typeface.MONOSPACE};
 
     public String getCurrentTranslation() {
         return currentTranslation;
@@ -58,5 +66,35 @@ public class Setting {
 
     public void setBooksList(List<String> booksList) {
         this.booksList = booksList;
+    }
+
+    public int getMainViewTextSize() { return mainViewTextSize; }
+
+    public void setMainViewTextSize(int textSize) {
+
+        this.mainViewTextSize = textSize;
+        Bible.mainTextView.setTextSize(textSize);
+    }
+
+    public int getMainViewTypeface() {
+
+        Typeface tf = Bible.mainTextView.getTypeface();
+
+        int returnValue = 0;
+
+        if (tf == typefaces[0]) {
+            returnValue = 0;
+        } else if (tf == typefaces[1]) {
+            returnValue = 1;
+        } else if (tf == typefaces[2]) {
+            returnValue = 2;
+        }
+
+        return returnValue;
+    }
+
+    public void setMainViewTypeface(int index) {
+
+        Bible.mainTextView.setTypeface(typefaces[index]);
     }
 }

@@ -39,8 +39,7 @@
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.03"
-        android:textStyle="bold"
-        android:textIsSelectable="true" />
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -68,7 +67,7 @@
         android:layout_weight="0.13"
         android:gravity="bottom"
         android:text="@string/about_text"
-        android:autoLink="all"
-        android:padding="5dp" />
+        android:padding="5dp"
+        android:autoLink="web" />
 
 </LinearLayout>

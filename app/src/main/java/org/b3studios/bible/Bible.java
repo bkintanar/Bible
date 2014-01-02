@@ -76,7 +76,6 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
         actionBar.setListNavigationCallbacks(adapter, this);
 
         // load preferences stored in device
-        loadSharedPreferences();
 
         settings.setBooksList(listAssetFiles("data/" + settings.getCurrentTranslation()));
         settings.setBookNames(initBookNames());
@@ -84,6 +83,8 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
         // Get components from XML
         setMainTextView((TextView) findViewById(R.id.main_text));
         setBookTextView((TextView) findViewById(R.id.current_book));
+
+        loadSharedPreferences();
 
         Button previousBtn = (Button) findViewById(R.id.previous_button);
         Button nextBtn     = (Button) findViewById(R.id.next_button);
@@ -120,15 +121,19 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
         boolean hasSettingsStored = settings.getBoolean("hasSettingsStored", false);
 
+
+
         if (hasSettingsStored) {
 
-            int index = Arrays.asList(sVersion).indexOf(settings.getString("currentTranslation", ""));
+            int index = Arrays.asList(sVersion).indexOf(settings.getString("currentTranslation", "kjv"));
 
             // has user settings stored, load them
-            Bible.settings.setCurrentTranslation(settings.getString("currentTranslation", ""));
-            Bible.settings.setCurrentBook(settings.getString("currentBook", ""));
-            Bible.settings.setCurrentChapter(settings.getInt("currentChapter", 0));
-            Bible.settings.setCurrentMaxChapters(settings.getInt("currentMaxChapters", 0));
+            Bible.settings.setCurrentTranslation(settings.getString("currentTranslation", "kjv"));
+            Bible.settings.setCurrentBook(settings.getString("currentBook", "01O"));
+            Bible.settings.setCurrentChapter(settings.getInt("currentChapter", 1));
+            Bible.settings.setCurrentMaxChapters(settings.getInt("currentMaxChapters", 50));
+            Bible.settings.setMainViewTextSize(settings.getInt("mainViewTextSize", 18));
+            Bible.settings.setMainViewTypeface(settings.getInt("mainViewTypeface", 0));
 
             actionBar.setSelectedNavigationItem(index);
         }
@@ -146,6 +151,8 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
         editor.putString("currentBook", Bible.settings.getCurrentBook());
         editor.putInt("currentChapter", Bible.settings.getCurrentChapter());
         editor.putInt("currentMaxChapters", Bible.settings.getCurrentMaxChapters());
+        editor.putInt("mainViewTextSize", Bible.settings.getMainViewTextSize());
+        editor.putInt("mainViewTypeface", Bible.settings.getMainViewTypeface());
 
         editor.putBoolean("hasSettingsStored", true);
 
@@ -192,6 +199,13 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
                 Intent about = new Intent("org.b3studios.bible.ABOUT");
                 startActivity(about);
+
+                return true;
+
+            case R.id.action_settings:
+
+                Intent settings = new Intent("org.b3studios.bible.SETTINGS");
+                startActivity(settings);
 
                 return true;
 
