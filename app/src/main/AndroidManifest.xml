@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.b3studios.bible"
     android:debuggable="false"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="3"
+    android:versionName="1.2" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -16,9 +16,11 @@
         <activity
             android:name="org.b3studios.bible.Bible"
             android:label="@string/title_activity_u_bible" >
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".SearchResultsActivity" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -27,7 +29,6 @@
             android:label="Select a Book" >
             <intent-filter>
                 <action android:name="org.b3studios.bible.BOOKSELECTOR" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -36,7 +37,6 @@
             android:label="Select a Chapter" >
             <intent-filter>
                 <action android:name="org.b3studios.bible.CHAPTERSELECTOR" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -45,18 +45,27 @@
             android:label="About" >
             <intent-filter>
                 <action android:name="org.b3studios.bible.ABOUT" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name="org.b3studios.bible.SettingsActivity"
+            android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
             <intent-filter>
                 <action android:name="org.b3studios.bible.SETTINGS" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+         <!--Search results activity -->
+        <activity android:name=".SearchResultsActivity"
+            android:parentActivityName="org.b3studios.bible.Bible" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
     </application>
 

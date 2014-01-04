@@ -39,7 +39,7 @@ public class BookSelector extends Activity {
 
                 Toast.makeText(getBaseContext(), bookNames.get(position), Toast.LENGTH_SHORT).show();
 
-                Bible.settings.setCurrentBook(Bible.settings.getBooksList().get(position));
+                Bible.settings.setCurrentBook(Bible.settings.getBookNames().get(position));
 
                 // create new activity
                 Intent chapterChooser = new Intent(getApplicationContext(), ChapterSelector.class);

@@ -15,7 +15,6 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
-import android.view.MenuItem;
 
 import java.util.List;
 
@@ -38,7 +37,6 @@ public class SettingsActivity extends PreferenceActivity {
      * shown on tablets.
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
-
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -67,11 +65,11 @@ public class SettingsActivity extends PreferenceActivity {
         // Add 'general' preferences.
         addPreferencesFromResource(R.xml.pref_general);
 
-//        // Add 'notifications' preferences, and a corresponding header.
+        // Add 'notifications' preferences, and a corresponding header.
 //        PreferenceCategory fakeHeader = new PreferenceCategory(this);
-//        fakeHeader.setTitle(R.string.pref_header_notifications);
+//        fakeHeader.setTitle(R.string.pref_header_index);
 //        getPreferenceScreen().addPreference(fakeHeader);
-//        addPreferencesFromResource(R.xml.pref_notification);
+//        addPreferencesFromResource(R.xml.pref_full_text_search);
 //
 //        // Add 'data and sync' preferences, and a corresponding header.
 //        fakeHeader = new PreferenceCategory(this);
@@ -249,7 +247,7 @@ public class SettingsActivity extends PreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_notification);
+            addPreferencesFromResource(R.xml.pref_full_text_search);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
@@ -276,21 +274,5 @@ public class SettingsActivity extends PreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
         }
-    }
-
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-
-//        Intent myIntent = getIntent();
-//        startActivityForResult(myIntent, 0);
-
-
-//        finish();
-//        Bible.settings.setMainViewTextSize(Bible.settings.getMainViewTextSize());
-
-        return true;
-
     }
 }

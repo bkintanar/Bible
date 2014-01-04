@@ -44,6 +44,10 @@
         <item>6</item>
     </string-array>
 
+    <string name="pref_header_index">Full-text search</string>
+
+    <string name="pref_title_enable_full_text_search_index">Enable Full-text search</string>
+
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
 

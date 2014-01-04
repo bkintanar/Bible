@@ -24,7 +24,7 @@ public class ChapterButtonAdapter extends BaseAdapter {
 
         mContext = c;
 
-        chapterCount = getChapterList(bookName);
+        chapterCount = Bible.db.getChapterSize(bookName);
 
     }
 
