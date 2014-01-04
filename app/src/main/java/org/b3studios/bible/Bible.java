@@ -43,6 +43,8 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
     public static Settings settings = new Settings();
 
     public static DatabaseHelper db;
+    public SearchView searchView;
+
 
     public static TextView mainTextView;
     public static TextView bookTextView;
@@ -226,16 +228,34 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
+        searchView = (SearchView) menu.findItem(R.id.action_search)
                 .getActionView();
         searchView.setSearchableInfo(searchManager
                 .getSearchableInfo(getComponentName()));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                MenuItem menuSearch = menu.findItem(R.id.action_search);
+                SearchView searchView = (SearchView) menuSearch.getActionView();
+
+                searchView.onActionViewCollapsed();
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -364,11 +384,9 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
             settings.setCurrentChapter(settings.getCurrentChapter() + i);
 		}
 
-		index = settings.getBookNames().indexOf(settings.getCurrentBook());
-
 		setBookTextView((TextView) findViewById(R.id.current_book));
 		
-		getBookTextView().setText(settings.getBookNames().get(index) + " " + settings.getCurrentChapter());
+		getBookTextView().setText(settings.getCurrentBook() + " " + settings.getCurrentChapter());
 		
 //		Log.i("DEBUG", "Displaying: " + settings.getBookNames().get(index) + " " + settings.getCurrentChapter() + " " + settings.getCurrentTranslation().toUpperCase());
 
