@@ -75,9 +75,9 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
         // Spinner title navigation data
         navSpinner = new ArrayList<SpinnerNavItem>();
-        navSpinner.add(new SpinnerNavItem("King James Version", R.drawable.ic_launcher));
-        navSpinner.add(new SpinnerNavItem("Ang Dating Biblia (Tagalog)", R.drawable.ic_launcher));
-        navSpinner.add(new SpinnerNavItem("Ang Biblia (Cebuano)", R.drawable.ic_launcher));
+        navSpinner.add(new SpinnerNavItem("King James Version"));
+        navSpinner.add(new SpinnerNavItem("Ang Dating Biblia (Tagalog)"));
+        navSpinner.add(new SpinnerNavItem("Ang Biblia (Cebuano)"));
 
         // title drop down adapter
         adapter = new TitleNavigationAdapter(getApplicationContext(), navSpinner);
@@ -94,8 +94,6 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
         } finally {
             db.openDatabase();
         }
-
-//        db.displayBookList();
 
         settings.setBookNames(initBookNames());
 
@@ -132,27 +130,6 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
         // display default view
         goToChapter(0);
-
-//        DatabaseHandler db = new DatabaseHandler(this);
-//
-//        Cursor cursor = db.isIndexDone("kjv");
-//
-//        Log.i("IndexStatus", "" + cursor.getCount());
-//
-//        if (cursor.getCount() > 0) {
-//
-//            cursor.moveToFirst();
-//
-//            Log.i("IndexStatus", "Indexing status of KJV: " + cursor.getString(1));
-//
-//        }
-//        if (cursor.getString(1).compareTo("none") == 0) {
-//
-//            // Run IndexService in background
-//            Intent mServiceIntent = new Intent(this, IndexService.class);
-//            this.startService(mServiceIntent);
-//        }
-
     }
 
     private void loadSharedPreferences() {
