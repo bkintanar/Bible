@@ -9,11 +9,6 @@ import android.widget.GridView;
 
 import org.b3studios.bible.Bible;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class ChapterButtonAdapter extends BaseAdapter {
 
     private Context mContext;
@@ -26,29 +21,6 @@ public class ChapterButtonAdapter extends BaseAdapter {
 
         chapterCount = Bible.db.getChapterSize(bookName);
 
-    }
-
-    public int getChapterList(String bookName) {
-
-        String [] list;
-
-        List<String> items = new ArrayList<String>();
-
-        try {
-
-            list = mContext.getAssets().list("data/" + Bible.settings.getCurrentTranslation() + "/"+ bookName);
-
-            if (list.length > 0) {
-
-                // This is a folder
-                Collections.addAll(items, list);
-            }
-        } catch (IOException e) {
-
-            return 0;
-        }
-
-        return items.size();
     }
 
     @Override

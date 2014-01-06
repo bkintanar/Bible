@@ -58,7 +58,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
@@ -115,7 +115,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
                 startActivity(selector);
             }
         });
-        
+
         previousBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +128,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
                 goToChapter(NEXT);
             }
         });
-        
+
         // display default view
         goToChapter(0);
 
@@ -318,23 +318,23 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
     }
 
     public void setCurrentMaxChapters(int i) {
-		
+
 		int currentIndex;
-				
+
 		if (settings.getCurrentChapter() + 1 > settings.getCurrentMaxChapters() && i == +1) {
 
             settings.setCurrentChapter(1);
-			
+
 			currentIndex = settings.getBookNames().indexOf(settings.getCurrentBook());
 
 			// Reached last book, wrap to the first book
 			if (settings.getCurrentBook().compareTo("Revelation") == 0) {
 				currentIndex = -1;
 			}
-			
+
 			// Get next book
             settings.setCurrentBook(settings.getBookNames().get(currentIndex+1));
-			
+
 			// Get the number of chapters
 			setMaxChapters(i);
 
@@ -347,10 +347,10 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 			{
 				currentIndex = settings.getBookNames().size();
 			}
-			
+
 			// Get previous book
             settings.setCurrentBook(settings.getBookNames().get(currentIndex - 1));
-			
+
 			// Get the number of chapters
 			setMaxChapters(i);
 		}
@@ -371,8 +371,6 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 	}
 
 	private void goToChapter(int i) {
-		
-		int index;
 
 		// Check if current chapter is the first or the last chapter of the current book.
 		if ((settings.getCurrentChapter() + 1 > settings.getCurrentMaxChapters() && i == 1) || (settings.getCurrentChapter() - 1 == 0 && i == -1))
@@ -385,19 +383,15 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 		}
 
 		setBookTextView((TextView) findViewById(R.id.current_book));
-		
+
 		getBookTextView().setText(settings.getCurrentBook() + " " + settings.getCurrentChapter());
-		
+
 //		Log.i("DEBUG", "Displaying: " + settings.getBookNames().get(index) + " " + settings.getCurrentChapter() + " " + settings.getCurrentTranslation().toUpperCase());
 
         updateMainTextView();
 	}
 
     // Getters and Setters
-
-    public TextView getMainTextView() {
-        return mainTextView;
-    }
 
     public void setMainTextView(TextView mainTextView) {
         this.mainTextView = mainTextView;
