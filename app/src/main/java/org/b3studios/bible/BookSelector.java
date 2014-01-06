@@ -1,5 +1,6 @@
 package org.b3studios.bible;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,8 +24,8 @@ public class BookSelector extends Activity {
 
         super.onCreate(savedInstanceState);
 
-//        ActionBar actionBar = getActionBar();
-//        actionBar.setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         this.setTitle("Select a Book");
 
