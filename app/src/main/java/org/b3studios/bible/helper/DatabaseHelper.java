@@ -211,18 +211,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return size;
     }
 
-    public Cursor query(String queryString) {
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        queryString = queryString.trim();
-
-        return db.query("kjv",
-                new String[]{"book", "chapter", "verse", "passage"},
-                "kjv" + " MATCH ?",
-                new String[]{appendWildcard(queryString)},
-                null, null, null);
-    }
-
     private String appendWildcard(String query) {
         if (TextUtils.isEmpty(query)) return query;
 
@@ -230,9 +218,76 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         final String[] splits = TextUtils.split(query, " ");
 
         for (String split : splits)
-            builder.append(split).append("*").append(" ");
+            builder.append("*").append(split).append("*").append(" ");
 
         return builder.toString().trim();
     }
 
+    String makePlaceholders(int len) {
+        if (len < 1) {
+            // It will lead to an invalid query anyway ..
+            throw new RuntimeException("No placeholders");
+        } else {
+            StringBuilder sb = new StringBuilder(len * 2 - 1);
+            sb.append("?");
+            for (int i = 1; i < len; i++) {
+                sb.append(",?");
+            }
+            return sb.toString();
+        }
+    }
+
+
+    public Cursor customQuery(int result_type, String params, String book) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        switch (result_type) {
+            case 1:
+
+                return db.query(Bible.settings.getCurrentTranslation(),
+                        new String[]{"book", "chapter", "verse", "passage"},
+                        "passage" + " LIKE ?",
+                        new String[]{"%" +params +"%"},
+                        null, null, null);
+
+            case 2:
+
+                return db.query(Bible.settings.getCurrentTranslation(),
+                        new String[]{"book", "chapter", "verse", "passage"},
+                        "passage" + " LIKE ? AND book IN ('Genesis', 'Exodus', 'Leviticus', 'Numbers', " +
+                                "'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1 Samuel', '2 Samuel', " +
+                                "'1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles', 'Ezra', " +
+                                "'Nehemiah', 'Esther', 'Job', 'Psalm', 'Proverbs', 'Ecclesiastes', " +
+                                "'Song of Songs', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', " +
+                                "'Daniel', 'Hosea', 'Joel', 'Amos', 'Obadiah', 'Jonah', 'Micah', " +
+                                "'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi')",
+                        new String[]{"%" +params +"%"},
+                        null, null, null);
+
+            case 3:
+
+                return db.query(Bible.settings.getCurrentTranslation(),
+                        new String[]{"book", "chapter", "verse", "passage"},
+                        "passage" + " LIKE ? AND book NOT IN ('Genesis', 'Exodus', 'Leviticus', 'Numbers', " +
+                                "'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1 Samuel', '2 Samuel', " +
+                                "'1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles', 'Ezra', " +
+                                "'Nehemiah', 'Esther', 'Job', 'Psalm', 'Proverbs', 'Ecclesiastes', " +
+                                "'Song of Songs', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', " +
+                                "'Daniel', 'Hosea', 'Joel', 'Amos', 'Obadiah', 'Jonah', 'Micah', " +
+                                "'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi')",
+                        new String[]{"%" +params +"%"},
+                        null, null, null);
+
+            case 4:
+
+                return db.query(Bible.settings.getCurrentTranslation(),
+                        new String[]{"book", "chapter", "verse", "passage"},
+                        "passage" + " LIKE ? AND book IN ('"+ book +"')",
+                        new String[]{"%" +params +"%"},
+                        null, null, null);
+        }
+
+
+        return null;
+    }
 }

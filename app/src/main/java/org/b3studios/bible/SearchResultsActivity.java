@@ -1,149 +1,97 @@
 package org.b3studios.bible;
 
 import android.app.ActionBar;
-import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.text.Html;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 
-import org.b3studios.bible.adapter.SearchResultAdapter;
-import org.b3studios.bible.helper.DatabaseHelper;
+import org.b3studios.bible.tabswipe.adapter.TabsPagerAdapter;
 
-import java.util.ArrayList;
+public class SearchResultsActivity extends FragmentActivity implements
+        ActionBar.TabListener {
 
-public class SearchResultsActivity extends Activity {
-
-    private ArrayList<String> searchResult =  new ArrayList<String>();
-    private ArrayList<String> verseCallback =  new ArrayList<String>();
-    private SearchResultAdapter arrayListViewAdapter = null;
+    private ViewPager viewPager;
+    private TabsPagerAdapter mAdapter;
+    private ActionBar actionBar;
+    // Tab titles
+    private String[] tabs = { Bible.settings.getCurrentBook(), "Old Testament", "New Testament"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
 
-        // get the action bar
-        ActionBar actionBar = getActionBar();
+        Intent intent = getIntent();
 
-        // Enabling Back navigation on Action Bar icon
+        String query = intent.getStringExtra(SearchManager.QUERY);
+
+        // Initilization
+        this.setTitle("Searched for `" + query  + "'");
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(false);
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), query);
 
-        handleIntent(getIntent());
+        viewPager.setAdapter(mAdapter);
+//        actionBar.setHomeButtonEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // Adding Tabs
+        for (String tab_name : tabs) {
+            actionBar.addTab(actionBar.newTab().setText(tab_name)
+                    .setTabListener(this));
+        }
+
+        /**
+         * on swiping the viewpager make respective tab selected
+         * */
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageSelected(int position) {
+                // on changing the page
+                // make respected tab selected
+                actionBar.setSelectedNavigationItem(position);
+            }
+
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+            }
+        });
+
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        setIntent(intent);
-        handleIntent(intent);
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
     }
 
-    /**
-     * Handling intent data
-     */
-    private void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            final String query = intent.getStringExtra(SearchManager.QUERY);
-
-            this.setTitle("Search Result");
-
-            new Thread(new Runnable() {
-
-                public void run() {
-
-                    DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-                    Cursor cursor = db.query(query);
-
-                    if (cursor.moveToFirst()) {
-                        do {
-                            searchResult.add("<strong>" + cursor.getString(0) + " " + cursor.getString(1) + ":" + cursor.getString(2) + "</strong> " + cursor.getString(3));
-                            verseCallback.add(cursor.getString(0) + "-" + cursor.getString(1) + "-" + cursor.getString(2));
-
-                        } while (cursor.moveToNext());
-                    } else {
-                        searchResult.add("No search result found for `" + query.trim() + "'");
-                        verseCallback.add("No search result found for `" + query.trim() + "'");
-                    }
-
-                    cursor.close();
-
-                    refreshList();
-
-                }
-
-            }).start();
-        }
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+        // on tab selected
+        // show respected fragment view
+        viewPager.setCurrentItem(tab.getPosition());
     }
 
-    private void refreshList() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                ListView myListView = (ListView) findViewById(R.id.rowListView);
-
-                arrayListViewAdapter = new SearchResultAdapter(getApplicationContext(), searchResult);
-
-
-                myListView.setAdapter(arrayListViewAdapter);
-
-                myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    public void onItemClick(AdapterView<?> parent, View view, int position,
-                                            long id) {
-
-                        String[] verse = verseCallback.get(position).split("-");
-
-                        if (verse.length == 3) {
-
-                            Log.i("DEBUG", verse.toString());
-
-                            Bible.settings.setCurrentBook(verse[0]);
-                            Bible.settings.setCurrentChapter(Integer.parseInt(verse[1]));
-
-                            updateMainTextView();
-
-                            finish();
-
-                            Toast.makeText(getBaseContext(), verse[0] + " " + verse[1] + ":" + verse[2], Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                });
-
-                arrayListViewAdapter.notifyDataSetChanged();
-            }
-        });
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
     }
 
-    private void updateMainTextView() {
-        new Thread(new Runnable() {
-            public void run() {
+    public boolean onOptionsItemSelected(MenuItem item){
+//        Intent myIntent = new Intent(getApplicationContext(), Bible.class);
+//        startActivityForResult(myIntent, 0);
 
-                String chapter = Bible.db.getChapterToDisplay();
+        finish();
 
-                setMainTextViewText(chapter.toString());
-            }
-        }).start();
-    }
-
-    public void setMainTextViewText(final String s) {
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                Bible.mainTextView.setText(Html.fromHtml(s));
-
-                Bible.bookTextView.setText(Bible.settings.getCurrentBook() + " " + Bible.settings.getCurrentChapter());
-            }
-        });
+        return true;
 
     }
 }

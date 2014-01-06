@@ -3,8 +3,9 @@ package org.b3studios.bible.adapter;
 /**
  * Created by bkintanar on 1/5/14.
  */
+
 import android.content.Context;
-import android.text.Html;
+import android.text.Spannable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,11 @@ import org.b3studios.bible.R;
 
 import java.util.ArrayList;
 
-public class SearchResultAdapter extends ArrayAdapter<String> {
+public class SearchResultAdapter extends ArrayAdapter<Spannable> {
     private final Context context;
-    private final ArrayList<String> values;
+    private final ArrayList<Spannable> values;
 
-    public SearchResultAdapter(Context context, ArrayList<String> values) {
+    public SearchResultAdapter(Context context, ArrayList<Spannable> values) {
         super(context, R.xml.row, values);
         this.context = context;
         this.values = values;
@@ -31,7 +32,7 @@ public class SearchResultAdapter extends ArrayAdapter<String> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.xml.row, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.rowSearchResultText);
-        textView.setText(Html.fromHtml(values.get(position)));
+        textView.setText(values.get(position));
 
         return rowView;
     }
