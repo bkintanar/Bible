@@ -30,7 +30,7 @@ public class Common {
     public Common (Activity activity, String query, int RESULT_TYPE, int id) {
 
         this.activity = activity;
-        this.query = query.trim();
+        this.query = query;
         this.RESULT_TYPE = RESULT_TYPE;
         this.id = id;
     }

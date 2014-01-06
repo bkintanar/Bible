@@ -27,7 +27,7 @@ public class SearchResultsActivity extends FragmentActivity implements
 
         Intent intent = getIntent();
 
-        String query = intent.getStringExtra(SearchManager.QUERY);
+        String query = intent.getStringExtra(SearchManager.QUERY).trim();
 
         // Initilization
         this.setTitle("Searched for `" + query  + "'");
