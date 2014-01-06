@@ -28,6 +28,7 @@ public class About extends Activity {
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(false);
 
         this.setTitle("About uBible");
 

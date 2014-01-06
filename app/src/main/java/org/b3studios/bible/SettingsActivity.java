@@ -1,6 +1,7 @@
 package org.b3studios.bible;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.media.Ringtone;
@@ -44,7 +45,8 @@ public class SettingsActivity extends PreferenceActivity {
 
         setupSimplePreferencesScreen();
 
-//        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(false);
 //        actionBar.setDisplayHomeAsUpEnabled(true);
 
     }

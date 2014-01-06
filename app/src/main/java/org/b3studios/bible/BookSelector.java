@@ -26,6 +26,7 @@ public class BookSelector extends Activity {
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(false);
 
         this.setTitle("Select a Book");
 

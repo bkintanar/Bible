@@ -32,6 +32,7 @@ public class ChapterSelector extends Activity {
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(false);
 
         setContentView(R.layout.chapter_selector);
         GridView gw = (GridView) findViewById(R.id.grid_view);

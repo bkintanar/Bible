@@ -68,6 +68,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
         // Hide the action bar title
         actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
 
         // Enabling Spinner dropdown navigation
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
