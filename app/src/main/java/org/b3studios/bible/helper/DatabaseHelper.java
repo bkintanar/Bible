@@ -41,6 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Constructor
      * Takes and keeps a reference of the passed context in order to access to the application assets and resources.
+     *
      * @param context
      */
     public DatabaseHelper(Context context) {
@@ -52,14 +53,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Creates a empty database on the system and rewrites it with your own database.
-     * */
+     */
     public void createDatabase() throws IOException {
 
         boolean dbExist = checkDatabase();
 
-        if(dbExist){
+        if (dbExist) {
             //do nothing - database already exist
-        }else{
+        } else {
 
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
@@ -83,23 +84,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Check if the database already exist to avoid re-copying the file each time you open the application.
+     *
      * @return true if it exists, false if it doesn't
      */
-    private boolean checkDatabase(){
+    private boolean checkDatabase() {
 
         SQLiteDatabase checkDB = null;
 
-        try{
+        try {
             String myPath = DB_PATH + DB_NAME;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
 
-        }catch(SQLiteException e){
+        } catch (SQLiteException e) {
 
             //database does't exist yet.
 
         }
 
-        if(checkDB != null){
+        if (checkDB != null) {
 
             checkDB.close();
 
@@ -112,8 +114,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Copies your database from your local assets-folder to the just created empty database in the
      * system folder, from where it can be accessed and handled.
      * This is done by transfering bytestream.
-     * */
-    private void copyDatabase(String filename) throws IOException{
+     */
+    private void copyDatabase(String filename) throws IOException {
 
         //Open your local db as the input stream
         InputStream myInput = myContext.getAssets().open("data/database/" + filename);
@@ -127,7 +129,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //transfer bytes from the inputfile to the outputfile
         byte[] buffer = new byte[1024];
         int length;
-        while ((length = myInput.read(buffer))>0){
+        while ((length = myInput.read(buffer)) > 0) {
             myOutput.write(buffer, 0, length);
         }
 
@@ -149,7 +151,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public synchronized void close() {
 
-        if(myDatabase != null)
+        if (myDatabase != null)
             myDatabase.close();
 
         super.close();
@@ -171,7 +173,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM book_list", null);
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             do {
                 bookList.add(cursor.getString(0));
             } while (cursor.moveToNext());
@@ -183,13 +185,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<Spannable> getChapterToDisplay() {
 
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + Bible.settings.getCurrentTranslation() +  " WHERE book=? AND chapter=?";
+        String query = "SELECT * FROM " + Bible.settings.getCurrentTranslation() + " WHERE book=? AND chapter=?";
 
-        Cursor cursor = db.rawQuery(query, new String[] { Bible.settings.getCurrentBook(),  String.valueOf(Bible.settings.getCurrentChapter()) });
+        Cursor cursor = db.rawQuery(query, new String[]{Bible.settings.getCurrentBook(), String.valueOf(Bible.settings.getCurrentChapter())});
 
         ArrayList<Spannable> searchResult = new ArrayList<Spannable>();
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             do {
                 String passage = cursor.getString(3);
 
@@ -198,7 +200,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Spannable spanRange = new SpannableString(verse + passage);
 
                 // Add Bold text to the verse
-                spanRange.setSpan(new StyleSpan(Typeface.BOLD), 0, verse.length()-1,
+                spanRange.setSpan(new StyleSpan(Typeface.BOLD), 0, verse.length() - 1,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 searchResult.add(spanRange);
@@ -215,12 +217,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int size = 1;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT DISTINCT chapter FROM " + Bible.settings.getCurrentTranslation() +  " WHERE book=?";
+        String query = "SELECT DISTINCT chapter FROM " + Bible.settings.getCurrentTranslation() + " WHERE book=?";
 
-        Cursor cursor = db.rawQuery(query, new String[] { currentBook });
+        Cursor cursor = db.rawQuery(query, new String[]{currentBook});
 
-        if(cursor.moveToFirst())
-        {
+        if (cursor.moveToFirst()) {
             size = cursor.getCount();
         }
 
@@ -263,7 +264,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 return db.query(Bible.settings.getCurrentTranslation(),
                         new String[]{"book", "chapter", "verse", "passage"},
                         "passage" + " LIKE ?",
-                        new String[]{"%" +params +"%"},
+                        new String[]{"%" + params + "%"},
                         null, null, null);
 
             case 2:
@@ -277,7 +278,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 "'Song of Songs', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', " +
                                 "'Daniel', 'Hosea', 'Joel', 'Amos', 'Obadiah', 'Jonah', 'Micah', " +
                                 "'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi')",
-                        new String[]{"%" +params +"%"},
+                        new String[]{"%" + params + "%"},
                         null, null, null);
 
             case 3:
@@ -291,15 +292,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                                 "'Song of Songs', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', " +
                                 "'Daniel', 'Hosea', 'Joel', 'Amos', 'Obadiah', 'Jonah', 'Micah', " +
                                 "'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi')",
-                        new String[]{"%" +params +"%"},
+                        new String[]{"%" + params + "%"},
                         null, null, null);
 
             case 4:
 
                 return db.query(Bible.settings.getCurrentTranslation(),
                         new String[]{"book", "chapter", "verse", "passage"},
-                        "passage" + " LIKE ? AND book IN ('"+ book +"')",
-                        new String[]{"%" +params +"%"},
+                        "passage" + " LIKE ? AND book IN ('" + book + "')",
+                        new String[]{"%" + params + "%"},
                         null, null, null);
         }
 

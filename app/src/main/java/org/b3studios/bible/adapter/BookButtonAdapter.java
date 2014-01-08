@@ -61,8 +61,8 @@ public class BookButtonAdapter extends BaseAdapter {
             btn = (Button) convertView;
         }
 
-        String bookName        = bookNames.get(position);
-        String bookNameTrimmed = bookName.replaceAll("\\s+","");
+        String bookName = bookNames.get(position);
+        String bookNameTrimmed = bookName.replaceAll("\\s+", "");
 
         btn.setText(bookNameTrimmed.substring(0, 3));
 
@@ -70,8 +70,7 @@ public class BookButtonAdapter extends BaseAdapter {
 
             btn.setTextColor(Color.RED);
 
-        }
-        else {
+        } else {
 
             btn.setTextColor(Color.BLUE);
         }

@@ -52,7 +52,7 @@ public class BookSelector extends Activity {
         });
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         Intent myIntent = new Intent(getApplicationContext(), Bible.class);
         startActivityForResult(myIntent, 0);
 

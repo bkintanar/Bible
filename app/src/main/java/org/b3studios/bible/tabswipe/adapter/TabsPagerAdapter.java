@@ -34,7 +34,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             case 2:
                 // New Testament fragment activity
                 return new NTFragment(query);
-                // Book fragment activity
+            // Book fragment activity
         }
 
         return null;

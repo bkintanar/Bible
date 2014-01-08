@@ -61,7 +61,7 @@ public class ChapterButtonAdapter extends BaseAdapter {
             btn = (Button) convertView;
         }
 
-        btn.setText("" + (position+1));
+        btn.setText("" + (position + 1));
 
         btn.setId(position);
 

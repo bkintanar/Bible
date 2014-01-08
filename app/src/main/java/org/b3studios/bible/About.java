@@ -55,7 +55,7 @@ public class About extends Activity {
             try {
 
                 InputStream is = getAssets().open("version.txt");
-                BufferedReader r  = new BufferedReader(new InputStreamReader(is));
+                BufferedReader r = new BufferedReader(new InputStreamReader(is));
 
                 gitCommit = r.readLine();
 
@@ -70,7 +70,7 @@ public class About extends Activity {
         }
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         Intent myIntent = new Intent(getApplicationContext(), Bible.class);
         startActivityForResult(myIntent, 0);

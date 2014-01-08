@@ -18,7 +18,7 @@ public class SearchResultsActivity extends FragmentActivity implements
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     // Tab titles
-    private String[] tabs = { Bible.settings.getCurrentBook(), "Old Testament", "New Testament"};
+    private String[] tabs = {Bible.settings.getCurrentBook(), "Old Testament", "New Testament"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class SearchResultsActivity extends FragmentActivity implements
         String query = intent.getStringExtra(SearchManager.QUERY).trim();
 
         // Initilization
-        this.setTitle("Searched for `" + query  + "'");
+        this.setTitle("Searched for `" + query + "'");
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -85,7 +85,7 @@ public class SearchResultsActivity extends FragmentActivity implements
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
 //        Intent myIntent = new Intent(getApplicationContext(), Bible.class);
 //        startActivityForResult(myIntent, 0);
 

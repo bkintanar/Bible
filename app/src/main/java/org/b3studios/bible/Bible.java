@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Spannable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -56,7 +57,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
     public static ListView mainListView;
 
     public int PREVIOUS = -1;
-    public int NEXT     = 1;
+    public int NEXT = 1;
 
     private ArrayList<Spannable> chapter;
 
@@ -64,7 +65,6 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
 
     public PullToRefreshAttacher mPullToRefreshAttacher;
 
-    public static int mLastFirstVisibleItem;
     public static int mIsScrollingUp = 0;
 
     String[] sVersion = {"kjv", "adb", "ceb"};
@@ -119,28 +119,30 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
 
 //        Button previousBtn = (Button) findViewById(R.id.previous_button);
 //        Button nextBtn     = (Button) findViewById(R.id.next_button);
-        mainListView       = (ListView) findViewById(R.id.mainListView);
+        mainListView = (ListView) findViewById(R.id.mainListView);
 
-        mainListView.setOnScrollListener( new AbsListView.OnScrollListener() {
+        mainListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if (view.getId() == mainListView.getId()) {
                     final int currentFirstVisibleItem = mainListView.getFirstVisiblePosition();
+                    final int currentLastVisibleItem = mainListView.getLastVisiblePosition();
 
-                    if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+                    if (currentLastVisibleItem == chapter.size()-1) {
                         mIsScrollingUp = -1;
                         goToChapter = NEXT;
-                    } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+                    } else if (currentFirstVisibleItem == 0) {
                         mIsScrollingUp = 1;
                         goToChapter = PREVIOUS;
                     }
-
-                    mLastFirstVisibleItem = currentFirstVisibleItem;
-                }            }
+                }
+            }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int currentFirstVisibleItem = mainListView.getFirstVisiblePosition();
 
+                Log.i("DEBUG", "currentFirstVisibleItem = " + currentFirstVisibleItem);
             }
         });
 
@@ -199,8 +201,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
             int index = Arrays.asList(sVersion).indexOf(settings.getString("currentTranslation", "kjv"));
 
             // for version = 1.0.1
-            if (settings.getString("currentBook", "Genesis").length() == 3)
-            {
+            if (settings.getString("currentBook", "Genesis").length() == 3) {
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("currentBook", Bible.settings.getCurrentBook());
                 editor.commit();
@@ -242,7 +243,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
 
     /**
      * Actionbar navigation item select listener
-     * */
+     */
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 
@@ -327,16 +328,16 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
 
     public List<String> initBookNames() {
 
-        InputStream    is;
+        InputStream is;
         BufferedReader r;
-        String 		   bookTitle;
+        String bookTitle;
 
         List<String> items = new ArrayList<String>();
 
         try {
 
             is = getAssets().open("data/book_names.txt");
-            r  = new BufferedReader(new InputStreamReader(is));
+            r = new BufferedReader(new InputStreamReader(is));
 
             while ((bookTitle = r.readLine()) != null) {
 
@@ -353,79 +354,74 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
 
     public void setCurrentMaxChapters(int i) {
 
-		int currentIndex;
+        int currentIndex;
 
-		if (settings.getCurrentChapter() + 1 > settings.getCurrentMaxChapters() && i == +1) {
+        if (settings.getCurrentChapter() + 1 > settings.getCurrentMaxChapters() && i == +1) {
 
             settings.setCurrentChapter(1);
-
-			currentIndex = settings.getBookNames().indexOf(settings.getCurrentBook());
-
-			// Reached last book, wrap to the first book
-			if (settings.getCurrentBook().compareTo("Revelation") == 0) {
-				currentIndex = -1;
-			}
-
-			// Get next book
-            settings.setCurrentBook(settings.getBookNames().get(currentIndex+1));
-
-			// Get the number of chapters
-			setMaxChapters(i);
-
-		} else if (settings.getCurrentChapter() -1 == 0 && i == -1) {
 
             currentIndex = settings.getBookNames().indexOf(settings.getCurrentBook());
 
-			// Reached first book, wrap to the last book
-			if (settings.getCurrentBook().compareTo("Genesis") == 0)
-			{
-				currentIndex = settings.getBookNames().size();
-			}
+            // Reached last book, wrap to the first book
+            if (settings.getCurrentBook().compareTo("Revelation") == 0) {
+                currentIndex = -1;
+            }
 
-			// Get previous book
+            // Get next book
+            settings.setCurrentBook(settings.getBookNames().get(currentIndex + 1));
+
+            // Get the number of chapters
+            setMaxChapters(i);
+
+        } else if (settings.getCurrentChapter() - 1 == 0 && i == -1) {
+
+            currentIndex = settings.getBookNames().indexOf(settings.getCurrentBook());
+
+            // Reached first book, wrap to the last book
+            if (settings.getCurrentBook().compareTo("Genesis") == 0) {
+                currentIndex = settings.getBookNames().size();
+            }
+
+            // Get previous book
             settings.setCurrentBook(settings.getBookNames().get(currentIndex - 1));
 
-			// Get the number of chapters
-			setMaxChapters(i);
-		}
-	}
+            // Get the number of chapters
+            setMaxChapters(i);
+        }
+    }
 
-	private void setMaxChapters(int i) {
+    private void setMaxChapters(int i) {
 
-	    int chapterSize = db.getChapterSize(settings.getCurrentBook());
+        int chapterSize = db.getChapterSize(settings.getCurrentBook());
 
         settings.setCurrentMaxChapters(chapterSize);
 
-		if (i == -1) {
+        if (i == -1) {
             settings.setCurrentChapter(chapterSize);
-		}
-		else {
+        } else {
             settings.setCurrentChapter(1);
-		}
-	}
-
-	private void goToChapter(int i) {
-
-		// Check if current chapter is the first or the last chapter of the current book.
-		if ((settings.getCurrentChapter() + 1 > settings.getCurrentMaxChapters() && i == 1) || (settings.getCurrentChapter() - 1 == 0 && i == -1))
-        {
-	        setCurrentMaxChapters(i);
         }
-		else
-		{
+    }
+
+    private void goToChapter(int i) {
+
+        // Check if current chapter is the first or the last chapter of the current book.
+        if ((settings.getCurrentChapter() + 1 > settings.getCurrentMaxChapters() && i == 1) || (settings.getCurrentChapter() - 1 == 0 && i == -1)) {
+            setCurrentMaxChapters(i);
+        } else {
             settings.setCurrentChapter(settings.getCurrentChapter() + i);
-		}
+        }
 
-		setBookTextView((TextView) findViewById(R.id.current_book));
+        setBookTextView((TextView) findViewById(R.id.current_book));
 
-		getBookTextView().setText(settings.getCurrentBook() + " " + settings.getCurrentChapter() + " \u25BC");
+        getBookTextView().setText(settings.getCurrentBook() + " " + settings.getCurrentChapter() + " \u25BC");
 
         chapter = Bible.db.getChapterToDisplay();
 
         MainListViewAdapter arrayListViewAdapter = new MainListViewAdapter(getApplicationContext(), chapter);
 
         mainListView.setAdapter(arrayListViewAdapter);
-	}
+    }
 
     // Getters and Setters
 
@@ -461,10 +457,10 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
                 mainListView.setAdapter(arrayListViewAdapter);
 
                 if (Bible.settings.position > 0) {
-                    mainListView.post( new Runnable() {
+                    mainListView.post(new Runnable() {
                         @Override
                         public void run() {
-                            mainListView.setSelection(Bible.settings.position-1);
+                            mainListView.setSelection(Bible.settings.position - 1);
                             Bible.settings.position = 0;
                         }
                     });

@@ -517,7 +517,6 @@ public class PullToRefreshAttacher implements View.OnTouchListener {
         mIsHandlingTouchEvent = false;
         mInitialMotionY = mLastMotionY = mPullBeginY = -1f;
         Bible.mIsScrollingUp = 0;
-        Bible.mLastFirstVisibleItem = Bible.mainListView.getFirstVisiblePosition() +1;
     }
 
     void onPullStarted(float y) {

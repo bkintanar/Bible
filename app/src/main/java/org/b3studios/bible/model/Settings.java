@@ -63,7 +63,9 @@ public class Settings {
         this.bookNames = bookNames;
     }
 
-    public int getMainViewTextSize() { return mainViewTextSize; }
+    public int getMainViewTextSize() {
+        return mainViewTextSize;
+    }
 
     public void setMainViewTextSize(int textSize) {
 

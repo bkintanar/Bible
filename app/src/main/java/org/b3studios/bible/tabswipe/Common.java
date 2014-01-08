@@ -26,7 +26,7 @@ public class Common {
     private String query;
     private int id;
 
-    public Common (Activity activity, String query, int RESULT_TYPE, int id) {
+    public Common(Activity activity, String query, int RESULT_TYPE, int id) {
 
         this.activity = activity;
         this.query = query;
@@ -104,8 +104,7 @@ public class Common {
 
                 SearchResultAdapter arrayListViewAdapter = new SearchResultAdapter(activity, searchResult);
 
-                if (myListView != null)
-                {
+                if (myListView != null) {
                     myListView.setAdapter(arrayListViewAdapter);
 
                     myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -130,8 +129,7 @@ public class Common {
 
                     });
                 }
-                synchronized ( this )
-                {
+                synchronized (this) {
                     this.notify();
                 }
             }
@@ -143,20 +141,15 @@ public class Common {
     /**
      * Start runnable on UI thread and wait until finished
      */
-    public void startOnUiAndWait(Runnable runnable)
-    {
-        synchronized ( runnable )
-        {
+    public void startOnUiAndWait(Runnable runnable) {
+        synchronized (runnable) {
             // Execute code on UI thread
             activity.runOnUiThread(runnable);
 
             // Wait until runnable finished
-            try
-            {
+            try {
                 runnable.wait();
-            }
-            catch ( InterruptedException e )
-            {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

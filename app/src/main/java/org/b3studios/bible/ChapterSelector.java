@@ -23,8 +23,8 @@ public class ChapterSelector extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         final String currentBook = Bible.settings.getCurrentBook();
-        final int index          = Bible.settings.getBookNames().indexOf(currentBook);
-        final String title       = bookNames.get(Bible.settings.getBookNames().indexOf(currentBook));
+        final int index = Bible.settings.getBookNames().indexOf(currentBook);
+        final String title = bookNames.get(Bible.settings.getBookNames().indexOf(currentBook));
 
         super.onCreate(savedInstanceState);
         this.setTitle(title);
@@ -42,7 +42,7 @@ public class ChapterSelector extends Activity {
 
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
-                Toast.makeText(getBaseContext(), title + " " + (position+1), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), title + " " + (position + 1), Toast.LENGTH_SHORT).show();
 
                 Bible.settings.setCurrentChapter(position + 1);
                 Bible.settings.setCurrentMaxChapters(Bible.db.getChapterSize(currentBook));
