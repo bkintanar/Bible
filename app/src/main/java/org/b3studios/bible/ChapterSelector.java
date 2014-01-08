@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -54,29 +53,6 @@ public class ChapterSelector extends Activity {
 
             }
         });
-    }
-
-    private void updateMainTextView() {
-        new Thread(new Runnable() {
-            public void run() {
-
-                String chapter = Bible.db.getChapterToDisplay();
-
-                setMainTextViewText(chapter.toString());
-            }
-        }).start();
-    }
-
-    public void setMainTextViewText(final String s) {
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                Bible.mainTextView.setText(Html.fromHtml(s));
-            }
-        });
-
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

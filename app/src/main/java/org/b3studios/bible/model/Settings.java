@@ -2,8 +2,7 @@ package org.b3studios.bible.model;
 
 import android.graphics.Typeface;
 
-import org.b3studios.bible.Bible;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class Settings {
@@ -15,9 +14,14 @@ public class Settings {
 
     private int mainViewTextSize = 18;
 
+    public ArrayList<String> positionHasFocus = new ArrayList<String>();
+
     private List<String> bookNames;
 
-    private Typeface[] typefaces = {Typeface.SANS_SERIF, Typeface.SERIF, Typeface.MONOSPACE};
+    public int currentTypeface = 0;
+
+    public Typeface[] typefaces = {Typeface.SANS_SERIF, Typeface.SERIF, Typeface.MONOSPACE};
+    public int position = 0;
 
     public String getCurrentTranslation() {
         return currentTranslation;
@@ -64,29 +68,16 @@ public class Settings {
     public void setMainViewTextSize(int textSize) {
 
         this.mainViewTextSize = textSize;
-        Bible.mainTextView.setTextSize(textSize);
     }
 
     public int getMainViewTypeface() {
 
-        Typeface tf = Bible.mainTextView.getTypeface();
-
-        int returnValue = 0;
-
-        if (tf == typefaces[0]) {
-            returnValue = 0;
-        } else if (tf == typefaces[1]) {
-            returnValue = 1;
-        } else if (tf == typefaces[2]) {
-            returnValue = 2;
-        }
-
-        return returnValue;
+        return currentTypeface;
     }
 
     public void setMainViewTypeface(int index) {
 
-        Bible.mainTextView.setTypeface(typefaces[index]);
+        currentTypeface = index;
     }
 
 

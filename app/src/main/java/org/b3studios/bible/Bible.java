@@ -6,17 +6,20 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Html;
+import android.text.Spannable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.AbsListView;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import org.b3studios.bible.adapter.MainListViewAdapter;
 import org.b3studios.bible.adapter.TitleNavigationAdapter;
 import org.b3studios.bible.helper.DatabaseHelper;
 import org.b3studios.bible.model.Settings;
@@ -30,7 +33,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Bible extends Activity implements ActionBar.OnNavigationListener {
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+
+public class Bible extends Activity implements ActionBar.OnNavigationListener, PullToRefreshAttacher.OnRefreshListener {
+    public static int goToChapter;
     // action bar
     protected ActionBar actionBar;
 
@@ -45,16 +52,24 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
     public static DatabaseHelper db;
     public SearchView searchView;
 
-
-    public static TextView mainTextView;
     public static TextView bookTextView;
+    public static ListView mainListView;
 
     public int PREVIOUS = -1;
     public int NEXT     = 1;
 
+    private ArrayList<Spannable> chapter;
+
     public static final String PREFS_NAME = "UserBibleInfo";
 
+    public PullToRefreshAttacher mPullToRefreshAttacher;
+
+    public static int mLastFirstVisibleItem;
+    public static int mIsScrollingUp = 0;
+
     String[] sVersion = {"kjv", "adb", "ceb"};
+
+//    private PullToRefreshLayout mPullToRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,16 +113,39 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
         settings.setBookNames(initBookNames());
 
         // Get components from XML
-        setMainTextView((TextView) findViewById(R.id.main_text));
         setBookTextView((TextView) findViewById(R.id.current_book));
 
         loadSharedPreferences();
 
-        Button previousBtn = (Button) findViewById(R.id.previous_button);
-        Button nextBtn     = (Button) findViewById(R.id.next_button);
+//        Button previousBtn = (Button) findViewById(R.id.previous_button);
+//        Button nextBtn     = (Button) findViewById(R.id.next_button);
+        mainListView       = (ListView) findViewById(R.id.mainListView);
+
+        mainListView.setOnScrollListener( new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (view.getId() == mainListView.getId()) {
+                    final int currentFirstVisibleItem = mainListView.getFirstVisiblePosition();
+
+                    if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+                        mIsScrollingUp = -1;
+                        goToChapter = NEXT;
+                    } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+                        mIsScrollingUp = 1;
+                        goToChapter = PREVIOUS;
+                    }
+
+                    mLastFirstVisibleItem = currentFirstVisibleItem;
+                }            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
 
         // Set listeners
-        getBookTextView().setOnClickListener( new OnClickListener() {
+        getBookTextView().setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent selector = new Intent("org.b3studios.bible.BOOKSELECTOR");
@@ -115,21 +153,39 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
             }
         });
 
-        previousBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToChapter(PREVIOUS);
-            }
-        });
-        nextBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToChapter(NEXT);
-            }
-        });
+//        previousBtn.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick (View v){
+//                goToChapter(PREVIOUS);
+//            }
+//        }
+//
+//        );
+//
+//        nextBtn.setOnClickListener(new
+//
+//        OnClickListener() {
+//            @Override
+//            public void onClick (View v){
+//                goToChapter(NEXT);
+//            }
+//        }
+//
+//        );
 
         // display default view
         goToChapter(0);
+
+        // Create a PullToRefreshAttacher instance
+        mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
+        mPullToRefreshAttacher.setPullFromBothWays(true);
+
+        // Retrieve the PullToRefreshLayout from the content view
+        PullToRefreshLayout ptrLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
+
+        // Give the PullToRefreshAttacher to the PullToRefreshLayout, along with a refresh listener.
+        ptrLayout.setPullToRefreshAttacher(mPullToRefreshAttacher, this);
+//        ptrLayout.setPullToRefreshAttacher(mPullToRefreshAttacher2, this);
     }
 
     private void loadSharedPreferences() {
@@ -362,18 +418,16 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
 
 		setBookTextView((TextView) findViewById(R.id.current_book));
 
-		getBookTextView().setText(settings.getCurrentBook() + " " + settings.getCurrentChapter());
+		getBookTextView().setText(settings.getCurrentBook() + " " + settings.getCurrentChapter() + " \u25BC");
 
-//		Log.i("DEBUG", "Displaying: " + settings.getBookNames().get(index) + " " + settings.getCurrentChapter() + " " + settings.getCurrentTranslation().toUpperCase());
+        chapter = Bible.db.getChapterToDisplay();
 
-        updateMainTextView();
+        MainListViewAdapter arrayListViewAdapter = new MainListViewAdapter(getApplicationContext(), chapter);
+
+        mainListView.setAdapter(arrayListViewAdapter);
 	}
 
     // Getters and Setters
-
-    public void setMainTextView(TextView mainTextView) {
-        this.mainTextView = mainTextView;
-    }
 
     public TextView getBookTextView() {
         return bookTextView;
@@ -388,22 +442,68 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener {
         new Thread(new Runnable() {
             public void run() {
 
-                String chapter = Bible.db.getChapterToDisplay();
+                ArrayList<Spannable> chapter = Bible.db.getChapterToDisplay();
 
-                setMainTextViewText(chapter.toString());
+                setMainTextViewText(chapter);
+
             }
         }).start();
     }
 
-    public void setMainTextViewText(final String s) {
+    public void setMainTextViewText(final ArrayList<Spannable> s) {
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
-                mainTextView.setText(Html.fromHtml(s));
+                MainListViewAdapter arrayListViewAdapter = new MainListViewAdapter(getApplicationContext(), s);
+
+                mainListView.setAdapter(arrayListViewAdapter);
+
+                if (Bible.settings.position > 0) {
+                    mainListView.post( new Runnable() {
+                        @Override
+                        public void run() {
+                            mainListView.setSelection(Bible.settings.position-1);
+                            Bible.settings.position = 0;
+                        }
+                    });
+                }
             }
         });
 
+    }
+
+    @Override
+    public void onRefreshStarted(View view) {
+        /**
+         * Simulate Refresh with 4 seconds sleep
+         */
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+                goToChapter(goToChapter);
+//                mIsScrollingUp = 0;
+
+                if (goToChapter == PREVIOUS) {
+                    mainListView.setSelection(chapter.size());
+                }
+                // Notify PullToRefreshAttacher that the refresh has finished
+                mPullToRefreshAttacher.setRefreshComplete();
+
+            }
+        }.execute();
     }
 }

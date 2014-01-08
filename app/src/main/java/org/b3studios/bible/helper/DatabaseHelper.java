@@ -6,7 +6,11 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Typeface;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.StyleSpan;
 
 import org.b3studios.bible.Bible;
 
@@ -14,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -175,23 +180,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
     }
 
-    public String getChapterToDisplay() {
+    public ArrayList<Spannable> getChapterToDisplay() {
 
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + Bible.settings.getCurrentTranslation() +  " WHERE book=? AND chapter=?";
 
         Cursor cursor = db.rawQuery(query, new String[] { Bible.settings.getCurrentBook(),  String.valueOf(Bible.settings.getCurrentChapter()) });
 
-        StringBuilder  chapter  = new StringBuilder();
+        ArrayList<Spannable> searchResult = new ArrayList<Spannable>();
 
         if(cursor.moveToFirst()) {
             do {
-                chapter.append("<strong>").append(cursor.getString(2)).append("</strong> ").append(cursor.getString(3)).append("<br />");
+                String passage = cursor.getString(3);
+
+                String verse = cursor.getString(2) + " ";
+
+                Spannable spanRange = new SpannableString(verse + passage);
+
+                // Add Bold text to the verse
+                spanRange.setSpan(new StyleSpan(Typeface.BOLD), 0, verse.length()-1,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                searchResult.add(spanRange);
+
             } while (cursor.moveToNext());
         }
         cursor.close();
 
-        return chapter.toString();
+        return searchResult;
     }
 
     public int getChapterSize(String currentBook) {

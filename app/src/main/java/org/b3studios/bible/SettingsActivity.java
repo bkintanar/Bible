@@ -16,6 +16,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.view.MenuItem;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class SettingsActivity extends PreferenceActivity {
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowHomeEnabled(false);
-//        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -276,5 +277,15 @@ public class SettingsActivity extends PreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
         }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+//        Intent myIntent = new Intent(getApplicationContext(), Bible.class);
+//        startActivityForResult(myIntent, 0);
+
+        finish();
+
+        return true;
+
     }
 }

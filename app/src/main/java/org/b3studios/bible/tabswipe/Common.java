@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
@@ -101,7 +100,7 @@ public class Common {
         Runnable runnable = new Runnable() {
             public void run() {
 
-                ListView myListView = (ListView) activity.findViewById(id);
+                final ListView myListView = (ListView) activity.findViewById(id);
 
                 SearchResultAdapter arrayListViewAdapter = new SearchResultAdapter(activity, searchResult);
 
@@ -111,24 +110,25 @@ public class Common {
 
                     myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                            String[] verse = verseCallback.get(position).split("-");
+                            final String[] verse = verseCallback.get(position).split("-");
 
                             if (verse.length == 3) {
 
                                 Bible.settings.setCurrentBook(verse[0]);
                                 Bible.settings.setCurrentChapter(Integer.parseInt(verse[1]));
+                                Bible.settings.position = Integer.parseInt(verse[2]);
 
-                                updateMainTextView();
+                                Bible.bookTextView.setText(Bible.settings.getCurrentBook() + " " + Bible.settings.getCurrentChapter() + " \u25BC");
+
+                                activity.finish();
 
                                 Toast.makeText(activity, verse[0] + " " + verse[1] + ":" + verse[2], Toast.LENGTH_SHORT).show();
                             }
                         }
 
                     });
-
-                    arrayListViewAdapter.notifyDataSetChanged();
                 }
                 synchronized ( this )
                 {
@@ -136,7 +136,7 @@ public class Common {
                 }
             }
         };
-
+//
         startOnUiAndWait(runnable);
     }
 
@@ -160,35 +160,5 @@ public class Common {
                 e.printStackTrace();
             }
         }
-    }
-
-    private void updateMainTextView() {
-        new Thread(new Runnable() {
-            public void run() {
-
-                String chapter = Bible.db.getChapterToDisplay();
-
-                setMainTextViewText(chapter.toString());
-            }
-        }).start();
-    }
-
-    public void setMainTextViewText(final String s) {
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                Bible.mainTextView.setText(Html.fromHtml(s));
-
-                Bible.bookTextView.setText(Bible.settings.getCurrentBook() + " " + Bible.settings.getCurrentChapter());
-
-                activity.finish();
-//
-//                Intent main = new Intent(activity, Bible.class);
-//                activity.startActivity(main);
-            }
-        });
-
     }
 }
