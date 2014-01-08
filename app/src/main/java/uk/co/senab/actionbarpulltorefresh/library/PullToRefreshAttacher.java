@@ -40,6 +40,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.b3studios.bible.Bible;
 import org.b3studios.bible.R;
 
 import java.util.WeakHashMap;
@@ -83,12 +84,14 @@ public class PullToRefreshAttacher implements View.OnTouchListener {
 
     private boolean mEnabled = true;
     private boolean pullFromBottom = false;
+    private boolean pullFromBothWays = false;
     private boolean mRefreshOnUp;
     private int mRefreshMinimizeDelay;
 
     private final Handler mHandler = new Handler();
 
     private OnPullDownListener pullDownListener;
+    private boolean mHandlingTouchEventFromDown;
 
     /**
      * Get a PullToRefreshAttacher for this Activity. If there is already a PullToRefreshAttacher
@@ -347,6 +350,15 @@ public class PullToRefreshAttacher implements View.OnTouchListener {
     }
 
     /**
+     * Allows you to pull from the bottom
+     *
+     * @param pullFromBothWays - enables pull from bottom instead of pulling down from top
+     */
+    public void setPullFromBothWays(boolean pullFromBothWays) {
+        this.pullFromBothWays = pullFromBothWays;
+    }
+
+    /**
      * Allows you to set a custom header view instead of the original header in the ActionBar
      *
      * @param customHeaderView - your custom header
@@ -392,7 +404,7 @@ public class PullToRefreshAttacher implements View.OnTouchListener {
                     final float y = event.getY();
                     final float yDiff = pullFromBottom ? mInitialMotionY - y : y - mInitialMotionY;
 
-                    if (yDiff > mTouchSlop) {
+                    if (yDiff > mTouchSlop || pullFromBothWays) {
                         mIsBeingDragged = true;
                         if (pullDownListener != null) pullDownListener.onPullDown(true);
                         onPullStarted(y);
@@ -405,10 +417,15 @@ public class PullToRefreshAttacher implements View.OnTouchListener {
 
             case MotionEvent.ACTION_DOWN: {
                 // If we're already refreshing, ignore
-                if (canRefresh(true, params.onRefreshListener) &&
-                        pullFromBottom ? params.viewDelegate.isScrolledToBottom(view) :
-                        params.viewDelegate.isScrolledToTop(view)) {
+                if (canRefresh(true, params.onRefreshListener) && params.viewDelegate.isScrolledToBottom(view) && Bible.mIsScrollingUp == -1) {
                     mInitialMotionY = event.getY();
+
+                    ((DefaultHeaderTransformer) getHeaderTransformer()).setPullText("Pull to load next chapter...");
+                }
+                else  if(canRefresh(true, params.onRefreshListener) && params.viewDelegate.isScrolledToTop(view) && Bible.mIsScrollingUp == 1) {
+                    mInitialMotionY = event.getY();
+
+                    ((DefaultHeaderTransformer) getHeaderTransformer()).setPullText("Pull to load previous chapter...");
                 }
                 break;
             }
@@ -454,10 +471,22 @@ public class PullToRefreshAttacher implements View.OnTouchListener {
                      * Check to see if the user is scrolling the right direction (down).
                      * We allow a small scroll up which is the check against negative touch slop.
                      */
-                    if (pullFromBottom ? yDx <= mTouchSlop || mLastMotionY == -1f : yDx >= -mTouchSlop) {
+                    if (pullFromBottom) {
+                        if (yDx <= mTouchSlop) {
+                            onPull(view, y);
+                            mLastMotionY = y;
+                        }
+                    } else if (pullFromBothWays) {
+                        if ((yDx <= mTouchSlop) || yDx >= -mTouchSlop) {
+                            onPull(view, y);
+                            if ((yDx < 0f) || yDx > 0f) {
+                                mLastMotionY = y;
+                            }
+                        }
+                    } else if (yDx >= -mTouchSlop) {
                         onPull(view, y);
                         // Only record the y motion if the user has scrolled down.
-                        if (pullFromBottom ? yDx < 0f || mLastMotionY == -1f : yDx > 0f) {
+                        if (yDx > 0f) {
                             mLastMotionY = y;
                         }
                     } else {
@@ -487,6 +516,8 @@ public class PullToRefreshAttacher implements View.OnTouchListener {
         if (pullDownListener != null) pullDownListener.onPullDown(false);
         mIsHandlingTouchEvent = false;
         mInitialMotionY = mLastMotionY = mPullBeginY = -1f;
+        Bible.mIsScrollingUp = 0;
+        Bible.mLastFirstVisibleItem = Bible.mainListView.getFirstVisiblePosition() +1;
     }
 
     void onPullStarted(float y) {
@@ -507,17 +538,32 @@ public class PullToRefreshAttacher implements View.OnTouchListener {
         }
 
         final int pxScrollForRefresh = getScrollNeededForRefresh(view);
-        final float scrollLength = pullFromBottom ? mPullBeginY - y : y - mPullBeginY;
+        final float scrollLengthBottom = mPullBeginY - y;
+        final float scrollLengthTop = y - mPullBeginY;
 
-        if (scrollLength < pxScrollForRefresh) {
-            mHeaderTransformer.onPulled(scrollLength / pxScrollForRefresh);
-        } else {
-            if (mRefreshOnUp) {
-                mHeaderTransformer.onReleaseToRefresh();
+        if (scrollLengthBottom > 0) {
+            if (scrollLengthBottom < pxScrollForRefresh) {
+                mHeaderTransformer.onPulled(scrollLengthBottom / pxScrollForRefresh);
             } else {
-                setRefreshingInt(view, true, true);
+                if (mRefreshOnUp) {
+                    mHeaderTransformer.onReleaseToRefresh();
+                } else {
+                    setRefreshingInt(view, true, true);
+                }
             }
         }
+        else if (scrollLengthTop > 0) {
+            if (scrollLengthTop < pxScrollForRefresh) {
+                mHeaderTransformer.onPulled(scrollLengthTop / pxScrollForRefresh);
+            } else {
+                if (mRefreshOnUp) {
+                    mHeaderTransformer.onReleaseToRefresh();
+                } else {
+                    setRefreshingInt(view, true, true);
+                }
+            }
+        }
+
     }
 
     void onPullEnded() {
