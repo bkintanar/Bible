@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Spannable;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,7 +37,7 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 
 public class Bible extends Activity implements ActionBar.OnNavigationListener, PullToRefreshAttacher.OnRefreshListener {
-    public static int goToChapter;
+    public static int GO_TO_CHAPTER;
     // action bar
     protected ActionBar actionBar;
 
@@ -117,8 +116,6 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
 
         loadSharedPreferences();
 
-//        Button previousBtn = (Button) findViewById(R.id.previous_button);
-//        Button nextBtn     = (Button) findViewById(R.id.next_button);
         mainListView = (ListView) findViewById(R.id.mainListView);
 
         mainListView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -130,19 +127,17 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
 
                     if (currentLastVisibleItem == chapter.size()-1) {
                         mIsScrollingUp = -1;
-                        goToChapter = NEXT;
+                        GO_TO_CHAPTER = NEXT;
                     } else if (currentFirstVisibleItem == 0) {
                         mIsScrollingUp = 1;
-                        goToChapter = PREVIOUS;
+                        GO_TO_CHAPTER = PREVIOUS;
                     }
                 }
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                final int currentFirstVisibleItem = mainListView.getFirstVisiblePosition();
 
-                Log.i("DEBUG", "currentFirstVisibleItem = " + currentFirstVisibleItem);
             }
         });
 
@@ -154,26 +149,6 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
                 startActivity(selector);
             }
         });
-
-//        previousBtn.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick (View v){
-//                goToChapter(PREVIOUS);
-//            }
-//        }
-//
-//        );
-//
-//        nextBtn.setOnClickListener(new
-//
-//        OnClickListener() {
-//            @Override
-//            public void onClick (View v){
-//                goToChapter(NEXT);
-//            }
-//        }
-//
-//        );
 
         // display default view
         goToChapter(0);
@@ -187,7 +162,6 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
 
         // Give the PullToRefreshAttacher to the PullToRefreshLayout, along with a refresh listener.
         ptrLayout.setPullToRefreshAttacher(mPullToRefreshAttacher, this);
-//        ptrLayout.setPullToRefreshAttacher(mPullToRefreshAttacher2, this);
     }
 
     private void loadSharedPreferences() {
@@ -490,10 +464,9 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
             @Override
             protected void onPostExecute(Void result) {
                 super.onPostExecute(result);
-                goToChapter(goToChapter);
-//                mIsScrollingUp = 0;
+                goToChapter(GO_TO_CHAPTER);
 
-                if (goToChapter == PREVIOUS) {
+                if (GO_TO_CHAPTER == PREVIOUS) {
                     mainListView.setSelection(chapter.size());
                 }
                 // Notify PullToRefreshAttacher that the refresh has finished
