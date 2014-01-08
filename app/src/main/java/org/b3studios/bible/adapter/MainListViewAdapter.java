@@ -36,7 +36,7 @@ public class MainListViewAdapter extends ArrayAdapter<Spannable> {
         textView.setText(values.get(position));
         textView.setTypeface(Bible.settings.typefaces[Bible.settings.currentTypeface]);
         textView.setTextSize(Bible.settings.getMainViewTextSize());
-//        textView.setTextIsSelectable(true);
+        textView.setTextIsSelectable(true);
 
 //        rowView.setOnTouchListener( new View.OnTouchListener() {
 //            @Override
