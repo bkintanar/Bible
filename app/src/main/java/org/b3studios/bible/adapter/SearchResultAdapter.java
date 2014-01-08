@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.b3studios.bible.Bible;
 import org.b3studios.bible.R;
 
 import java.util.ArrayList;
@@ -33,7 +34,8 @@ public class SearchResultAdapter extends ArrayAdapter<Spannable> {
         View rowView = inflater.inflate(R.xml.row, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.rowSearchResultText);
         textView.setText(values.get(position));
-
+        textView.setTypeface(Bible.settings.typefaces[Bible.settings.currentTypeface]);
+        textView.setTextSize(Bible.settings.getMainViewTextSize());
         return rowView;
     }
 }
