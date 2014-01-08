@@ -48,8 +48,7 @@ public class ChapterSelector extends Activity {
                 Bible.settings.setCurrentChapter(position + 1);
                 Bible.settings.setCurrentMaxChapters(Bible.db.getChapterSize(currentBook));
 
-                updateMainTextView();
-                Bible.bookTextView.setText(bookNames.get(index) + " " + Bible.settings.getCurrentChapter());
+                Bible.bookTextView.setText(bookNames.get(index) + " " + Bible.settings.getCurrentChapter() + " \u25BC");
 
                 finish();
 
