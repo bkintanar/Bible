@@ -231,9 +231,9 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
     @Override
     public void onResume() {
 
-        updateMainTextView();
-
         super.onResume();
+
+        goToChapter(0);
     }
 
     @Override
@@ -392,9 +392,19 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
 
         chapter = Bible.db.getChapterToDisplay();
 
-        MainListViewAdapter arrayListViewAdapter = new MainListViewAdapter(getApplicationContext(), chapter);
+        mainListView.setAdapter(new MainListViewAdapter(getApplicationContext(), chapter));
 
-        mainListView.setAdapter(arrayListViewAdapter);
+        if (Bible.settings.position > 0) {
+            mainListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mainListView.setSelection(Bible.settings.position - 1);
+                    Bible.settings.position = 0;
+                }
+            });
+        }
+
+        mIsScrollingUp = 0;
     }
 
     // Getters and Setters
@@ -405,43 +415,6 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
 
     public void setBookTextView(TextView bookTextView) {
         this.bookTextView = bookTextView;
-    }
-
-    public void updateMainTextView() {
-
-        new Thread(new Runnable() {
-            public void run() {
-
-                ArrayList<Spannable> chapter = Bible.db.getChapterToDisplay();
-
-                setMainTextViewText(chapter);
-
-            }
-        }).start();
-    }
-
-    public void setMainTextViewText(final ArrayList<Spannable> s) {
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                MainListViewAdapter arrayListViewAdapter = new MainListViewAdapter(getApplicationContext(), s);
-
-                mainListView.setAdapter(arrayListViewAdapter);
-
-                if (Bible.settings.position > 0) {
-                    mainListView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mainListView.setSelection(Bible.settings.position - 1);
-                            Bible.settings.position = 0;
-                        }
-                    });
-                }
-            }
-        });
-
     }
 
     @Override
