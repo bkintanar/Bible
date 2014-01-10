@@ -12,19 +12,20 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import org.b3studios.bible.adapter.ChapterButtonAdapter;
+import org.b3studios.bible.slidingmenu.BibleFragment;
 
 import java.util.List;
 
 public class ChapterSelector extends Activity {
 
-    private List<String> bookNames = Bible.settings.getBookNames();
+    private List<String> bookNames = BibleFragment.settings.getBookNames();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        final String currentBook = Bible.settings.getCurrentBook();
-        final int index = Bible.settings.getBookNames().indexOf(currentBook);
-        final String title = bookNames.get(Bible.settings.getBookNames().indexOf(currentBook));
+        final String currentBook = BibleFragment.settings.getCurrentBook();
+        final int index = BibleFragment.settings.getBookNames().indexOf(currentBook);
+        final String title = bookNames.get(BibleFragment.settings.getBookNames().indexOf(currentBook));
 
         super.onCreate(savedInstanceState);
         this.setTitle(title);
@@ -44,10 +45,10 @@ public class ChapterSelector extends Activity {
 
                 Toast.makeText(getBaseContext(), title + " " + (position + 1), Toast.LENGTH_SHORT).show();
 
-                Bible.settings.setCurrentChapter(position + 1);
-                Bible.settings.setCurrentMaxChapters(Bible.db.getChapterSize(currentBook));
+                BibleFragment.settings.setCurrentChapter(position + 1);
+                BibleFragment.settings.setCurrentMaxChapters(BibleFragment.db.getChapterSize(currentBook));
 
-                Bible.bookTextView.setText(bookNames.get(index) + " " + Bible.settings.getCurrentChapter() + " \u25BC");
+                BibleFragment.bookTextView.setText(bookNames.get(index) + " " + BibleFragment.settings.getCurrentChapter() + " \u25BC");
 
                 finish();
 

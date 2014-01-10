@@ -1,7 +1,7 @@
-package org.b3studios.bible;
+package org.b3studios.bible.slidingmenu;
 
 import android.app.ActionBar;
-import android.app.Activity;
+import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -9,16 +9,18 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Spannable;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import org.b3studios.bible.R;
 import org.b3studios.bible.adapter.MainListViewAdapter;
 import org.b3studios.bible.adapter.TitleNavigationAdapter;
 import org.b3studios.bible.helper.DatabaseHelper;
@@ -36,7 +38,8 @@ import java.util.List;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 
-public class Bible extends Activity implements ActionBar.OnNavigationListener, PullToRefreshAttacher.OnRefreshListener {
+public class BibleFragment extends Fragment implements ActionBar.OnNavigationListener, PullToRefreshAttacher.OnRefreshListener {
+
     public static int GO_TO_CHAPTER;
     // action bar
     protected ActionBar actionBar;
@@ -68,17 +71,21 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
 
     String[] sVersion = {"kjv", "adb", "ceb"};
 
-//    private PullToRefreshLayout mPullToRefreshLayout;
+    View rootView;
+
+    public BibleFragment() {
+    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        rootView = inflater.inflate(R.layout.fragment_bible, container, false);
+        setHasOptionsMenu(true);
 
-        actionBar = getActionBar();
+        actionBar = getActivity().getActionBar();
 
-        db = new DatabaseHelper(getApplicationContext());
+        db = new DatabaseHelper(getActivity());
 
         // Hide the action bar title
         actionBar.setDisplayShowTitleEnabled(false);
@@ -94,7 +101,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
         navSpinner.add(new SpinnerNavItem("Ang Biblia (Cebuano)"));
 
         // title drop down adapter
-        adapter = new TitleNavigationAdapter(getApplicationContext(), navSpinner);
+        adapter = new TitleNavigationAdapter(getActivity(), navSpinner);
 
         // assigning the spinner navigation
         actionBar.setListNavigationCallbacks(adapter, this);
@@ -112,9 +119,9 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
         settings.setBookNames(initBookNames());
 
         // Get components from XML
-        setBookTextView((TextView) findViewById(R.id.current_book));
+        setBookTextView((TextView) rootView.findViewById(R.id.current_book));
 
-        mainListView = (ListView) findViewById(R.id.mainListView);
+        mainListView = (ListView) rootView.findViewById(R.id.mainListView);
 
         mainListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -140,7 +147,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
         });
 
         // Set listeners
-        getBookTextView().setOnClickListener(new OnClickListener() {
+        getBookTextView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent selector = new Intent("org.b3studios.bible.BOOKSELECTOR");
@@ -154,19 +161,21 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
         goToChapter(0);
 
         // Create a PullToRefreshAttacher instance
-        mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
+        mPullToRefreshAttacher = PullToRefreshAttacher.get(getActivity());
         mPullToRefreshAttacher.setPullFromBothWays(true);
 
         // Retrieve the PullToRefreshLayout from the content view
-        PullToRefreshLayout ptrLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
+        PullToRefreshLayout ptrLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout);
 
         // Give the PullToRefreshAttacher to the PullToRefreshLayout, along with a refresh listener.
         ptrLayout.setPullToRefreshAttacher(mPullToRefreshAttacher, this);
+
+        return rootView;
     }
 
     private void loadSharedPreferences() {
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
 
         boolean hasSettingsStored = settings.getBoolean("hasSettingsStored", false);
 
@@ -177,41 +186,42 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
             // for version = 1.0.1
             if (settings.getString("currentBook", "Genesis").length() == 3) {
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putString("currentBook", Bible.settings.getCurrentBook());
+                editor.putString("currentBook", BibleFragment.settings.getCurrentBook());
                 editor.commit();
             }
 
-
             // has user settings stored, load them
-            Bible.settings.setCurrentTranslation(settings.getString("currentTranslation", "kjv"));
-            Bible.settings.setCurrentBook(settings.getString("currentBook", "Genesis"));
-            Bible.settings.setCurrentChapter(settings.getInt("currentChapter", 1));
-            Bible.settings.setCurrentMaxChapters(settings.getInt("currentMaxChapters", 50));
-            Bible.settings.setMainViewTextSize(settings.getInt("mainViewTextSize", 18));
-            Bible.settings.setMainViewTypeface(settings.getInt("mainViewTypeface", 0));
-            Bible.settings.setNightMode(settings.getBoolean("night_mode", false));
+            BibleFragment.settings.setCurrentTranslation(settings.getString("currentTranslation", "kjv"));
+            BibleFragment.settings.setCurrentBook(settings.getString("currentBook", "Genesis"));
+            BibleFragment.settings.setCurrentChapter(settings.getInt("currentChapter", 1));
+            BibleFragment.settings.setCurrentMaxChapters(settings.getInt("currentMaxChapters", 50));
+            BibleFragment.settings.setMainViewTextSize(settings.getInt("mainViewTextSize", 18));
+            BibleFragment.settings.setMainViewTypeface(settings.getInt("mainViewTypeface", 0));
+            BibleFragment.settings.setNightMode(settings.getBoolean("night_mode", false));
+            BibleFragment.settings.setPosition(settings.getInt("position", 0));
 
-            Bible.settings.setDefaults();
+            BibleFragment.settings.setDefaults();
 
             actionBar.setSelectedNavigationItem(index);
         }
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
 
         super.onStop();
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
 
-        editor.putString("currentTranslation", Bible.settings.getCurrentTranslation());
-        editor.putString("currentBook", Bible.settings.getCurrentBook());
-        editor.putInt("currentChapter", Bible.settings.getCurrentChapter());
-        editor.putInt("currentMaxChapters", Bible.settings.getCurrentMaxChapters());
-        editor.putInt("mainViewTextSize", Bible.settings.getMainViewTextSize());
-        editor.putInt("mainViewTypeface", Bible.settings.getMainViewTypeface());
-        editor.putBoolean("night_mode", Bible.settings.getNightMode());
+        editor.putString("currentTranslation", BibleFragment.settings.getCurrentTranslation());
+        editor.putString("currentBook", BibleFragment.settings.getCurrentBook());
+        editor.putInt("currentChapter", BibleFragment.settings.getCurrentChapter());
+        editor.putInt("currentMaxChapters", BibleFragment.settings.getCurrentMaxChapters());
+        editor.putInt("mainViewTextSize", BibleFragment.settings.getMainViewTextSize());
+        editor.putInt("mainViewTypeface", BibleFragment.settings.getMainViewTypeface());
+        editor.putBoolean("night_mode", BibleFragment.settings.getNightMode());
+        editor.putInt("position", BibleFragment.settings.getPosition());
 
         editor.putBoolean("hasSettingsStored", true);
 
@@ -234,25 +244,20 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
 
     @Override
     public void onResume() {
-
         super.onResume();
-
-        Bible.settings.setDefaults();
-
-        goToChapter(0);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
+    public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
 
-        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
 
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        super.onCreateOptionsMenu(menu, inflater);
+
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) menu.findItem(R.id.action_search)
                 .getActionView();
         searchView.setSearchableInfo(searchManager
-                .getSearchableInfo(getComponentName()));
+                .getSearchableInfo(getActivity().getComponentName()));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -268,8 +273,6 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
                 return true;
             }
         });
-
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -278,21 +281,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
         // Handle presses on the action bar items
         switch (item.getItemId()) {
 
-            case R.id.action_about:
-
-                Intent about = new Intent("org.b3studios.bible.ABOUT");
-                startActivity(about);
-
-                return true;
-
             case R.id.action_search:
-
-                return true;
-
-            case R.id.action_settings:
-
-                Intent settings = new Intent("org.b3studios.bible.SETTINGS");
-                startActivity(settings);
 
                 return true;
 
@@ -313,7 +302,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
 
         try {
 
-            is = getAssets().open("data/book_names.txt");
+            is = getActivity().getAssets().open("data/book_names.txt");
             r = new BufferedReader(new InputStreamReader(is));
 
             while ((bookTitle = r.readLine()) != null) {
@@ -389,26 +378,59 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
             settings.setCurrentChapter(settings.getCurrentChapter() + i);
         }
 
-        setBookTextView((TextView) findViewById(R.id.current_book));
+        setBookTextView((TextView) rootView.findViewById(R.id.current_book));
 
         getBookTextView().setText(settings.getCurrentBook() + " " + settings.getCurrentChapter() + " \u25BC");
 
-        chapter = Bible.db.getChapterToDisplay();
-
-        mainListView.setAdapter(new MainListViewAdapter(getApplicationContext(), chapter));
-
-        if (Bible.settings.position > 0) {
-            mainListView.post(new Runnable() {
-                @Override
-                public void run() {
-                    mainListView.setSelection(Bible.settings.position - 1);
-                    Bible.settings.position = 0;
-                }
-            });
-        }
+        updateMainTextView();
 
         mIsScrollingUp = 0;
     }
+
+    private void updateMainTextView() {
+        new Thread(new Runnable() {
+            public void run() {
+
+                chapter = BibleFragment.db.getChapterToDisplay();
+
+                setMainTextViewText();
+            }
+        }).start();
+    }
+
+    public void setMainTextViewText() {
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                MainListViewAdapter adapter = new MainListViewAdapter(getActivity(), chapter);
+
+                mainListView.setAdapter(adapter);
+
+                final SharedPreferences settings = getActivity().getSharedPreferences("UserBibleInfo", 0);
+
+                if (settings.getInt("position", 0) > 0) {
+                    mainListView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mainListView.setSelection(settings.getInt("position", 0) - 1);
+
+                            SharedPreferences.Editor editor = settings.edit();
+
+                            editor.putInt("position", 0);
+
+                            editor.commit();
+
+                            BibleFragment.settings.position = 0;
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+
 
     // Getters and Setters
 
@@ -417,7 +439,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
     }
 
     public void setBookTextView(TextView bookTextView) {
-        Bible.bookTextView = bookTextView;
+        this.bookTextView = bookTextView;
     }
 
     @Override

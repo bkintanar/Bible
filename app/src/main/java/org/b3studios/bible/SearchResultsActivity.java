@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
+import org.b3studios.bible.slidingmenu.BibleFragment;
 import org.b3studios.bible.tabswipe.adapter.TabsPagerAdapter;
 
 public class SearchResultsActivity extends FragmentActivity implements
@@ -17,7 +18,7 @@ public class SearchResultsActivity extends FragmentActivity implements
     private ViewPager viewPager;
     private ActionBar actionBar;
     // Tab titles
-    private String[] tabs = {Bible.settings.getCurrentBook(), "Old Testament", "New Testament"};
+    private String[] tabs = {BibleFragment.settings.getCurrentBook(), "Old Testament", "New Testament"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

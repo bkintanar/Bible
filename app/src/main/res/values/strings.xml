@@ -1,8 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Bible</string>
-    <string name="previous">&lt;&lt;</string>
-    <string name="next">&gt;&gt;</string>
     <string name="current_book">Genesis 1</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_about">About</string>
@@ -12,6 +11,36 @@
     <string name="title_activity_u_bible">uBible</string>
     <string name="search_hint">Search text in the Bible</string>
     <string name="about_text">uBible is built because we saw the lack of intuitive Cebuano translated Bible available in the Google Play Store. uBible is a project done by the Youth of the Pentecostals of Mandaue City, United Pentecostal Church Philippines, Inc. \n\nLike us at https://facebook.com/upcmandaue or\nfollow us over at https://twitter.com/uBibleApp</string>
-    <string name="main_text"/>
+    <string name="main_text"></string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="drawer_open">Slider Menu Opened</string>
+    <string name="drawer_close">Slider Menu Closed</string>
+
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item >Bible</item>
+        <item >Settings</item>
+        <item >About</item>
+        <item >Communities</item>
+        <item >Pages</item>
+        <item >What\'s Hot</item>
+    </string-array>
+
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_settings</item>
+        <item>@drawable/ic_about</item>
+        <item>@drawable/ic_communities</item>
+        <item>@drawable/ic_pages</item>
+        <item>@drawable/ic_whats_hot</item>
+    </array>
+
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
 
 </resources>

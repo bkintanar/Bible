@@ -3,7 +3,7 @@ package org.b3studios.bible.model;
 import android.graphics.Color;
 import android.graphics.Typeface;
 
-import org.b3studios.bible.Bible;
+import org.b3studios.bible.slidingmenu.BibleFragment;
 
 import java.util.List;
 
@@ -86,15 +86,14 @@ public class Settings {
 
     public void setDefaults() {
 
-        if (nightMode) {
-
-            Bible.mainListView.setBackgroundColor(Color.BLACK);
-            Bible.bookTextView.setBackgroundColor(Color.BLACK);
-            Bible.bookTextView.setTextColor(Color.WHITE);
+        if (this.nightMode) {
+            BibleFragment.mainListView.setBackgroundColor(Color.BLACK);
+            BibleFragment.bookTextView.setBackgroundColor(Color.BLACK);
+            BibleFragment.bookTextView.setTextColor(Color.WHITE);
         } else {
-            Bible.mainListView.setBackgroundColor(Color.WHITE);
-            Bible.bookTextView.setBackgroundColor(Color.WHITE);
-            Bible.bookTextView.setTextColor(Color.BLACK);
+            BibleFragment.mainListView.setBackgroundColor(Color.WHITE);
+            BibleFragment.bookTextView.setBackgroundColor(Color.WHITE);
+            BibleFragment.bookTextView.setTextColor(Color.BLACK);
         }
     }
 
@@ -104,5 +103,13 @@ public class Settings {
 
     public Boolean getNightMode() {
         return nightMode;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public int getPosition() {
+        return position;
     }
 }

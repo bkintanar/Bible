@@ -12,12 +12,13 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import org.b3studios.bible.adapter.BookButtonAdapter;
+import org.b3studios.bible.slidingmenu.BibleFragment;
 
 import java.util.List;
 
 public class BookSelector extends Activity {
 
-    private List<String> bookNames = Bible.settings.getBookNames();
+    private List<String> bookNames = BibleFragment.settings.getBookNames();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class BookSelector extends Activity {
 
                 Toast.makeText(getBaseContext(), bookNames.get(position), Toast.LENGTH_SHORT).show();
 
-                Bible.settings.setCurrentBook(Bible.settings.getBookNames().get(position));
+                BibleFragment.settings.setCurrentBook(BibleFragment.settings.getBookNames().get(position));
 
                 // create new activity
                 Intent chapterChooser = new Intent(getApplicationContext(), ChapterSelector.class);
@@ -53,8 +54,6 @@ public class BookSelector extends Activity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent myIntent = new Intent(getApplicationContext(), Bible.class);
-        startActivityForResult(myIntent, 0);
 
         finish();
 

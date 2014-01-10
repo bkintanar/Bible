@@ -1,6 +1,7 @@
 package org.b3studios.bible.tabswipe;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -13,9 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.b3studios.bible.Bible;
 import org.b3studios.bible.adapter.SearchResultAdapter;
 import org.b3studios.bible.helper.DatabaseHelper;
+import org.b3studios.bible.slidingmenu.BibleFragment;
 
 import java.util.ArrayList;
 
@@ -47,7 +48,7 @@ public class Common {
                 Cursor cursor;
 
                 if (RESULT_TYPE == 4) {
-                    cursor = db.customQuery(RESULT_TYPE, query, Bible.settings.getCurrentBook());
+                    cursor = db.customQuery(RESULT_TYPE, query, BibleFragment.settings.getCurrentBook());
                 } else {
                     cursor = db.customQuery(RESULT_TYPE, query, "");
                 }
@@ -115,11 +116,19 @@ public class Common {
 
                             if (verse.length == 3) {
 
-                                Bible.settings.setCurrentBook(verse[0]);
-                                Bible.settings.setCurrentChapter(Integer.parseInt(verse[1]));
-                                Bible.settings.position = Integer.parseInt(verse[2]);
+                                BibleFragment.settings.setCurrentBook(verse[0]);
+                                BibleFragment.settings.setCurrentChapter(Integer.parseInt(verse[1]));
+                                BibleFragment.settings.position = Integer.parseInt(verse[2]);
 
-                                Bible.bookTextView.setText(Bible.settings.getCurrentBook() + " " + Bible.settings.getCurrentChapter() + " \u25BC");
+                                BibleFragment.bookTextView.setText(BibleFragment.settings.getCurrentBook() + " " + BibleFragment.settings.getCurrentChapter() + " \u25BC");
+
+                                SharedPreferences settings = activity.getSharedPreferences("UserBibleInfo", 0);
+
+                                SharedPreferences.Editor editor = settings.edit();
+
+                                editor.putInt("position", Integer.parseInt(verse[2]));
+
+                                editor.commit();
 
                                 activity.finish();
 

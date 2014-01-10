@@ -1,38 +1,41 @@
-package org.b3studios.bible;
+package org.b3studios.bible.slidingmenu;
 
 import android.app.ActionBar;
-import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.b3studios.bible.R;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-/**
- * Created by bkintanar on 12/24/13.
- */
-public class About extends Activity {
+public class AboutFragment extends Fragment {
+
+    public AboutFragment() {
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
+        ActionBar actionBar = getActivity().getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
 
-        setContentView(R.layout.about);
+        View rootView = inflater.inflate(R.layout.fragment_about, container, false);
 
-        ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
 
-        this.setTitle("About uBible");
-
-        Context context = getApplicationContext(); // or activity.getApplicationContext()
+        Context context = getActivity().getApplicationContext(); // or activity.getApplicationContext()
         PackageManager packageManager = context.getPackageManager();
         String packageName = context.getPackageName();
 
@@ -48,13 +51,13 @@ public class About extends Activity {
 
         } finally {
 
-            TextView tvVersionName = (TextView) findViewById(R.id.tvVersionNumber);
+            TextView tvVersionName = (TextView) rootView.findViewById(R.id.tvVersionNumber);
 
             String gitCommit = "";
 
             try {
 
-                InputStream is = getAssets().open("version.txt");
+                InputStream is = getActivity().getAssets().open("version.txt");
                 BufferedReader r = new BufferedReader(new InputStreamReader(is));
 
                 gitCommit = r.readLine();
@@ -68,14 +71,12 @@ public class About extends Activity {
                 tvVersionName.setText("Version " + myVersionName + " (" + gitCommit.substring(32) + ")");
             }
         }
+
+        return rootView;
     }
 
+
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        Intent myIntent = new Intent(getApplicationContext(), Bible.class);
-        startActivityForResult(myIntent, 0);
-
-        finish();
 
         return true;
 

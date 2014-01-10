@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.b3studios.bible.Bible;
 import org.b3studios.bible.R;
+import org.b3studios.bible.slidingmenu.BibleFragment;
 
 import java.util.ArrayList;
 
@@ -32,8 +32,8 @@ public class SearchResultAdapter extends ArrayAdapter<Spannable> {
         if (rowView != null) {
             textView = (TextView) rowView.findViewById(R.id.rowSearchResultText);
             textView.setText(values.get(position));
-            textView.setTypeface(Bible.settings.typefaces[Bible.settings.currentTypeface]);
-            textView.setTextSize(Bible.settings.getMainViewTextSize());
+            textView.setTypeface(BibleFragment.settings.typefaces[BibleFragment.settings.currentTypeface]);
+            textView.setTextSize(BibleFragment.settings.getMainViewTextSize());
         }
 
         return rowView;

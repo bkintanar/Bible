@@ -40,8 +40,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.b3studios.bible.Bible;
 import org.b3studios.bible.R;
+import org.b3studios.bible.slidingmenu.BibleFragment;
 
 import java.util.WeakHashMap;
 
@@ -417,15 +417,15 @@ public class PullToRefreshAttacher implements View.OnTouchListener {
 
             case MotionEvent.ACTION_DOWN: {
                 // If we're already refreshing, ignore
-                if (canRefresh(true, params.onRefreshListener) && params.viewDelegate.isScrolledToBottom(view) && Bible.mIsScrollingUp == -1) {
+                if (canRefresh(true, params.onRefreshListener) && params.viewDelegate.isScrolledToBottom(view) && BibleFragment.mIsScrollingUp == -1) {
                     mInitialMotionY = event.getY();
 
-                    ((DefaultHeaderTransformer) getHeaderTransformer()).setPullText("Pull to load next chapter…");
+                    ((DefaultHeaderTransformer) getHeaderTransformer()).setPullText("Swipe up to load next chapter…");
                 }
-                else  if(canRefresh(true, params.onRefreshListener) && params.viewDelegate.isScrolledToTop(view) && Bible.mIsScrollingUp == 1) {
+                else  if(canRefresh(true, params.onRefreshListener) && params.viewDelegate.isScrolledToTop(view) && BibleFragment.mIsScrollingUp == 1) {
                     mInitialMotionY = event.getY();
 
-                    ((DefaultHeaderTransformer) getHeaderTransformer()).setPullText("Pull to load previous chapter…");
+                    ((DefaultHeaderTransformer) getHeaderTransformer()).setPullText("Swipe down to load previous chapter…");
                 }
                 break;
             }
@@ -516,7 +516,7 @@ public class PullToRefreshAttacher implements View.OnTouchListener {
         if (pullDownListener != null) pullDownListener.onPullDown(false);
         mIsHandlingTouchEvent = false;
         mInitialMotionY = mLastMotionY = mPullBeginY = -1f;
-        Bible.mIsScrollingUp = 0;
+        BibleFragment.mIsScrollingUp = 0;
     }
 
     void onPullStarted(float y) {

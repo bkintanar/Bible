@@ -12,7 +12,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 
-import org.b3studios.bible.Bible;
+import org.b3studios.bible.slidingmenu.BibleFragment;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -162,9 +162,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<Spannable> getChapterToDisplay() {
 
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + Bible.settings.getCurrentTranslation() + " WHERE book=? AND chapter=?";
+        String query = "SELECT * FROM " + BibleFragment.settings.getCurrentTranslation() + " WHERE book=? AND chapter=?";
 
-        Cursor cursor = db != null ? db.rawQuery(query, new String[]{Bible.settings.getCurrentBook(), String.valueOf(Bible.settings.getCurrentChapter())}) : null;
+        Cursor cursor = db != null ? db.rawQuery(query, new String[]{BibleFragment.settings.getCurrentBook(), String.valueOf(BibleFragment.settings.getCurrentChapter())}) : null;
 
         ArrayList<Spannable> searchResult = new ArrayList<Spannable>();
 
@@ -197,7 +197,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int size = 1;
 
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT DISTINCT chapter FROM " + Bible.settings.getCurrentTranslation() + " WHERE book=?";
+        String query = "SELECT DISTINCT chapter FROM " + BibleFragment.settings.getCurrentTranslation() + " WHERE book=?";
 
         Cursor cursor = db != null ? db.rawQuery(query, new String[]{currentBook}) : null;
 
@@ -245,7 +245,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             switch (result_type) {
                 case 1:
 
-                    return db.query(Bible.settings.getCurrentTranslation(),
+                    return db.query(BibleFragment.settings.getCurrentTranslation(),
                             new String[]{"book", "chapter", "verse", "passage"},
                             "passage" + " LIKE ?",
                             new String[]{"%" + params + "%"},
@@ -253,7 +253,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                 case 2:
 
-                    return db.query(Bible.settings.getCurrentTranslation(),
+                    return db.query(BibleFragment.settings.getCurrentTranslation(),
                             new String[]{"book", "chapter", "verse", "passage"},
                             "passage" + " LIKE ? AND book IN ('Genesis', 'Exodus', 'Leviticus', 'Numbers', " +
                                     "'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1 Samuel', '2 Samuel', " +
@@ -267,7 +267,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                 case 3:
 
-                    return db.query(Bible.settings.getCurrentTranslation(),
+                    return db.query(BibleFragment.settings.getCurrentTranslation(),
                             new String[]{"book", "chapter", "verse", "passage"},
                             "passage" + " LIKE ? AND book NOT IN ('Genesis', 'Exodus', 'Leviticus', 'Numbers', " +
                                     "'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1 Samuel', '2 Samuel', " +
@@ -281,7 +281,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                 case 4:
 
-                    return db.query(Bible.settings.getCurrentTranslation(),
+                    return db.query(BibleFragment.settings.getCurrentTranslation(),
                             new String[]{"book", "chapter", "verse", "passage"},
                             "passage" + " LIKE ? AND book IN ('" + book + "')",
                             new String[]{"%" + params + "%"},

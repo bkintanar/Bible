@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 
-import org.b3studios.bible.Bible;
+import org.b3studios.bible.slidingmenu.BibleFragment;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class BookButtonAdapter extends BaseAdapter {
 
     private Context mContext;
 
-    private List<String> bookNames = Bible.settings.getBookNames();
+    private List<String> bookNames = BibleFragment.settings.getBookNames();
 
     public BookButtonAdapter(Context c) {
 
