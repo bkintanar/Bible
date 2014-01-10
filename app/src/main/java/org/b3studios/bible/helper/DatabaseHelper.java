@@ -19,14 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Created by bkintanar on 1/3/14.
- */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String TABLE_IDX = "idx";
     //The Android's default system path of your application database.
     private static String DB_PATH = "/data/data/org.b3studios.bible/databases/";
 
@@ -36,13 +31,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private final Context myContext;
 
-    protected List<String> bookList;
-
     /**
      * Constructor
      * Takes and keeps a reference of the passed context in order to access to the application assets and resources.
      *
-     * @param context
+     * @param context context
      */
     public DatabaseHelper(Context context) {
 
@@ -58,9 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         boolean dbExist = checkDatabase();
 
-        if (dbExist) {
-            //do nothing - database already exist
-        } else {
+        if (!dbExist) {
 
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
@@ -107,7 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         }
 
-        return checkDB != null ? true : false;
+        return checkDB != null;
     }
 
     /**
@@ -168,46 +159,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void setBookList() {
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM book_list", null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                bookList.add(cursor.getString(0));
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-    }
-
     public ArrayList<Spannable> getChapterToDisplay() {
 
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + Bible.settings.getCurrentTranslation() + " WHERE book=? AND chapter=?";
 
-        Cursor cursor = db.rawQuery(query, new String[]{Bible.settings.getCurrentBook(), String.valueOf(Bible.settings.getCurrentChapter())});
+        Cursor cursor = db != null ? db.rawQuery(query, new String[]{Bible.settings.getCurrentBook(), String.valueOf(Bible.settings.getCurrentChapter())}) : null;
 
         ArrayList<Spannable> searchResult = new ArrayList<Spannable>();
 
-        if (cursor.moveToFirst()) {
-            do {
-                String passage = cursor.getString(3);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    String passage = cursor.getString(3);
 
-                String verse = cursor.getString(2) + " ";
+                    String verse = cursor.getString(2) + " ";
 
-                Spannable spanRange = new SpannableString(verse + passage);
+                    Spannable spanRange = new SpannableString(verse + passage);
 
-                // Add Bold text to the verse
-                spanRange.setSpan(new StyleSpan(Typeface.BOLD), 0, verse.length() - 1,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    // Add Bold text to the verse
+                    spanRange.setSpan(new StyleSpan(Typeface.BOLD), 0, verse.length() - 1,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                searchResult.add(spanRange);
+                    searchResult.add(spanRange);
 
-            } while (cursor.moveToNext());
+                } while (cursor.moveToNext());
+            }
+
+            cursor.close();
         }
-        cursor.close();
 
         return searchResult;
     }
@@ -219,10 +199,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT DISTINCT chapter FROM " + Bible.settings.getCurrentTranslation() + " WHERE book=?";
 
-        Cursor cursor = db.rawQuery(query, new String[]{currentBook});
+        Cursor cursor = db != null ? db.rawQuery(query, new String[]{currentBook}) : null;
 
-        if (cursor.moveToFirst()) {
-            size = cursor.getCount();
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                size = cursor.getCount();
+            }
         }
 
         return size;
@@ -258,52 +240,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor customQuery(int result_type, String params, String book) {
 
         SQLiteDatabase db = this.getReadableDatabase();
-        switch (result_type) {
-            case 1:
 
-                return db.query(Bible.settings.getCurrentTranslation(),
-                        new String[]{"book", "chapter", "verse", "passage"},
-                        "passage" + " LIKE ?",
-                        new String[]{"%" + params + "%"},
-                        null, null, null);
+        if (db != null) {
+            switch (result_type) {
+                case 1:
 
-            case 2:
+                    return db.query(Bible.settings.getCurrentTranslation(),
+                            new String[]{"book", "chapter", "verse", "passage"},
+                            "passage" + " LIKE ?",
+                            new String[]{"%" + params + "%"},
+                            null, null, null);
 
-                return db.query(Bible.settings.getCurrentTranslation(),
-                        new String[]{"book", "chapter", "verse", "passage"},
-                        "passage" + " LIKE ? AND book IN ('Genesis', 'Exodus', 'Leviticus', 'Numbers', " +
-                                "'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1 Samuel', '2 Samuel', " +
-                                "'1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles', 'Ezra', " +
-                                "'Nehemiah', 'Esther', 'Job', 'Psalm', 'Proverbs', 'Ecclesiastes', " +
-                                "'Song of Songs', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', " +
-                                "'Daniel', 'Hosea', 'Joel', 'Amos', 'Obadiah', 'Jonah', 'Micah', " +
-                                "'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi')",
-                        new String[]{"%" + params + "%"},
-                        null, null, null);
+                case 2:
 
-            case 3:
+                    return db.query(Bible.settings.getCurrentTranslation(),
+                            new String[]{"book", "chapter", "verse", "passage"},
+                            "passage" + " LIKE ? AND book IN ('Genesis', 'Exodus', 'Leviticus', 'Numbers', " +
+                                    "'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1 Samuel', '2 Samuel', " +
+                                    "'1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles', 'Ezra', " +
+                                    "'Nehemiah', 'Esther', 'Job', 'Psalm', 'Proverbs', 'Ecclesiastes', " +
+                                    "'Song of Songs', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', " +
+                                    "'Daniel', 'Hosea', 'Joel', 'Amos', 'Obadiah', 'Jonah', 'Micah', " +
+                                    "'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi')",
+                            new String[]{"%" + params + "%"},
+                            null, null, null);
 
-                return db.query(Bible.settings.getCurrentTranslation(),
-                        new String[]{"book", "chapter", "verse", "passage"},
-                        "passage" + " LIKE ? AND book NOT IN ('Genesis', 'Exodus', 'Leviticus', 'Numbers', " +
-                                "'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1 Samuel', '2 Samuel', " +
-                                "'1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles', 'Ezra', " +
-                                "'Nehemiah', 'Esther', 'Job', 'Psalm', 'Proverbs', 'Ecclesiastes', " +
-                                "'Song of Songs', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', " +
-                                "'Daniel', 'Hosea', 'Joel', 'Amos', 'Obadiah', 'Jonah', 'Micah', " +
-                                "'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi')",
-                        new String[]{"%" + params + "%"},
-                        null, null, null);
+                case 3:
 
-            case 4:
+                    return db.query(Bible.settings.getCurrentTranslation(),
+                            new String[]{"book", "chapter", "verse", "passage"},
+                            "passage" + " LIKE ? AND book NOT IN ('Genesis', 'Exodus', 'Leviticus', 'Numbers', " +
+                                    "'Deuteronomy', 'Joshua', 'Judges', 'Ruth', '1 Samuel', '2 Samuel', " +
+                                    "'1 Kings', '2 Kings', '1 Chronicles', '2 Chronicles', 'Ezra', " +
+                                    "'Nehemiah', 'Esther', 'Job', 'Psalm', 'Proverbs', 'Ecclesiastes', " +
+                                    "'Song of Songs', 'Isaiah', 'Jeremiah', 'Lamentations', 'Ezekiel', " +
+                                    "'Daniel', 'Hosea', 'Joel', 'Amos', 'Obadiah', 'Jonah', 'Micah', " +
+                                    "'Nahum', 'Habakkuk', 'Zephaniah', 'Haggai', 'Zechariah', 'Malachi')",
+                            new String[]{"%" + params + "%"},
+                            null, null, null);
 
-                return db.query(Bible.settings.getCurrentTranslation(),
-                        new String[]{"book", "chapter", "verse", "passage"},
-                        "passage" + " LIKE ? AND book IN ('" + book + "')",
-                        new String[]{"%" + params + "%"},
-                        null, null, null);
+                case 4:
+
+                    return db.query(Bible.settings.getCurrentTranslation(),
+                            new String[]{"book", "chapter", "verse", "passage"},
+                            "passage" + " LIKE ? AND book IN ('" + book + "')",
+                            new String[]{"%" + params + "%"},
+                            null, null, null);
+            }
         }
-
 
         return null;
     }

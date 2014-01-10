@@ -12,14 +12,13 @@ import org.b3studios.bible.Bible;
 public class ChapterButtonAdapter extends BaseAdapter {
 
     private Context mContext;
-    private String bookName = Bible.settings.getCurrentBook();
     private int chapterCount;
 
     public ChapterButtonAdapter(Context c) {
 
         mContext = c;
 
-        chapterCount = Bible.db.getChapterSize(bookName);
+        chapterCount = Bible.db.getChapterSize(Bible.settings.getCurrentBook());
 
     }
 

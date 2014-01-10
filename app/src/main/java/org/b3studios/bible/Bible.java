@@ -123,7 +123,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
                     final int currentFirstVisibleItem = mainListView.getFirstVisiblePosition();
                     final int currentLastVisibleItem = mainListView.getLastVisiblePosition();
 
-                    if (currentLastVisibleItem == chapter.size()-1) {
+                    if (currentLastVisibleItem == chapter.size() - 1) {
                         mIsScrollingUp = -1;
                         GO_TO_CHAPTER = NEXT;
                     } else if (currentFirstVisibleItem == 0) {
@@ -417,7 +417,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
     }
 
     public void setBookTextView(TextView bookTextView) {
-        this.bookTextView = bookTextView;
+        Bible.bookTextView = bookTextView;
     }
 
     @Override

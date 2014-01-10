@@ -1,9 +1,5 @@
 package org.b3studios.bible.adapter;
 
-/**
- * Created by bkintanar on 1/5/14.
- */
-
 import android.content.Context;
 import android.text.Spannable;
 import android.view.LayoutInflater;
@@ -32,10 +28,14 @@ public class SearchResultAdapter extends ArrayAdapter<Spannable> {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.xml.row, parent, false);
-        TextView textView = (TextView) rowView.findViewById(R.id.rowSearchResultText);
-        textView.setText(values.get(position));
-        textView.setTypeface(Bible.settings.typefaces[Bible.settings.currentTypeface]);
-        textView.setTextSize(Bible.settings.getMainViewTextSize());
+        TextView textView;
+        if (rowView != null) {
+            textView = (TextView) rowView.findViewById(R.id.rowSearchResultText);
+            textView.setText(values.get(position));
+            textView.setTypeface(Bible.settings.typefaces[Bible.settings.currentTypeface]);
+            textView.setTextSize(Bible.settings.getMainViewTextSize());
+        }
+
         return rowView;
     }
 }

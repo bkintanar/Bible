@@ -15,7 +15,6 @@ public class SearchResultsActivity extends FragmentActivity implements
         ActionBar.TabListener {
 
     private ViewPager viewPager;
-    private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     // Tab titles
     private String[] tabs = {Bible.settings.getCurrentBook(), "Old Testament", "New Testament"};
@@ -35,7 +34,7 @@ public class SearchResultsActivity extends FragmentActivity implements
         actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), query);
+        TabsPagerAdapter mAdapter = new TabsPagerAdapter(getSupportFragmentManager(), query);
 
         viewPager.setAdapter(mAdapter);
 //        actionBar.setHomeButtonEnabled(false);

@@ -47,7 +47,9 @@ public class TitleNavigationAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.list_item_title_navigation, null);
         }
 
-        txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
+        if (convertView != null) {
+            txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
+        }
 
         txtTitle.setText(spinnerNavItem.get(position).getTitle());
         return convertView;
@@ -62,7 +64,9 @@ public class TitleNavigationAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.list_item_title_navigation, null);
         }
 
-        txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
+        if (convertView != null) {
+            txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
+        }
 
         txtTitle.setText(spinnerNavItem.get(position).getTitle());
         return convertView;

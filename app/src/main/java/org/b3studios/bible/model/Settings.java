@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 
 import org.b3studios.bible.Bible;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Settings {
@@ -16,8 +15,6 @@ public class Settings {
     private int currentMaxChapters = 50;
 
     private int mainViewTextSize = 18;
-
-    public ArrayList<String> positionHasFocus = new ArrayList<String>();
 
     private List<String> bookNames;
 
@@ -94,8 +91,7 @@ public class Settings {
             Bible.mainListView.setBackgroundColor(Color.BLACK);
             Bible.bookTextView.setBackgroundColor(Color.BLACK);
             Bible.bookTextView.setTextColor(Color.WHITE);
-        }
-        else {
+        } else {
             Bible.mainListView.setBackgroundColor(Color.WHITE);
             Bible.bookTextView.setBackgroundColor(Color.WHITE);
             Bible.bookTextView.setTextColor(Color.BLACK);
