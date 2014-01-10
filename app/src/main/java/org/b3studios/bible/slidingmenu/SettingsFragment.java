@@ -33,6 +33,7 @@ public class SettingsFragment extends PreferenceFragment {
         ActionBar actionBar = getActivity().getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
 
         setupSimplePreferencesScreen();
     }

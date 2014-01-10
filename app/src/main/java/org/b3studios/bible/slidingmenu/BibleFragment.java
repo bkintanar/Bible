@@ -89,7 +89,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
 
         // Hide the action bar title
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(true);
 
         // Enabling Spinner dropdown navigation
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);

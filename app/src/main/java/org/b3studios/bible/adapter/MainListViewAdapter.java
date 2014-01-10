@@ -39,10 +39,10 @@ public class MainListViewAdapter extends ArrayAdapter<Spannable> {
             if (BibleFragment.settings.nightMode) {
                 textView.setTextColor(Color.WHITE);
             }
+            textView.setTextIsSelectable(true);
         }
 
 
-//        textView.setTextIsSelectable(true);
 
 //        rowView.setOnTouchListener( new View.OnTouchListener() {
 //            @Override
