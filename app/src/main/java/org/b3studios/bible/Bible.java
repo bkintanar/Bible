@@ -258,9 +258,6 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                MenuItem menuSearch = menu.findItem(R.id.action_search);
-                SearchView searchView = (SearchView) menuSearch.getActionView();
-
                 searchView.onActionViewCollapsed();
 
                 return false;
