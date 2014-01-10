@@ -35,9 +35,6 @@
         <item>@drawable/ic_home</item>
         <item>@drawable/ic_settings</item>
         <item>@drawable/ic_about</item>
-        <item>@drawable/ic_communities</item>
-        <item>@drawable/ic_pages</item>
-        <item>@drawable/ic_whats_hot</item>
     </array>
 
     <!-- Content Description -->
