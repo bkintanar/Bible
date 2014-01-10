@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/current_book"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:text="@string/current_book"
@@ -15,7 +15,8 @@
         android:layout_alignParentBottom="false"
         android:layout_alignWithParentIfMissing="false"
         android:paddingTop="5dp"
-        android:paddingBottom="5dp" />
+        android:paddingBottom="5dp"
+        android:gravity="center" />
 
     <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

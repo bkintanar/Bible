@@ -9,6 +9,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -16,6 +17,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.List;
@@ -73,8 +75,8 @@ public class SettingsActivity extends PreferenceActivity {
 //        fakeHeader.setTitle(R.string.pref_header_index);
 //        getPreferenceScreen().addPreference(fakeHeader);
 //        addPreferencesFromResource(R.xml.pref_full_text_search);
-//
-//        // Add 'data and sync' preferences, and a corresponding header.
+
+        // Add 'data and sync' preferences, and a corresponding header.
 //        fakeHeader = new PreferenceCategory(this);
 //        fakeHeader.setTitle(R.string.pref_header_data_sync);
 //        getPreferenceScreen().addPreference(fakeHeader);
@@ -86,8 +88,26 @@ public class SettingsActivity extends PreferenceActivity {
 //        bindPreferenceSummaryToValue(findPreference("example_text"));
         bindPreferenceSummaryToValue(findPreference("font_list"));
         bindPreferenceSummaryToValue(findPreference("font_size_list"));
+//        bindPreferenceSummaryToValue(findPreference("night_mode"));
 //        bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
 //        bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+
+        final CheckBoxPreference nightModeCheckBox = (CheckBoxPreference) getPreferenceManager().findPreference("night_mode");
+
+        if (nightModeCheckBox != null) {
+            nightModeCheckBox.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if (newValue instanceof Boolean) {
+
+                        Bible.settings.nightMode = (Boolean) newValue;
+
+                        Bible.settings.setDefaults();
+                    }
+                    return true;
+                }
+            });
+        }
+
     }
 
     /**
@@ -183,6 +203,7 @@ public class SettingsActivity extends PreferenceActivity {
                 }
 
             } else {
+                Log.i("DEBUG", "prefkey" + preference.getKey());
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);

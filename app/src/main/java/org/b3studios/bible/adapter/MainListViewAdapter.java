@@ -5,6 +5,7 @@ package org.b3studios.bible.adapter;
  */
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Spannable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +37,12 @@ public class MainListViewAdapter extends ArrayAdapter<Spannable> {
         textView.setText(values.get(position));
         textView.setTypeface(Bible.settings.typefaces[Bible.settings.currentTypeface]);
         textView.setTextSize(Bible.settings.getMainViewTextSize());
-        textView.setTextIsSelectable(true);
+
+        if(Bible.settings.nightMode) {
+            textView.setTextColor(Color.WHITE);
+        }
+
+//        textView.setTextIsSelectable(true);
 
 //        rowView.setOnTouchListener( new View.OnTouchListener() {
 //            @Override
@@ -44,7 +50,6 @@ public class MainListViewAdapter extends ArrayAdapter<Spannable> {
 //                CharSequence t = textView.getText();
 //                Spannable spanRange = new SpannableString(t);
 //
-//                BackgroundColorSpan backColour = new BackgroundColorSpan(Color.YELLOW);
 //
 //                spanRange.setSpan(backColour, 0, t.length(),
 //                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

@@ -114,8 +114,6 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
         // Get components from XML
         setBookTextView((TextView) findViewById(R.id.current_book));
 
-        loadSharedPreferences();
-
         mainListView = (ListView) findViewById(R.id.mainListView);
 
         mainListView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -149,6 +147,8 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
                 startActivity(selector);
             }
         });
+
+        loadSharedPreferences();
 
         // display default view
         goToChapter(0);
@@ -189,6 +189,9 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
             Bible.settings.setCurrentMaxChapters(settings.getInt("currentMaxChapters", 50));
             Bible.settings.setMainViewTextSize(settings.getInt("mainViewTextSize", 18));
             Bible.settings.setMainViewTypeface(settings.getInt("mainViewTypeface", 0));
+            Bible.settings.setNightMode(settings.getBoolean("night_mode", false));
+
+            Bible.settings.setDefaults();
 
             actionBar.setSelectedNavigationItem(index);
         }
@@ -208,6 +211,7 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
         editor.putInt("currentMaxChapters", Bible.settings.getCurrentMaxChapters());
         editor.putInt("mainViewTextSize", Bible.settings.getMainViewTextSize());
         editor.putInt("mainViewTypeface", Bible.settings.getMainViewTypeface());
+        editor.putBoolean("night_mode", Bible.settings.getNightMode());
 
         editor.putBoolean("hasSettingsStored", true);
 
@@ -232,6 +236,8 @@ public class Bible extends Activity implements ActionBar.OnNavigationListener, P
     public void onResume() {
 
         super.onResume();
+
+        Bible.settings.setDefaults();
 
         goToChapter(0);
     }

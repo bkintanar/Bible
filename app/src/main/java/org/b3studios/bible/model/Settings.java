@@ -1,6 +1,9 @@
 package org.b3studios.bible.model;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
+
+import org.b3studios.bible.Bible;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,7 @@ public class Settings {
 
     public Typeface[] typefaces = {Typeface.SANS_SERIF, Typeface.SERIF, Typeface.MONOSPACE};
     public int position = 0;
+    public Boolean nightMode = false;
 
     public String getCurrentTranslation() {
         return currentTranslation;
@@ -83,4 +87,26 @@ public class Settings {
     }
 
 
+    public void setDefaults() {
+
+        if (nightMode) {
+
+            Bible.mainListView.setBackgroundColor(Color.BLACK);
+            Bible.bookTextView.setBackgroundColor(Color.BLACK);
+            Bible.bookTextView.setTextColor(Color.WHITE);
+        }
+        else {
+            Bible.mainListView.setBackgroundColor(Color.WHITE);
+            Bible.bookTextView.setBackgroundColor(Color.WHITE);
+            Bible.bookTextView.setTextColor(Color.BLACK);
+        }
+    }
+
+    public void setNightMode(boolean nightMode) {
+        this.nightMode = nightMode;
+    }
+
+    public Boolean getNightMode() {
+        return nightMode;
+    }
 }
