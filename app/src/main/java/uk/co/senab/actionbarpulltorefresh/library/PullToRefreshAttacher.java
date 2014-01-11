@@ -412,7 +412,7 @@ public class PullToRefreshAttacher implements View.OnTouchListener {
                     mInitialMotionY = event.getY();
 
                     if (BibleFragment.mIsScrollingUp == -1) {
-                        ((DefaultHeaderTransformer) getHeaderTransformer()).setPullText("Swipe down to load next chapter…");
+                        ((DefaultHeaderTransformer) getHeaderTransformer()).setPullText("Swipe up to load next chapter…");
                     }
                     else if (BibleFragment.mIsScrollingUp == 1) {
                         ((DefaultHeaderTransformer) getHeaderTransformer()).setPullText("Swipe down to load previous chapter…");
