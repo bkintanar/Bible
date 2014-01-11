@@ -170,7 +170,7 @@ public class MainActivity extends Activity {
 
         if (fragment != null) {
             final Fragment finalFragment = fragment;
-            new Handler().postDelayed(new Runnable() {
+            new Handler().post(new Runnable() {
                 @Override
                 public void run() {
                     FragmentManager fragmentManager = getFragmentManager();
@@ -183,7 +183,7 @@ public class MainActivity extends Activity {
                     setTitle(navMenuTitles[position]);
                     mDrawerLayout.closeDrawer(mDrawerList);
                 }
-            }, 100);
+            });
         } else {
             // error in creating fragment
             Log.e("MainActivity", "Error in creating fragment");

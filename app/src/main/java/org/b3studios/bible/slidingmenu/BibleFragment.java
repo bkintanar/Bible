@@ -67,7 +67,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
 
     public PullToRefreshAttacher mPullToRefreshAttacher;
 
-    public static int mIsScrollingUp = 0;
+    public static int mIsScrollingUp = -1;
 
     String[] sVersion = {"kjv", "adb", "ceb"};
 
@@ -142,7 +142,12 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
+                if(firstVisibleItem + visibleItemCount >= totalItemCount){
+                }
+                if (0 == firstVisibleItem){
+                    mIsScrollingUp = 1;
+                    GO_TO_CHAPTER = PREVIOUS;
+                }
             }
         });
 
@@ -162,7 +167,6 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
 
         // Create a PullToRefreshAttacher instance
         mPullToRefreshAttacher = PullToRefreshAttacher.get(getActivity());
-        mPullToRefreshAttacher.setPullFromBothWays(true);
 
         // Retrieve the PullToRefreshLayout from the content view
         PullToRefreshLayout ptrLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout);
@@ -382,23 +386,23 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
 
         getBookTextView().setText(settings.getCurrentBook() + " " + settings.getCurrentChapter() + " \u25BC");
 
-        updateMainTextView();
+        updateMainTextView(i);
 
         mIsScrollingUp = 0;
     }
 
-    private void updateMainTextView() {
+    private void updateMainTextView(final int i) {
         new Thread(new Runnable() {
             public void run() {
 
                 chapter = BibleFragment.db.getChapterToDisplay();
 
-                setMainTextViewText();
+                setMainTextViewText(i);
             }
         }).start();
     }
 
-    public void setMainTextViewText() {
+    public void setMainTextViewText(final int i) {
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -425,6 +429,13 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
                             BibleFragment.settings.position = 0;
                         }
                     });
+                }
+
+                else if (i == PREVIOUS) {
+                    mainListView.setSelection(chapter.size());
+                }
+                else {
+                    mainListView.setSelection(0);
                 }
             }
         });
@@ -464,9 +475,6 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
                 super.onPostExecute(result);
                 goToChapter(GO_TO_CHAPTER);
 
-                if (GO_TO_CHAPTER == PREVIOUS) {
-                    mainListView.setSelection(chapter.size());
-                }
                 // Notify PullToRefreshAttacher that the refresh has finished
                 mPullToRefreshAttacher.setRefreshComplete();
 
