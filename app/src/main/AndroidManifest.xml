@@ -31,24 +31,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="org.b3studios.bible.About"
-            android:label="About" >
-            <intent-filter>
-                <action android:name="org.b3studios.bible.ABOUT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="org.b3studios.bible.SettingsActivity"
-            android:label="@string/title_activity_settings" >
-            <intent-filter>
-                <action android:name="org.b3studios.bible.SETTINGS" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
         <!-- Search results activity -->
         <activity
             android:name="org.b3studios.bible.SearchResultsActivity"
