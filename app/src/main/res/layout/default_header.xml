@@ -15,22 +15,15 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <FrameLayout
         android:id="@id/ptr_content"
         android:layout_width="match_parent"
-        android:layout_height="48dp">
-
-        <View
-            android:id="@id/ptr_text_opaque_bg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?android:attr/colorBackground"
-            android:visibility="gone" />
+        android:layout_height="48dp"
+        android:background="?android:attr/colorBackground">
 
         <TextView
             android:id="@id/ptr_text"
@@ -41,11 +34,11 @@
 
     </FrameLayout>
 
-    <ProgressBar
+    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
         android:id="@id/ptr_progress"
-        android:layout_height="wrap_content"
+        style="@style/Widget.ProgressBar.PullToRefresh"
         android:layout_width="match_parent"
-        style="@style/Widget.PullToRefresh.ProgressBar.Horizontal.Center" />
+        android:layout_height="wrap_content" />
 
-</LinearLayout>
+</RelativeLayout>
 

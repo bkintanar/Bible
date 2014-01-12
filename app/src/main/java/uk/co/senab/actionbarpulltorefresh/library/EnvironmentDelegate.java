@@ -14,30 +14,19 @@
  * limitations under the License.
  */
 
-package uk.co.senab.actionbarpulltorefresh.library.viewdelegates;
+package uk.co.senab.actionbarpulltorefresh.library;
 
-import android.view.View;
-import android.webkit.WebView;
+import android.app.Activity;
+import android.content.Context;
 
 /**
- * FIXME
+ * This is used to provide platform and environment specific functionality for the Attacher.
  */
-public class WebViewDelegate implements ViewDelegate {
+public interface EnvironmentDelegate {
 
-    public static final Class[] SUPPORTED_VIEW_CLASSES =  { WebView.class };
+    /**
+     * @return Context which should be used for inflating the header layout
+     */
+    public Context getContextForInflater(Activity activity);
 
-    @Override
-    public boolean isReadyForPull(View view, float x, float y) {
-        return view.getScrollY() <= 0;
-    }
-
-    @Override
-    public boolean isScrolledToTop(View view) {
-        return false;
-    }
-
-    @Override
-    public boolean isScrolledToBottom(View view) {
-        return false;
-    }
 }

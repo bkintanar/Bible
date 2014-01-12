@@ -35,14 +35,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
-public class BibleFragment extends Fragment implements ActionBar.OnNavigationListener, PullToRefreshAttacher.OnRefreshListener {
+public class BibleFragment extends Fragment implements ActionBar.OnNavigationListener, OnRefreshListener {
 
     public static int GO_TO_CHAPTER;
     // action bar
     protected ActionBar actionBar;
+
+    PullToRefreshLayout mPullToRefreshLayout;
 
     // Title navigation Spinner data
     protected ArrayList<SpinnerNavItem> navSpinner;
@@ -166,13 +170,22 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
         goToChapter(0);
 
         // Create a PullToRefreshAttacher instance
-        mPullToRefreshAttacher = PullToRefreshAttacher.get(getActivity());
+//        mPullToRefreshAttacher = PullToRefreshAttacher.get(getActivity());
 
         // Retrieve the PullToRefreshLayout from the content view
-        PullToRefreshLayout ptrLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout);
+        mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout);
 
         // Give the PullToRefreshAttacher to the PullToRefreshLayout, along with a refresh listener.
-        ptrLayout.setPullToRefreshAttacher(mPullToRefreshAttacher, this);
+//        ptrLayout.setPullToRefreshAttacher(mPullToRefreshAttacher, this);
+
+        // Now setup the PullToRefreshLayout
+        ActionBarPullToRefresh.from(getActivity())
+                // Mark All Children as pullable
+                .allChildrenArePullable()
+                        // Set the OnRefreshListener
+                .listener(this)
+                        // Finally commit the setup to our PullToRefreshLayout
+                .setup(mPullToRefreshLayout);
 
         return rootView;
     }
@@ -476,7 +489,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
                 goToChapter(GO_TO_CHAPTER);
 
                 // Notify PullToRefreshAttacher that the refresh has finished
-                mPullToRefreshAttacher.setRefreshComplete();
+                mPullToRefreshLayout.setRefreshComplete();
 
             }
         }.execute();

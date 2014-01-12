@@ -14,30 +14,19 @@
  * limitations under the License.
  */
 
-package uk.co.senab.actionbarpulltorefresh.library.viewdelegates;
+package uk.co.senab.actionbarpulltorefresh.library.sdk;
 
+import android.animation.ValueAnimator;
 import android.view.View;
-import android.webkit.WebView;
 
-/**
- * FIXME
- */
-public class WebViewDelegate implements ViewDelegate {
+class CompatV11 {
 
-    public static final Class[] SUPPORTED_VIEW_CLASSES =  { WebView.class };
-
-    @Override
-    public boolean isReadyForPull(View view, float x, float y) {
-        return view.getScrollY() <= 0;
+    static void setAlpha(View view, float alpha) {
+        view.setAlpha(alpha);
     }
 
-    @Override
-    public boolean isScrolledToTop(View view) {
-        return false;
+    static void postOnAnimation(View view, Runnable runnable) {
+        view.postDelayed(runnable, ValueAnimator.getFrameDelay());
     }
 
-    @Override
-    public boolean isScrolledToBottom(View view) {
-        return false;
-    }
 }
