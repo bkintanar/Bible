@@ -14,13 +14,13 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import org.b3studios.bible.adapter.ChapterButtonAdapter;
-import org.b3studios.bible.adapter.MainListViewAdapter;
+import org.b3studios.bible.slidingmenu.adapter.MainListViewAdapter;
 import org.b3studios.bible.slidingmenu.BibleFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChapterSelector extends Activity {
+public class ChapterSelectorActivity extends Activity {
 
     private List<String> bookNames = BibleFragment.settings.getBookNames();
     private ArrayList<Spannable> chapter;

@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="org.b3studios.bible.BookSelector"
+            android:name=".BookSelectorActivity"
             android:label="Select a Book" >
             <intent-filter>
                 <action android:name="org.b3studios.bible.BOOKSELECTOR" />
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.b3studios.bible.ChapterSelector"
+            android:name=".ChapterSelectorActivity"
             android:label="Select a Chapter" >
             <intent-filter>
                 <action android:name="org.b3studios.bible.CHAPTERSELECTOR" />
@@ -33,7 +33,7 @@
         </activity>
         <!-- Search results activity -->
         <activity
-            android:name="org.b3studios.bible.SearchResultsActivity"
+            android:name=".search.SearchResultsActivity"
             android:parentActivityName="org.b3studios.bible.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />

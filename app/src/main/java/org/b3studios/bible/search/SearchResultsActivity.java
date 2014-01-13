@@ -1,4 +1,4 @@
-package org.b3studios.bible;
+package org.b3studios.bible.search;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
@@ -9,8 +9,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
+import org.b3studios.bible.R;
 import org.b3studios.bible.slidingmenu.BibleFragment;
-import org.b3studios.bible.tabswipe.adapter.TabsPagerAdapter;
+import org.b3studios.bible.search.adapter.TabsPagerAdapter;
 
 public class SearchResultsActivity extends FragmentActivity implements
         ActionBar.TabListener {

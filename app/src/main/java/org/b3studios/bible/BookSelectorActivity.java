@@ -16,7 +16,7 @@ import org.b3studios.bible.slidingmenu.BibleFragment;
 
 import java.util.List;
 
-public class BookSelector extends Activity {
+public class BookSelectorActivity extends Activity {
 
     private List<String> bookNames = BibleFragment.settings.getBookNames();
 
@@ -45,7 +45,7 @@ public class BookSelector extends Activity {
                 BibleFragment.settings.setCurrentBook(BibleFragment.settings.getBookNames().get(position));
 
                 // create new activity
-                Intent chapterChooser = new Intent(getApplicationContext(), ChapterSelector.class);
+                Intent chapterChooser = new Intent(getApplicationContext(), ChapterSelectorActivity.class);
                 startActivity(chapterChooser);
 
                 finish();

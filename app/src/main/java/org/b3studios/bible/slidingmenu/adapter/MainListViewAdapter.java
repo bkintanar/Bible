@@ -1,4 +1,4 @@
-package org.b3studios.bible.adapter;
+package org.b3studios.bible.slidingmenu.adapter;
 
 import android.content.Context;
 import android.graphics.Color;

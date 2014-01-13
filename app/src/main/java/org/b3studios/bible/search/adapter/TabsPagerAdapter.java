@@ -1,12 +1,12 @@
-package org.b3studios.bible.tabswipe.adapter;
+package org.b3studios.bible.search.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import org.b3studios.bible.tabswipe.BookFragment;
-import org.b3studios.bible.tabswipe.NTFragment;
-import org.b3studios.bible.tabswipe.OTFragment;
+import org.b3studios.bible.search.BookFragment;
+import org.b3studios.bible.search.NTFragment;
+import org.b3studios.bible.search.OTFragment;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 

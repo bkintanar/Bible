@@ -1,4 +1,4 @@
-package org.b3studios.bible.tabswipe;
+package org.b3studios.bible.search;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -14,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.b3studios.bible.adapter.SearchResultAdapter;
+import org.b3studios.bible.search.adapter.SearchResultAdapter;
 import org.b3studios.bible.helper.DatabaseHelper;
 import org.b3studios.bible.slidingmenu.BibleFragment;
 

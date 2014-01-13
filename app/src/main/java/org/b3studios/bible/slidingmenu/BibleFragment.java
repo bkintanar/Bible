@@ -21,7 +21,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import org.b3studios.bible.R;
-import org.b3studios.bible.adapter.MainListViewAdapter;
+import org.b3studios.bible.slidingmenu.adapter.MainListViewAdapter;
 import org.b3studios.bible.adapter.TitleNavigationAdapter;
 import org.b3studios.bible.helper.DatabaseHelper;
 import org.b3studios.bible.model.Settings;
