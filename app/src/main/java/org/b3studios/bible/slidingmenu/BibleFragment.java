@@ -134,11 +134,11 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if(firstVisibleItem + visibleItemCount >= totalItemCount){
+                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                     mScrollingDirection = DIRECTION_DOWN;
                     GO_TO_CHAPTER = NEXT;
                 }
-                if (0 == firstVisibleItem){
+                if (0 == firstVisibleItem) {
                     mScrollingDirection = DIRECTION_UP;
                     GO_TO_CHAPTER = PREVIOUS;
                 }
@@ -432,12 +432,9 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
                             BibleFragment.settings.position = 0;
                         }
                     });
-                }
-
-                else if (i == PREVIOUS) {
+                } else if (i == PREVIOUS) {
                     mainListView.setSelection(chapter.size());
-                }
-                else {
+                } else {
                     mainListView.setSelection(0);
                 }
             }
