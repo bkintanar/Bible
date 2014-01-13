@@ -48,7 +48,7 @@
             android:label="@string/title_activity_u_bible" >
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".SearchResultsActivity" />
+                android:value="org.b3studios.bible.search.SearchResultsActivity" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
