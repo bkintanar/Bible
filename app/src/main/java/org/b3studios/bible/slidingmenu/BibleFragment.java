@@ -453,7 +453,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
     }
 
     public void setBookTextView(TextView bookTextView) {
-        this.bookTextView = bookTextView;
+        BibleFragment.bookTextView = bookTextView;
     }
 
     @Override
