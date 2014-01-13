@@ -36,7 +36,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
@@ -69,9 +68,9 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
 
     public static final String PREFS_NAME = "UserBibleInfo";
 
-    public PullToRefreshAttacher mPullToRefreshAttacher;
-
-    public static int mIsScrollingUp = -1;
+    public static int mScrollingDirection = 0;
+    public static int DIRECTION_UP = 1;
+    public static int DIRECTION_DOWN = -1;
 
     String[] sVersion = {"kjv", "adb", "ceb"};
 
@@ -130,26 +129,17 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
         mainListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                if (view.getId() == mainListView.getId()) {
-                    final int currentFirstVisibleItem = mainListView.getFirstVisiblePosition();
-                    final int currentLastVisibleItem = mainListView.getLastVisiblePosition();
 
-                    if (currentLastVisibleItem == chapter.size() - 1) {
-                        mIsScrollingUp = -1;
-                        GO_TO_CHAPTER = NEXT;
-                    } else if (currentFirstVisibleItem == 0) {
-                        mIsScrollingUp = 1;
-                        GO_TO_CHAPTER = PREVIOUS;
-                    }
-                }
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if(firstVisibleItem + visibleItemCount >= totalItemCount){
+                    mScrollingDirection = DIRECTION_DOWN;
+                    GO_TO_CHAPTER = NEXT;
                 }
                 if (0 == firstVisibleItem){
-                    mIsScrollingUp = 1;
+                    mScrollingDirection = DIRECTION_UP;
                     GO_TO_CHAPTER = PREVIOUS;
                 }
             }
@@ -401,7 +391,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
 
         updateMainTextView(i);
 
-        mIsScrollingUp = 0;
+        mScrollingDirection = 0;
     }
 
     private void updateMainTextView(final int i) {

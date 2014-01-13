@@ -57,7 +57,7 @@ public class ChapterSelector extends Activity {
 
                 updateMainTextView(0);
 
-                BibleFragment.mIsScrollingUp = 0;
+                BibleFragment.mScrollingDirection = 0;
 
                 finish();
 
