@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Spannable;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,11 +23,11 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import org.b3studios.bible.R;
-import org.b3studios.bible.slidingmenu.adapter.MainListViewAdapter;
 import org.b3studios.bible.adapter.TitleNavigationAdapter;
 import org.b3studios.bible.helper.DatabaseHelper;
 import org.b3studios.bible.model.Settings;
 import org.b3studios.bible.model.SpinnerNavItem;
+import org.b3studios.bible.slidingmenu.adapter.MainListViewAdapter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -117,6 +119,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
             e.printStackTrace();
         } finally {
             db.openDatabase();
+            db.checkHighlightTable();
         }
 
         settings.setBookNames(initBookNames());
@@ -405,15 +408,75 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
         }).start();
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void setMainTextViewText(final int i) {
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
-                MainListViewAdapter adapter = new MainListViewAdapter(getActivity(), chapter);
+                final MainListViewAdapter adapter = new MainListViewAdapter(getActivity(), chapter);
 
                 mainListView.setAdapter(adapter);
+                mainListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+                mainListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+
+                    @Override
+                    public void onItemCheckedStateChanged(ActionMode mode,
+                                                          int position, long id, boolean checked) {
+                        // Capture total checked items
+                        final int checkedCount = mainListView.getCheckedItemCount();
+                        // Set the CAB title according to total checked items
+                        mode.setTitle(checkedCount + " Selected");
+                        // Calls toggleSelection method from ListViewAdapter Class
+                        adapter.toggleSelection(position);
+                    }
+
+                    @Override
+                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                        switch (item.getItemId()) {
+
+                            case R.id.highlight:
+
+                                // Calls getSelectedIds method from ListViewAdapter Class
+                                SparseBooleanArray selected = adapter.getSelectedIds();
+                                // Captures all selected ids with a loop
+                                for (int i = (selected.size() - 1); i >= 0; i--) {
+                                    if (selected.valueAt(i)) {
+                                        adapter.highlight(selected.keyAt(i));
+                                    }
+                                }
+                                // Close CAB
+                                mode.finish();
+
+                                selected.clear();
+
+                                return true;
+
+                            default:
+                                return false;
+                        }
+                    }
+
+                    @Override
+                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                        mode.getMenuInflater().inflate(R.menu.listitem_menu, menu);
+                        return true;
+                    }
+
+                    @Override
+                    public void onDestroyActionMode(ActionMode mode) {
+                        // TODO Auto-generated method stub
+//                        adapter.removeSelection();
+                    }
+
+                    @Override
+                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                        // TODO Auto-generated method stub
+                        return false;
+                    }
+                });
 
                 final SharedPreferences settings = getActivity().getSharedPreferences("UserBibleInfo", 0);
 

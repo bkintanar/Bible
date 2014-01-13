@@ -10,8 +10,8 @@ import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 
 import org.b3studios.bible.R;
-import org.b3studios.bible.slidingmenu.BibleFragment;
 import org.b3studios.bible.search.adapter.TabsPagerAdapter;
+import org.b3studios.bible.slidingmenu.BibleFragment;
 
 public class SearchResultsActivity extends FragmentActivity implements
         ActionBar.TabListener {

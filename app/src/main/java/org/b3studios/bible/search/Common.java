@@ -14,8 +14,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.b3studios.bible.search.adapter.SearchResultAdapter;
 import org.b3studios.bible.helper.DatabaseHelper;
+import org.b3studios.bible.search.adapter.SearchResultAdapter;
 import org.b3studios.bible.slidingmenu.BibleFragment;
 
 import java.util.ArrayList;

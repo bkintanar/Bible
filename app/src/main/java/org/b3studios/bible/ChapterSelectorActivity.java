@@ -14,8 +14,8 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import org.b3studios.bible.adapter.ChapterButtonAdapter;
-import org.b3studios.bible.slidingmenu.adapter.MainListViewAdapter;
 import org.b3studios.bible.slidingmenu.BibleFragment;
+import org.b3studios.bible.slidingmenu.adapter.MainListViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
