@@ -393,10 +393,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String translation = BibleFragment.settings.getCurrentTranslation();
 
         // Select All Query
-        String selectQuery = "SELECT " +TABLE_HIGHLIGHT+ ".book, "+TABLE_HIGHLIGHT+".chapter, "+TABLE_HIGHLIGHT+".verse, "+ translation +
-                ".passage FROM " + TABLE_HIGHLIGHT +", " + translation  + " WHERE highlight = 1" +
-                " AND " + translation + ".book="+TABLE_HIGHLIGHT+".book AND " + translation + ".chapter="+TABLE_HIGHLIGHT+".chapter " +
-                " AND " + translation + ".verse="+TABLE_HIGHLIGHT+".verse+1";
+        String selectQuery = "SELECT " + TABLE_HIGHLIGHT + ".book, " + TABLE_HIGHLIGHT + ".chapter, " + TABLE_HIGHLIGHT + ".verse, " + translation +
+                ".passage FROM " + TABLE_HIGHLIGHT + ", " + translation + " WHERE highlight = 1" +
+                " AND " + translation + ".book=" + TABLE_HIGHLIGHT + ".book AND " + translation + ".chapter=" + TABLE_HIGHLIGHT + ".chapter " +
+                " AND " + translation + ".verse=" + TABLE_HIGHLIGHT + ".verse+1";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -458,7 +458,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.i("DEBUG", "table doesnt exist, creating...");
             String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_HIGHLIGHT + "("
                     + KEY_ID + " INTEGER PRIMARY KEY," + KEY_BOOK + " TEXT,"
-                    + KEY_CHAPTER + " INTEGER," + KEY_VERSE + " INTEGER," +  KEY_PASSAGE + " TEXT," + KEY_HIGHLIGHT + " INTEGER" + ")";
+                    + KEY_CHAPTER + " INTEGER," + KEY_VERSE + " INTEGER," + KEY_PASSAGE + " TEXT," + KEY_HIGHLIGHT + " INTEGER" + ")";
             db.execSQL(CREATE_CONTACTS_TABLE);
 
         }

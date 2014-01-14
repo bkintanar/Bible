@@ -90,7 +90,6 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
         actionBar = getActivity().getActionBar();
 
 
-
         // Hide the action bar title
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowHomeEnabled(true);
