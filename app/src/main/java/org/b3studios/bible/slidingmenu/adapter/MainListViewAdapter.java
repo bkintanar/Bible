@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.b3studios.bible.R;
+import org.b3studios.bible.SplashScreen;
 import org.b3studios.bible.model.Highlight;
 import org.b3studios.bible.slidingmenu.BibleFragment;
 
@@ -56,7 +57,7 @@ public class MainListViewAdapter extends ArrayAdapter<Spannable> {
             String t = textView.getText().toString();
             Spannable spanRange = new SpannableString(t);
 
-            if (BibleFragment.db.isHighlight(hl)) {
+            if (SplashScreen.db.isHighlight(hl)) {
 
 
                 // Add Bold text to the verse
@@ -125,14 +126,14 @@ public class MainListViewAdapter extends ArrayAdapter<Spannable> {
         hl.setChapter(BibleFragment.settings.getCurrentChapter());
         hl.setVerse(i);
 
-        Highlight highlightToUpdate = BibleFragment.db.getHighlight(hl);
+        Highlight highlightToUpdate = SplashScreen.db.getHighlight(hl);
 
         if (highlightToUpdate != null) {
             highlightToUpdate.setHighlight(highlightToUpdate.getHighlight() == 1 ? 0 : 1);
-            BibleFragment.db.updateHighlight(highlightToUpdate);
+            SplashScreen.db.updateHighlight(highlightToUpdate);
         } else {
             hl.setHighlight(1);
-            BibleFragment.db.addHighlight(hl);
+            SplashScreen.db.addHighlight(hl);
         }
     }
 }

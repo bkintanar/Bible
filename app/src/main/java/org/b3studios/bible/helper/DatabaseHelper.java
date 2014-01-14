@@ -30,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static String DB_PATH = "/data/data/org.b3studios.bible/databases/";
 
     private static String DB_NAME = "bible";
+    private final String TABLE_HIGHLIGHT = "highlights";
 
     private SQLiteDatabase myDatabase;
 
@@ -40,6 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_BOOK = "book";
     private static final String KEY_CHAPTER = "chapter";
     private static final String KEY_VERSE = "verse";
+    private static final String KEY_PASSAGE = "passage";
     private static final String KEY_HIGHLIGHT = "highlight";
 
     /**
@@ -313,24 +315,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_BOOK, highlight.getBook());
         values.put(KEY_CHAPTER, highlight.getChapter());
         values.put(KEY_VERSE, highlight.getVerse());
+        values.put(KEY_PASSAGE, highlight.getPassage());
         values.put(KEY_HIGHLIGHT, highlight.getHighlight());
 
         // Inserting Row
-        db.insert("highlights", null, values);
+        db.insert(TABLE_HIGHLIGHT, null, values);
         // Closing database connection
     }
 
     public Highlight getHighlight(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query("highlights", new String[]{KEY_ID,
+        Cursor cursor = db.query(TABLE_HIGHLIGHT, new String[]{KEY_ID,
                 KEY_BOOK, KEY_CHAPTER, KEY_VERSE, KEY_HIGHLIGHT}, KEY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
         Highlight highlight = new Highlight(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), Integer.parseInt(cursor.getString(2)), Integer.parseInt(cursor.getString(3)), Integer.parseInt(cursor.getString(4)));
+                cursor.getString(1), Integer.parseInt(cursor.getString(2)), Integer.parseInt(cursor.getString(3)), Integer.parseInt(cursor.getString(5)));
 
 
         // return highlight
@@ -340,14 +343,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Highlight getHighlight(Highlight hl) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT  * FROM " + "highlights" + " WHERE" +
+        String selectQuery = "SELECT  * FROM " + TABLE_HIGHLIGHT + " WHERE" +
                 " " + KEY_BOOK + " = '" + hl.getBook() + "' AND " + KEY_CHAPTER + " = " + hl.getChapter() +
                 " AND " + KEY_VERSE + " = " + hl.getVerse();
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             Highlight highlight = new Highlight(Integer.parseInt(cursor.getString(0)),
-                    cursor.getString(1), Integer.parseInt(cursor.getString(2)), Integer.parseInt(cursor.getString(3)), Integer.parseInt(cursor.getString(4)));
+                    cursor.getString(1), Integer.parseInt(cursor.getString(2)), Integer.parseInt(cursor.getString(3)), Integer.parseInt(cursor.getString(5)));
             cursor.close();
             return highlight;
         }
@@ -356,9 +359,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public List<Highlight> getAllHighlights() {
-        List<Highlight> contactList = new ArrayList<Highlight>();
+        List<Highlight> highlightList = new ArrayList<Highlight>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + "highlights";
+        String selectQuery = "SELECT  * FROM " + TABLE_HIGHLIGHT + " WHERE highlight = 1";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -371,16 +374,55 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 highlight.setBook(cursor.getString(1));
                 highlight.setChapter(Integer.parseInt(cursor.getString(2)));
                 highlight.setVerse(Integer.parseInt(cursor.getString(3)));
-                highlight.setHighlight(Integer.parseInt(cursor.getString(4)));
+                highlight.setHighlight(Integer.parseInt(cursor.getString(5)));
                 // Adding highlight to list
-                contactList.add(highlight);
+                highlightList.add(highlight);
             } while (cursor.moveToNext());
         }
 
         cursor.close();
 
         // return contact list
-        return contactList;
+        return highlightList;
+    }
+
+    public ArrayList<Spannable> getAllHighlightsSpannable() {
+
+        ArrayList<Spannable> searchResult = new ArrayList<Spannable>();
+
+        String translation = BibleFragment.settings.getCurrentTranslation();
+
+        // Select All Query
+        String selectQuery = "SELECT " +TABLE_HIGHLIGHT+ ".book, "+TABLE_HIGHLIGHT+".chapter, "+TABLE_HIGHLIGHT+".verse, "+ translation +
+                ".passage FROM " + TABLE_HIGHLIGHT +", " + translation  + " WHERE highlight = 1" +
+                " AND " + translation + ".book="+TABLE_HIGHLIGHT+".book AND " + translation + ".chapter="+TABLE_HIGHLIGHT+".chapter " +
+                " AND " + translation + ".verse="+TABLE_HIGHLIGHT+".verse+1";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    String passage = cursor.getString(3);
+
+                    String verse = cursor.getString(0) + " " + cursor.getString(1) + ":" + (Integer.parseInt(cursor.getString(2)) + 1) + " ";
+
+                    Spannable spanRange = new SpannableString(verse + passage);
+
+                    // Add Bold text to the verse
+                    spanRange.setSpan(new StyleSpan(Typeface.BOLD), 0, verse.length() - 1,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    searchResult.add(spanRange);
+
+                } while (cursor.moveToNext());
+            }
+
+            cursor.close();
+        }
+
+        return searchResult;
     }
 
     public int updateHighlight(Highlight highlight) {
@@ -390,10 +432,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_BOOK, highlight.getBook());
         values.put(KEY_CHAPTER, highlight.getChapter());
         values.put(KEY_VERSE, highlight.getVerse());
+        values.put(KEY_PASSAGE, highlight.getPassage());
         values.put(KEY_HIGHLIGHT, highlight.getHighlight());
 
         // updating row
-        int returnValue = db.update("highlights", values, KEY_ID + " = ?",
+        int returnValue = db.update(TABLE_HIGHLIGHT, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(highlight.getID())});
 
         return returnValue;
@@ -401,7 +444,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void deleteHighlight(Highlight contact) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("highlights", KEY_ID + " = ?",
+        db.delete(TABLE_HIGHLIGHT, KEY_ID + " = ?",
                 new String[]{String.valueOf(contact.getID())});
     }
 
@@ -409,13 +452,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         try {
-            db.query("highlights", null,
+            db.query(TABLE_HIGHLIGHT, null,
                     null, null, null, null, null);
         } catch (Exception e) {
             Log.i("DEBUG", "table doesnt exist, creating...");
-            String CREATE_CONTACTS_TABLE = "CREATE TABLE " + "highlights" + "("
+            String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_HIGHLIGHT + "("
                     + KEY_ID + " INTEGER PRIMARY KEY," + KEY_BOOK + " TEXT,"
-                    + KEY_CHAPTER + " INTEGER," + KEY_VERSE + " INTEGER," + KEY_HIGHLIGHT + " INTEGER" + ")";
+                    + KEY_CHAPTER + " INTEGER," + KEY_VERSE + " INTEGER," +  KEY_PASSAGE + " TEXT," + KEY_HIGHLIGHT + " INTEGER" + ")";
             db.execSQL(CREATE_CONTACTS_TABLE);
 
         }
@@ -423,7 +466,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean isHighlight(Highlight hl) {
 
-        String selectQuery = "SELECT  * FROM " + "highlights" + " WHERE" +
+        String selectQuery = "SELECT  * FROM " + TABLE_HIGHLIGHT + " WHERE" +
                 " " + KEY_BOOK + " = '" + hl.getBook() + "' AND " + KEY_CHAPTER + " = " + hl.getChapter() +
                 " AND " + KEY_VERSE + " = " + hl.getVerse() + " AND " + KEY_HIGHLIGHT + " = " + "1";
 

@@ -18,6 +18,7 @@ import android.widget.ListView;
 
 import org.b3studios.bible.slidingmenu.AboutFragment;
 import org.b3studios.bible.slidingmenu.BibleFragment;
+import org.b3studios.bible.slidingmenu.BookmarkFragment;
 import org.b3studios.bible.slidingmenu.SettingsFragment;
 import org.b3studios.bible.slidingmenu.adapter.NavDrawerListAdapter;
 import org.b3studios.bible.slidingmenu.model.NavDrawerItem;
@@ -58,12 +59,14 @@ public class MainActivity extends Activity {
         ArrayList<NavDrawerItem> navDrawerItems = new ArrayList<NavDrawerItem>();
 
         // adding nav drawer items to array
-        // Home
+        // Bible
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
-        // Find People
+        // Bookmarks
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-        // Photos
+        // Settings
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
+        // About
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
         // Communities, Will add a counter here
 //        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1), true, "22"));
 //        Pages
@@ -159,9 +162,12 @@ public class MainActivity extends Activity {
                 fragment = new BibleFragment();
                 break;
             case 1:
-                fragment = new SettingsFragment();
+                fragment = new BookmarkFragment();
                 break;
             case 2:
+                fragment = new SettingsFragment();
+                break;
+            case 3:
                 fragment = new AboutFragment();
 
             default:

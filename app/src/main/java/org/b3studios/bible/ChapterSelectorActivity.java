@@ -51,7 +51,7 @@ public class ChapterSelectorActivity extends Activity {
                 Toast.makeText(getBaseContext(), title + " " + (position + 1), Toast.LENGTH_SHORT).show();
 
                 BibleFragment.settings.setCurrentChapter(position + 1);
-                BibleFragment.settings.setCurrentMaxChapters(BibleFragment.db.getChapterSize(currentBook));
+                BibleFragment.settings.setCurrentMaxChapters(SplashScreen.db.getChapterSize(currentBook));
 
                 BibleFragment.bookTextView.setText(bookNames.get(index) + " " + BibleFragment.settings.getCurrentChapter() + " \u25BC");
 
@@ -69,7 +69,7 @@ public class ChapterSelectorActivity extends Activity {
         new Thread(new Runnable() {
             public void run() {
 
-                chapter = BibleFragment.db.getChapterToDisplay();
+                chapter = SplashScreen.db.getChapterToDisplay();
 
                 setMainTextViewText(i);
             }

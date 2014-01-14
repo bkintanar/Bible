@@ -14,9 +14,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.b3studios.bible.SplashScreen;
 import org.b3studios.bible.helper.DatabaseHelper;
 import org.b3studios.bible.search.adapter.SearchResultAdapter;
 import org.b3studios.bible.slidingmenu.BibleFragment;
+import org.b3studios.bible.slidingmenu.adapter.MainListViewAdapter;
 
 import java.util.ArrayList;
 
@@ -121,6 +123,12 @@ public class Common {
                                 BibleFragment.settings.position = Integer.parseInt(verse[2]);
 
                                 BibleFragment.bookTextView.setText(BibleFragment.settings.getCurrentBook() + " " + BibleFragment.settings.getCurrentChapter() + " \u25BC");
+
+                                ArrayList<Spannable> chapter = SplashScreen.db.getChapterToDisplay();
+
+                                final MainListViewAdapter adapter = new MainListViewAdapter(activity, chapter);
+
+                                BibleFragment.mainListView.setAdapter(adapter);
 
                                 SharedPreferences settings = activity.getSharedPreferences("UserBibleInfo", 0);
 

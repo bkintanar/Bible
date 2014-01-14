@@ -23,8 +23,8 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import org.b3studios.bible.R;
+import org.b3studios.bible.SplashScreen;
 import org.b3studios.bible.adapter.TitleNavigationAdapter;
-import org.b3studios.bible.helper.DatabaseHelper;
 import org.b3studios.bible.model.Settings;
 import org.b3studios.bible.model.SpinnerNavItem;
 import org.b3studios.bible.slidingmenu.adapter.MainListViewAdapter;
@@ -57,7 +57,6 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
 
     public static Settings settings = new Settings();
 
-    public static DatabaseHelper db;
     public SearchView searchView;
 
     public static TextView bookTextView;
@@ -90,7 +89,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
 
         actionBar = getActivity().getActionBar();
 
-        db = new DatabaseHelper(getActivity());
+
 
         // Hide the action bar title
         actionBar.setDisplayShowTitleEnabled(false);
@@ -112,15 +111,6 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
         actionBar.setListNavigationCallbacks(adapter, this);
 
         // load preferences stored in device
-
-        try {
-            db.createDatabase();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            db.openDatabase();
-            db.checkHighlightTable();
-        }
 
         settings.setBookNames(initBookNames());
 
@@ -368,7 +358,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
 
     private void setMaxChapters(int i) {
 
-        int chapterSize = db.getChapterSize(settings.getCurrentBook());
+        int chapterSize = SplashScreen.db.getChapterSize(settings.getCurrentBook());
 
         settings.setCurrentMaxChapters(chapterSize);
 
@@ -401,7 +391,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
         new Thread(new Runnable() {
             public void run() {
 
-                chapter = BibleFragment.db.getChapterToDisplay();
+                chapter = SplashScreen.db.getChapterToDisplay();
 
                 setMainTextViewText(i);
             }

@@ -11,6 +11,7 @@ public class Highlight {
     private int _chapter;
     private int _verse;
     private int highlight;
+    private String passage;
 
     // Empty constructor
     public Highlight() {
@@ -27,11 +28,12 @@ public class Highlight {
     }
 
     // constructor
-    public Highlight(String book, int chapter, int verse, int highlight) {
+    public Highlight(String book, int chapter, int verse, int highlight, String passage) {
         this.setBook(book);
         this.setChapter(chapter);
         this.setVerse(verse);
         this.setHighlight(highlight);
+        this.setPassage(passage);
     }
 
     public int getID() {
@@ -72,5 +74,13 @@ public class Highlight {
 
     public void setHighlight(int highlight) {
         this.highlight = highlight;
+    }
+
+    public String getPassage() {
+        return passage;
+    }
+
+    public void setPassage(String passage) {
+        this.passage = passage;
     }
 }

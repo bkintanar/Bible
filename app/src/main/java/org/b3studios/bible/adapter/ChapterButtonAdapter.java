@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 
+import org.b3studios.bible.SplashScreen;
 import org.b3studios.bible.slidingmenu.BibleFragment;
 
 public class ChapterButtonAdapter extends BaseAdapter {
@@ -18,7 +19,7 @@ public class ChapterButtonAdapter extends BaseAdapter {
 
         mContext = c;
 
-        chapterCount = BibleFragment.db.getChapterSize(BibleFragment.settings.getCurrentBook());
+        chapterCount = SplashScreen.db.getChapterSize(BibleFragment.settings.getCurrentBook());
 
     }
 
