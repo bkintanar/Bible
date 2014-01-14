@@ -49,12 +49,20 @@
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value="org.b3studios.bible.search.SearchResultsActivity" />
+        </activity>
+        <!-- Splash screen -->
+        <activity
+            android:name="org.b3studios.bible.SplashScreen"
+            android:label="@string/title_activity_u_bible"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
