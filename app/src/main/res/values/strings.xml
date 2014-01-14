@@ -10,7 +10,7 @@
     <string name="menu_ceb">Ang Biblia (Cebuano)</string>
     <string name="title_activity_u_bible">µBible</string>
     <string name="search_hint">Search text in the Bible</string>
-    <string name="about_text">µBible is built because we saw the lack of intuitive Cebuano translated Bible available in the Google Play Store. µBible is a project done by the Youth of the Pentecostals of Mandaue City, United Pentecostal Church Philippines, Inc.\n\nLike us at https://facebook.com/upcmandaue or\nfollow us over at https://twitter.com/uBibleApp</string>
+    <string name="about_text">µBible is built because we saw the lack of intuitive Cebuano translated Bible available in the Google Play Store. µBible is a project done by the Youth of the Pentecostals of Mandaue City, United Pentecostal Church Philippines, Inc.\n\nLike us at https://facebook.com/upcmandaue or\nfollow us over at https://twitter.com/uBibleApp\n\nThanks to http://gabrielceniza.com for the splash screen and icon set.</string>
     <string name="main_text"></string>
     <string name="title_activity_main">MainActivity</string>
     <string name="hello_world">Hello world!</string>
