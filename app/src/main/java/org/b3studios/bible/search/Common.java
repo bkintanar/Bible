@@ -55,40 +55,48 @@ public class Common {
                     cursor = db.customQuery(RESULT_TYPE, query, "");
                 }
 
-                if (cursor.moveToFirst()) {
-                    do {
+                if (cursor != null)
+                    if (cursor.moveToFirst()) {
+                        do {
 
-                        String passage = cursor.getString(3);
-                        int startSpan, endSpan = 0;
+                            String passage = cursor.getString(3);
 
-                        String verse = cursor.getString(0) + " " + cursor.getString(1) + ":" + cursor.getString(2) + " ";
+                            String verse = cursor.getString(0) + " " + cursor.getString(1) + ":" + cursor.getString(2) + " ";
 
-                        Spannable spanRange = new SpannableString(verse + passage);
+                            Spannable spanRange = new SpannableString(verse + passage);
 
-                        while (true) {
-                            startSpan = (verse + passage).toLowerCase().indexOf(query, endSpan);
-                            BackgroundColorSpan backColour = new BackgroundColorSpan(Color.YELLOW);
+                            String text = (verse + passage).toLowerCase();
 
-                            // Need a NEW span object every loop, else it just moves the span
-                            if (startSpan < 0)
-                                break;
-                            endSpan = startSpan + query.length();
-                            spanRange.setSpan(backColour, startSpan, endSpan,
+                            int startSpan;
+                            int endSpan = verse.length();
+
+                            query = query.toLowerCase();
+
+                            while (true) {
+
+                                startSpan = text.indexOf(query, endSpan);
+                                BackgroundColorSpan backColour = new BackgroundColorSpan(Color.YELLOW);
+
+                                // Need a NEW span object every loop, else it just moves the span
+                                if (startSpan < 0)
+                                    break;
+                                endSpan = startSpan + query.length();
+                                spanRange.setSpan(backColour, startSpan, endSpan,
+                                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            }
+
+                            // Add Bold text to the verse
+                            spanRange.setSpan(new StyleSpan(Typeface.BOLD), 0, verse.length(),
                                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
 
-                        // Add Bold text to the verse
-                        spanRange.setSpan(new StyleSpan(Typeface.BOLD), 0, verse.length(),
-                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            searchResult.add(spanRange);
+                            verseCallback.add(cursor.getString(0) + "-" + cursor.getString(1) + "-" + cursor.getString(2));
 
-                        searchResult.add(spanRange);
-                        verseCallback.add(cursor.getString(0) + "-" + cursor.getString(1) + "-" + cursor.getString(2));
-
-                    } while (cursor.moveToNext());
-                } else {
-                    searchResult.add(new SpannableString("No search result found for `" + query + "'"));
-                    verseCallback.add("No search result found for `" + query + "'");
-                }
+                        } while (cursor.moveToNext());
+                    } else {
+                        searchResult.add(new SpannableString("No search result found for `" + query + "'"));
+                        verseCallback.add("No search result found for `" + query + "'");
+                    }
 
                 cursor.close();
 

@@ -136,4 +136,38 @@ public class MainListViewAdapter extends ArrayAdapter<Spannable> {
             SplashScreen.db.addHighlight(hl);
         }
     }
+
+    public String getSelectedText() {
+
+        StringBuilder textToShare = new StringBuilder();
+        ArrayList<String> verses = new ArrayList<String>();
+        for (int i = 0; i < mSelectedItemsIds.size(); i++) {
+
+            String text = this.getItem(mSelectedItemsIds.keyAt(i)).toString();
+
+            String[] split = text.split(" ");
+
+            verses.add(split[0]);
+
+            textToShare.append(text).append("\n");
+        }
+
+        textToShare.append("(").
+                append(BibleFragment.settings.getCurrentBook()).
+                append(" ").append(BibleFragment.settings.getCurrentChapter()).append(":").
+                append(simplifyVerses(verses)).append(")");
+
+        return textToShare.toString();
+    }
+
+    private String simplifyVerses(ArrayList<String> verses) {
+        StringBuilder verseFinal = new StringBuilder();
+
+        for (int i = 0; i < verses.size(); i++) {
+
+            verseFinal.append(verses.get(i)).append(",");
+        }
+
+        return verseFinal.toString().substring(0, verseFinal.toString().length() - 1);
+    }
 }

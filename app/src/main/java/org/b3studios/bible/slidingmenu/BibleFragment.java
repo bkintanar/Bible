@@ -439,9 +439,28 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
                                 // Close CAB
                                 mode.finish();
 
-                                selected.clear();
+                                adapter.removeSelection();
 
                                 return true;
+
+                            case R.id.menu_item_share:
+
+                                String text = adapter.getSelectedText();
+
+//                                String shareBody = "Here is the share content body";
+                                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                                sharingIntent.setType("text/plain");
+//                                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
+                                startActivity(Intent.createChooser(sharingIntent, "Share Verse"));
+
+                                mode.finish();
+
+                                adapter.removeSelection();
+
+                                return true;
+
+//                                mShareActionProvider.setShareIntent(shareIntent);
 
                             default:
                                 return false;

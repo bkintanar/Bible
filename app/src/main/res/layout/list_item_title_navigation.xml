@@ -7,6 +7,8 @@
     <TextView android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:paddingTop="5sp"
+        android:paddingBottom="5sp" />
 
 </RelativeLayout>

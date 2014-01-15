@@ -2,4 +2,7 @@
     <item
         android:id="@+id/highlight"
         android:title="Highlight"/>
+    <item
+        android:id="@+id/menu_item_share"
+        android:title="Share" />
 </menu>
