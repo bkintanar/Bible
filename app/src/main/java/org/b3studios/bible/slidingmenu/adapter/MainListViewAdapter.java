@@ -141,15 +141,24 @@ public class MainListViewAdapter extends ArrayAdapter<Spannable> {
 
         StringBuilder textToShare = new StringBuilder();
         ArrayList<String> verses = new ArrayList<String>();
-        for (int i = 0; i < mSelectedItemsIds.size(); i++) {
 
-            String text = this.getItem(mSelectedItemsIds.keyAt(i)).toString();
+        int len = BibleFragment.mainListView.getCount();
+        SparseBooleanArray checked = BibleFragment.mainListView.getCheckedItemPositions();
 
-            String[] split = text.split(" ");
+        for (int i = 0; i < len; i++) {
 
-            verses.add(split[0]);
+            if (checked.get(i))
+            {
+                String text = this.getItem(i).toString();
 
-            textToShare.append(text).append("\n");
+                String[] split = text.split(" ");
+
+                verses.add(split[0]);
+
+                textToShare.append(text).append("\n");
+            }
+
+
         }
 
         textToShare.append("(").
