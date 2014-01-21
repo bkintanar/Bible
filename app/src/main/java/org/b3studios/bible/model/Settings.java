@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 
 import org.b3studios.bible.slidingmenu.BibleFragment;
+import org.b3studios.bible.slidingmenu.BookmarkFragment;
 
 import java.util.List;
 
@@ -20,9 +21,12 @@ public class Settings {
 
     public int currentTypeface = 0;
 
-    public Typeface[] typefaces = {Typeface.SANS_SERIF, Typeface.SERIF, Typeface.MONOSPACE};
     public int position = 0;
     public Boolean nightMode = false;
+
+    private Typeface typeface;
+    private String fontFilename;
+    private int style = 2;
 
     public String getCurrentTranslation() {
         return currentTranslation;
@@ -94,6 +98,9 @@ public class Settings {
             BibleFragment.mainListView.setBackgroundColor(Color.WHITE);
             BibleFragment.bookTextView.setBackgroundColor(Color.WHITE);
             BibleFragment.bookTextView.setTextColor(Color.BLACK);
+
+            if (BookmarkFragment.bookmarkListView != null)
+            BookmarkFragment.bookmarkListView.setBackgroundColor(Color.WHITE);
         }
     }
 
@@ -111,5 +118,31 @@ public class Settings {
 
     public int getPosition() {
         return position;
+    }
+
+    public void setTypeface(Typeface typeface) {
+        this.typeface = typeface;
+    }
+
+    public Typeface getTypeface() {
+        return typeface;
+    }
+
+    public void setFontFilename(String fontFilename) {
+        this.fontFilename = fontFilename;
+    }
+
+    public String getFontFilename() {
+        return fontFilename;
+    }
+
+
+
+    public void setFontStyle(int style) {
+        this.style = style;
+    }
+
+    public int getFontStyle() {
+        return style;
     }
 }

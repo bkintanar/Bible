@@ -82,4 +82,32 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+    <string-array name="pref_font_styles_titles">
+        <item>American Typewriter</item>
+        <item>Baskerville</item>
+        <item>Cochin</item>
+        <item>Futura</item>
+        <item>Helvetica Neue</item>
+        <item>Optima</item>
+        <item>Palatino</item>
+        <item>Papyrus</item>
+        <item>Roboto</item>
+        <item>Snell Roundhand</item>
+        <item>Trebuchet MS</item>
+    </string-array>
+
+    <string-array name="pref_font_styles_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
 </resources>

@@ -45,7 +45,6 @@ public class MainListViewAdapter extends ArrayAdapter<Spannable> {
         if (rowView != null) {
             textView = (TextView) rowView.findViewById(R.id.textview_item);
             textView.setText(values.get(position));
-            textView.setTypeface(BibleFragment.settings.typefaces[BibleFragment.settings.currentTypeface]);
             textView.setTextSize(BibleFragment.settings.getMainViewTextSize());
 
             Highlight hl = new Highlight();
@@ -86,6 +85,9 @@ public class MainListViewAdapter extends ArrayAdapter<Spannable> {
                     textView.setTextColor(Color.WHITE);
                 }
             }
+
+            textView.setTypeface(BibleFragment.settings.getTypeface());
+
         }
 
         return rowView;

@@ -32,7 +32,7 @@ public class SearchResultAdapter extends ArrayAdapter<Spannable> {
         if (rowView != null) {
             textView = (TextView) rowView.findViewById(R.id.rowSearchResultText);
             textView.setText(values.get(position));
-            textView.setTypeface(BibleFragment.settings.typefaces[BibleFragment.settings.currentTypeface]);
+            textView.setTypeface(BibleFragment.settings.getTypeface());
             textView.setTextSize(BibleFragment.settings.getMainViewTextSize());
         }
 

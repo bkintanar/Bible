@@ -6,6 +6,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -198,6 +199,12 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
             BibleFragment.settings.setMainViewTypeface(settings.getInt("mainViewTypeface", 0));
             BibleFragment.settings.setNightMode(settings.getBoolean("night_mode", false));
             BibleFragment.settings.setPosition(settings.getInt("position", 0));
+            BibleFragment.settings.setFontFilename(settings.getString("fontFilename", "HelveticaNeue"));
+            BibleFragment.settings.setFontStyle(settings.getInt("font_style", 4));
+
+            Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/"+BibleFragment.settings.getFontFilename()+".ttf");
+
+            BibleFragment.settings.setTypeface(typeface);
 
             BibleFragment.settings.setDefaults();
 
@@ -221,6 +228,8 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
         editor.putInt("mainViewTypeface", BibleFragment.settings.getMainViewTypeface());
         editor.putBoolean("night_mode", BibleFragment.settings.getNightMode());
         editor.putInt("position", BibleFragment.settings.getPosition());
+        editor.putString("fontFilename", BibleFragment.settings.getFontFilename());
+        editor.putInt("font_style", BibleFragment.settings.getFontStyle());
 
         editor.putBoolean("hasSettingsStored", true);
 
