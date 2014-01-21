@@ -100,7 +100,7 @@ public class Settings {
             BibleFragment.bookTextView.setTextColor(Color.BLACK);
 
             if (BookmarkFragment.bookmarkListView != null)
-            BookmarkFragment.bookmarkListView.setBackgroundColor(Color.WHITE);
+                BookmarkFragment.bookmarkListView.setBackgroundColor(Color.WHITE);
         }
     }
 
@@ -135,7 +135,6 @@ public class Settings {
     public String getFontFilename() {
         return fontFilename;
     }
-
 
 
     public void setFontStyle(int style) {

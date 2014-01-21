@@ -202,7 +202,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
             BibleFragment.settings.setFontFilename(settings.getString("fontFilename", "HelveticaNeue"));
             BibleFragment.settings.setFontStyle(settings.getInt("font_style", 4));
 
-            Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/"+BibleFragment.settings.getFontFilename()+".ttf");
+            Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/" + BibleFragment.settings.getFontFilename() + ".ttf");
 
             BibleFragment.settings.setTypeface(typeface);
 

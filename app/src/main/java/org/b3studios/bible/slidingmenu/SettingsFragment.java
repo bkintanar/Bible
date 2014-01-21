@@ -153,7 +153,7 @@ public class SettingsFragment extends PreferenceFragment {
 
         String[] values = {"AmericanTypewriter", "Baskerville", "Cochin", "Futura", "HelveticaNeue", "Optima", "Palatino", "Papyrus", "Roboto", "SnellRoundhand", "TrebuchetMS"};
 
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/"+values[index]+".ttf");
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/" + values[index] + ".ttf");
 
         BibleFragment.settings.setTypeface(typeface);
 

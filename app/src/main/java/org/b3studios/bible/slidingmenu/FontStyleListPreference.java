@@ -20,8 +20,7 @@ import org.b3studios.bible.R;
 
 import java.util.ArrayList;
 
-public class FontStyleListPreference extends ListPreference
-{
+public class FontStyleListPreference extends ListPreference {
     FontStyleListPreferenceAdapter fontStyleListPreferenceAdapter = null;
     Context mContext;
     private LayoutInflater mInflater;
@@ -32,8 +31,7 @@ public class FontStyleListPreference extends ListPreference
     SharedPreferences.Editor editor;
     int selected;
 
-    public FontStyleListPreference(Context context, AttributeSet attrs)
-    {
+    public FontStyleListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
         mInflater = LayoutInflater.from(context);
@@ -43,8 +41,7 @@ public class FontStyleListPreference extends ListPreference
     }
 
     @Override
-    protected void onPrepareDialogBuilder(Builder builder)
-    {
+    protected void onPrepareDialogBuilder(Builder builder) {
         super.onPrepareDialogBuilder(builder);
 
         entries = getEntries();
@@ -52,23 +49,19 @@ public class FontStyleListPreference extends ListPreference
 
         selected = prefs.getInt("font_style", 4);
 
-        if (entries == null || entryValues == null || entries.length != entryValues.length )
-        {
+        if (entries == null || entryValues == null || entries.length != entryValues.length) {
             throw new IllegalStateException(
                     "ListPreference requires an entries array and an entryValues array which are both the same length");
         }
 
         fontStyleListPreferenceAdapter = new FontStyleListPreferenceAdapter(mContext);
 
-        builder.setAdapter(fontStyleListPreferenceAdapter, new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
+        builder.setAdapter(fontStyleListPreferenceAdapter, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
                 this.onClick(dialog, DialogInterface.BUTTON_POSITIVE);
                 dialog.dismiss();
             }
         });
-
 
 
         builder.setPositiveButton(null, null);
@@ -82,37 +75,30 @@ public class FontStyleListPreference extends ListPreference
         }
     }
 
-        private class FontStyleListPreferenceAdapter extends BaseAdapter
-    {
+    private class FontStyleListPreferenceAdapter extends BaseAdapter {
         View[] Views;
 
-        public FontStyleListPreferenceAdapter(Context context)
-        {
+        public FontStyleListPreferenceAdapter(Context context) {
             Views = new View[entries.length];
         }
 
-        public int getCount()
-        {
+        public int getCount() {
             return entries.length;
         }
 
-        public Object getItem(int position)
-        {
+        public Object getItem(int position) {
             return null;
         }
 
-        public long getItemId(int position)
-        {
+        public long getItemId(int position) {
             return position;
         }
 
-        public View getView(final int position, View convertView, ViewGroup parent)
-        {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             View row = Views[position];
             CustomHolder holder;
 
-            if(row == null)
-            {
+            if (row == null) {
                 row = mInflater.inflate(R.layout.font_style_list_preference_row, parent, false);
                 holder = new CustomHolder(row, position);
                 row.setTag(holder);
@@ -122,27 +108,25 @@ public class FontStyleListPreference extends ListPreference
             return row;
         }
 
-        class CustomHolder
-        {
+        class CustomHolder {
             private TextView text = null;
             private RadioButton rButton = null;
 
-            CustomHolder(View row, final int position)
-            {
-                text = (TextView)row.findViewById(R.id.custom_list_view_row_text_view);
+            CustomHolder(View row, final int position) {
+                text = (TextView) row.findViewById(R.id.custom_list_view_row_text_view);
                 text.setText(entries[position]);
 
                 String fontName = (String) entries[position];
                 String fontFilename = fontName.replaceAll("\\s", "");
 
-                Typeface mFont = Typeface.createFromAsset(mContext.getAssets(), "fonts/"+fontFilename+".ttf");
+                Typeface mFont = Typeface.createFromAsset(mContext.getAssets(), "fonts/" + fontFilename + ".ttf");
 
                 text.setTypeface(mFont);
 
-                rButton = (RadioButton)row.findViewById(R.id.custom_list_view_row_radio_button);
+                rButton = (RadioButton) row.findViewById(R.id.custom_list_view_row_radio_button);
                 rButton.setId(position);
 
-                if((""+selected).compareTo((String)entryValues[position])==0)
+                if (("" + selected).compareTo((String) entryValues[position]) == 0)
                     rButton.setChecked(true);
 
                 row.setOnClickListener(new View.OnClickListener() {
@@ -161,15 +145,11 @@ public class FontStyleListPreference extends ListPreference
                 });
 
                 rButtonList.add(rButton);
-                rButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-                {
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-                    {
-                        if(isChecked)
-                        {
-                            for(RadioButton rb : rButtonList)
-                            {
-                                if(rb != buttonView)
+                rButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            for (RadioButton rb : rButtonList) {
+                                if (rb != buttonView)
                                     rb.setChecked(false);
                             }
 

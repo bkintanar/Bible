@@ -149,8 +149,7 @@ public class MainListViewAdapter extends ArrayAdapter<Spannable> {
 
         for (int i = 0; i < len; i++) {
 
-            if (checked.get(i))
-            {
+            if (checked.get(i)) {
                 String text = this.getItem(i).toString();
 
                 String[] split = text.split(" ");
