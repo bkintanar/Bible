@@ -72,8 +72,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             try {
 
-//                Log.i("DEBUG", "Copying Database");
-
                 copyDatabase("bible");
 //                copyDatabase("bible-journal");
 
