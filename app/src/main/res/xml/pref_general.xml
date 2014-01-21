@@ -8,7 +8,7 @@
             android:title="Set default font style"
             android:dialogTitle="Set default font style"
             android:summary="Your Summary"
-            android:defaultValue="2"
+            android:defaultValue="4"
             android:entries="@array/pref_font_styles_titles"
             android:entryValues="@array/pref_font_styles_values"/>
         <ListPreference

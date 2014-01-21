@@ -89,10 +89,13 @@
         <item>Cochin</item>
         <item>Futura</item>
         <item>Helvetica Neue</item>
+        <item>Monospace</item>
         <item>Optima</item>
         <item>Palatino</item>
         <item>Papyrus</item>
         <item>Roboto</item>
+        <item>Sans Serif</item>
+        <item>Serif</item>
         <item>Snell Roundhand</item>
         <item>Trebuchet MS</item>
     </string-array>
@@ -109,5 +112,8 @@
         <item>8</item>
         <item>9</item>
         <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
     </string-array>
 </resources>

@@ -4,8 +4,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 
 import org.b3studios.bible.slidingmenu.BibleFragment;
-import org.b3studios.bible.slidingmenu.BookmarkFragment;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Settings {
@@ -25,8 +26,10 @@ public class Settings {
     public Boolean nightMode = false;
 
     private Typeface typeface;
-    private String fontFilename;
-    private int style = 2;
+    private String fontFilename = "HelveticaNeue";
+    private int style = 4;
+    private String[] fontsArrayString = {"AmericanTypewriter", "Baskerville", "Cochin", "Futura", "HelveticaNeue",
+            "Monospace", "Optima", "Palatino", "Papyrus", "Roboto", "SansSerif", "Serif", "SnellRoundhand", "TrebuchetMS"};
 
     public String getCurrentTranslation() {
         return currentTranslation;
@@ -98,9 +101,6 @@ public class Settings {
             BibleFragment.mainListView.setBackgroundColor(Color.WHITE);
             BibleFragment.bookTextView.setBackgroundColor(Color.WHITE);
             BibleFragment.bookTextView.setTextColor(Color.BLACK);
-
-            if (BookmarkFragment.bookmarkListView != null)
-                BookmarkFragment.bookmarkListView.setBackgroundColor(Color.WHITE);
         }
     }
 
@@ -125,6 +125,32 @@ public class Settings {
     }
 
     public Typeface getTypeface() {
+
+        String fontName = getFontFilename();
+
+        Typeface typeface = null;
+        ArrayList<String> builtInFonts = new ArrayList<String>();
+        builtInFonts.add("Monospace");
+        builtInFonts.add("Serif");
+        builtInFonts.add("SansSerif");
+
+        if (builtInFonts.contains(fontName)) {
+
+            switch (Arrays.asList(BibleFragment.settings.fontsArrayString).indexOf(fontName)) {
+                case 5:
+                    typeface = Typeface.MONOSPACE;
+                    break;
+                case 10:
+                    typeface = Typeface.SANS_SERIF;
+                    break;
+                case 11:
+                    typeface = Typeface.SERIF;
+                    break;
+            }
+        } else {
+            typeface = Typeface.createFromAsset(BibleFragment.mActivity.getAssets(), "fonts/" + fontName + ".ttf");
+        }
+
         return typeface;
     }
 
@@ -143,5 +169,9 @@ public class Settings {
 
     public int getFontStyle() {
         return style;
+    }
+
+    public String[] getFontArrayString() {
+        return fontsArrayString;
     }
 }

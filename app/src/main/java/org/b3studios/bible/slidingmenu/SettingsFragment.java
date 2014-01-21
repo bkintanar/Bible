@@ -2,14 +2,12 @@ package org.b3studios.bible.slidingmenu;
 
 import android.app.ActionBar;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.MenuItem;
 
 import org.b3studios.bible.R;
@@ -91,14 +89,9 @@ public class SettingsFragment extends PreferenceFragment {
                 // For list preferences, look up the correct display value in
                 // the preference's 'entries' list.
                 FontStyleListPreference fontStyleListPreference = (FontStyleListPreference) preference;
-                int index = settings.getInt("font_style", 2);//fontStyleListPreference.findIndexOfValue(stringValue);
-
-//                settings = getActivity().getSharedPreferences("UserBibleInfo", 0);
-
+                int index = settings.getInt("font_style", 4);//fontStyleListPreference.findIndexOfValue(stringValue);
 
                 setDefaultFontStyle(index);
-
-                Log.i("DEBUG", "index = " + index);
 
                 // Set the summary to reflect the new value.
                 if (index >= 0) preference.setSummary(
@@ -124,7 +117,6 @@ public class SettingsFragment extends PreferenceFragment {
                         null);
 
             } else {
-                Log.i("DEBUG", "preference.getClass().toString() = " + preference.getClass().toString());
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
                 preference.setSummary(stringValue);
@@ -151,17 +143,15 @@ public class SettingsFragment extends PreferenceFragment {
 
     public void setDefaultFontStyle(int index) {
 
-        String[] values = {"AmericanTypewriter", "Baskerville", "Cochin", "Futura", "HelveticaNeue", "Optima", "Palatino", "Papyrus", "Roboto", "SnellRoundhand", "TrebuchetMS"};
+        BibleFragment.settings.setFontFilename(BibleFragment.settings.getFontArrayString()[index]);
 
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/" + values[index] + ".ttf");
-
-        BibleFragment.settings.setTypeface(typeface);
+//        BibleFragment.settings.setTypeface(typeface);
 
         settings = getActivity().getSharedPreferences("UserBibleInfo", 0);
 
         SharedPreferences.Editor editor = settings.edit();
 
-        editor.putString("fontFilename", values[index]);
+        editor.putString("fontFilename", BibleFragment.settings.getFontArrayString()[index]);
         editor.putInt("font_style", index);
 
         editor.commit();

@@ -29,6 +29,7 @@ public class FontStyleListPreference extends ListPreference {
     ArrayList<RadioButton> rButtonList;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
+    ArrayList<Integer> builtInFonts = new ArrayList<Integer>();
     int selected;
 
     public FontStyleListPreference(Context context, AttributeSet attrs) {
@@ -38,6 +39,10 @@ public class FontStyleListPreference extends ListPreference {
         rButtonList = new ArrayList<RadioButton>();
         prefs = mContext.getSharedPreferences("UserBibleInfo", 0);
         editor = prefs.edit();
+
+        builtInFonts.add(5);
+        builtInFonts.add(10);
+        builtInFonts.add(11);
     }
 
     @Override
@@ -116,10 +121,28 @@ public class FontStyleListPreference extends ListPreference {
                 text = (TextView) row.findViewById(R.id.custom_list_view_row_text_view);
                 text.setText(entries[position]);
 
-                String fontName = (String) entries[position];
-                String fontFilename = fontName.replaceAll("\\s", "");
+                Typeface mFont = null;
 
-                Typeface mFont = Typeface.createFromAsset(mContext.getAssets(), "fonts/" + fontFilename + ".ttf");
+                if (builtInFonts.contains(position)) {
+
+                    switch (position) {
+                        case 5:
+                            mFont = Typeface.MONOSPACE;
+                            break;
+                        case 10:
+                            mFont = Typeface.SANS_SERIF;
+                            break;
+                        case 11:
+                            mFont = Typeface.SERIF;
+                            break;
+                    }
+                } else {
+
+                    String fontName = (String) entries[position];
+                    String fontFilename = fontName.replaceAll("\\s", "");
+
+                    mFont = Typeface.createFromAsset(mContext.getAssets(), "fonts/" + fontFilename + ".ttf");
+                }
 
                 text.setTypeface(mFont);
 
@@ -129,10 +152,9 @@ public class FontStyleListPreference extends ListPreference {
                 if (("" + selected).compareTo((String) entryValues[position]) == 0)
                     rButton.setChecked(true);
 
-                row.setOnClickListener(new View.OnClickListener() {
+                text.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         int value = Integer.valueOf((String) entryValues[position]);
                         editor.putInt("font_style", value);
                         editor.commit();

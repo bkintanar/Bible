@@ -1,12 +1,12 @@
 package org.b3studios.bible.slidingmenu;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -78,6 +78,8 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
 
     View rootView;
 
+    public static Activity mActivity;
+
     public BibleFragment() {
     }
 
@@ -89,6 +91,8 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
         setHasOptionsMenu(true);
 
         actionBar = getActivity().getActionBar();
+
+        mActivity = getActivity();
 
 
         // Hide the action bar title
@@ -201,10 +205,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
             BibleFragment.settings.setPosition(settings.getInt("position", 0));
             BibleFragment.settings.setFontFilename(settings.getString("fontFilename", "HelveticaNeue"));
             BibleFragment.settings.setFontStyle(settings.getInt("font_style", 4));
-
-            Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/" + BibleFragment.settings.getFontFilename() + ".ttf");
-
-            BibleFragment.settings.setTypeface(typeface);
+            BibleFragment.settings.setTypeface(BibleFragment.settings.getTypeface());
 
             BibleFragment.settings.setDefaults();
 
