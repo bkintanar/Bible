@@ -19,6 +19,7 @@ import android.widget.ListView;
 import org.b3studios.bible.slidingmenu.AboutFragment;
 import org.b3studios.bible.slidingmenu.BibleFragment;
 import org.b3studios.bible.slidingmenu.BookmarkFragment;
+import org.b3studios.bible.slidingmenu.NotesFragment;
 import org.b3studios.bible.slidingmenu.SettingsFragment;
 import org.b3studios.bible.slidingmenu.adapter.NavDrawerListAdapter;
 import org.b3studios.bible.slidingmenu.model.NavDrawerItem;
@@ -60,20 +61,16 @@ public class MainActivity extends Activity {
 
         // adding nav drawer items to array
         // Bible
+        assert navMenuIcons != null;
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
         // Bookmarks
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-        // Settings
+        // Notes
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
-        // About
+        // Settings
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
-        // Communities, Will add a counter here
-//        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1), true, "22"));
-//        Pages
-//        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
-//        What's hot, We  will add a counter here
-//        navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1), true, "50+"));
-
+        // About
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
 
         // Recycle the typed array
         navMenuIcons.recycle();
@@ -136,10 +133,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // toggle nav drawer on selecting action bar app icon/title
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     /**
@@ -165,9 +159,12 @@ public class MainActivity extends Activity {
                 fragment = new BookmarkFragment();
                 break;
             case 2:
-                fragment = new SettingsFragment();
+                fragment = new NotesFragment();
                 break;
             case 3:
+                fragment = new SettingsFragment();
+                break;
+            case 4:
                 fragment = new AboutFragment();
 
             default:
