@@ -62,7 +62,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name="org.b3studios.bible.slidingmenu.NoteEditActivity" />
     </application>
 
 </manifest>
