@@ -12,7 +12,7 @@ import android.util.Log;
  * Simple notes database access helper class. Defines the basic CRUD operations
  * for the notepad example, and gives the ability to list all notes as well as
  * retrieve or modify a specific note.
- *
+ * <p/>
  * This has been improved from the first version of this tutorial through the
  * addition of better error handling and also using returning a Cursor instead
  * of using a collection of inner classes (which is less scalable and not
@@ -78,7 +78,7 @@ public class NotesDbAdapter {
      * signal the failure
      *
      * @return this (self reference, allowing this to be chained in an
-     *         initialization call)
+     * initialization call)
      * @throws SQLException if the database could be neither opened or created
      */
     public NotesDbAdapter open() throws SQLException {
@@ -98,7 +98,7 @@ public class NotesDbAdapter {
      * a -1 to indicate failure.
      *
      * @param title the title of the note
-     * @param body the body of the note
+     * @param body  the body of the note
      * @return rowId or -1 if failed
      */
     public long createNote(String title, String body) {
@@ -127,7 +127,7 @@ public class NotesDbAdapter {
      */
     public Cursor fetchAllNotes() {
 
-        return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_TITLE,
+        return mDb.query(DATABASE_TABLE, new String[]{KEY_ROWID, KEY_TITLE,
                 KEY_BODY}, null, null, null, null, null);
     }
 
@@ -142,7 +142,7 @@ public class NotesDbAdapter {
 
         Cursor mCursor =
 
-                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID,
+                mDb.query(true, DATABASE_TABLE, new String[]{KEY_ROWID,
                         KEY_TITLE, KEY_BODY}, KEY_ROWID + "=" + rowId, null,
                         null, null, null, null);
         if (mCursor != null) {
@@ -159,7 +159,7 @@ public class NotesDbAdapter {
      *
      * @param rowId id of note to update
      * @param title value to set note title to
-     * @param body value to set note body to
+     * @param body  value to set note body to
      * @return true if the note was successfully updated, false otherwise
      */
     public boolean updateNote(long rowId, String title, String body) {

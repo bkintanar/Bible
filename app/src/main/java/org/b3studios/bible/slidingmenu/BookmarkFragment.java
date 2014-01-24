@@ -44,7 +44,7 @@ public class BookmarkFragment extends Fragment {
         actionBar.setDisplayShowHomeEnabled(false);
 
         ThemeHelper themeHelper = new ThemeHelper(getActivity());
-        TypedArray ta =  getActivity().obtainStyledAttributes(themeHelper.getmTheme(), themeHelper.attrs);
+        TypedArray ta = getActivity().obtainStyledAttributes(themeHelper.getmTheme(), themeHelper.attrs);
         int backgroundColor = ta.getColor(themeHelper.BACKGROUND_COLOR, Color.BLACK);
         ta.recycle();
 

@@ -24,8 +24,8 @@ public class NotesFragment extends Fragment implements AdapterView.OnItemClickLi
     private View rootView;
     private ListView notesList;
 
-    private static final int ACTIVITY_CREATE=0;
-    private static final int ACTIVITY_EDIT=1;
+    private static final int ACTIVITY_CREATE = 0;
+    private static final int ACTIVITY_EDIT = 1;
 
     private static final int INSERT_ID = Menu.FIRST;
     private static final int DELETE_ID = Menu.FIRST + 1;
@@ -92,7 +92,7 @@ public class NotesFragment extends Fragment implements AdapterView.OnItemClickLi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case INSERT_ID:
                 createNote();
                 return true;
@@ -110,7 +110,7 @@ public class NotesFragment extends Fragment implements AdapterView.OnItemClickLi
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case DELETE_ID:
                 AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 mDbHelper.deleteNote(info.id);

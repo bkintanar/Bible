@@ -127,7 +127,7 @@ public class Common {
                 if (myListView != null) {
 
                     ThemeHelper themeHelper = new ThemeHelper(activity);
-                    TypedArray ta =  activity.obtainStyledAttributes(themeHelper.getmTheme(), themeHelper.attrs);
+                    TypedArray ta = activity.obtainStyledAttributes(themeHelper.getmTheme(), themeHelper.attrs);
 
                     int backgroundColor = ta.getColor(themeHelper.BACKGROUND_COLOR, Color.BLACK);
 
@@ -153,7 +153,7 @@ public class Common {
 
                                 BibleFragment.mainListView.setAdapter(adapter);
 
-                                BibleFragment.mainListView.setSelection(Integer.parseInt(verse[2]) -1);
+                                BibleFragment.mainListView.setSelection(Integer.parseInt(verse[2]) - 1);
 
                                 activity.finish();
 

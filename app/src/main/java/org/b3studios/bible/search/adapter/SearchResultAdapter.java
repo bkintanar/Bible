@@ -41,7 +41,7 @@ public class SearchResultAdapter extends ArrayAdapter<Spannable> {
             // set theme color for textView
             ThemeHelper themeHelper = new ThemeHelper(context);
 
-            TypedArray ta =  context.obtainStyledAttributes(themeHelper.getmTheme(), themeHelper.attrs);
+            TypedArray ta = context.obtainStyledAttributes(themeHelper.getmTheme(), themeHelper.attrs);
 
             int textColor = ta.getColor(themeHelper.TEXT_COLOR, Color.BLACK);
 
