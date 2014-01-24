@@ -1,7 +1,6 @@
 package org.b3studios.bible.search;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -128,7 +127,7 @@ public class Common {
 
                                 BibleFragment.settings.setCurrentBook(verse[0]);
                                 BibleFragment.settings.setCurrentChapter(Integer.parseInt(verse[1]));
-                                BibleFragment.settings.position = Integer.parseInt(verse[2]);
+//                                BibleFragment.settings.position = Integer.parseInt(verse[2]);
 
                                 BibleFragment.bookTextView.setText(BibleFragment.settings.getCurrentBook() + " " + BibleFragment.settings.getCurrentChapter() + " \u25BC");
 
@@ -138,13 +137,7 @@ public class Common {
 
                                 BibleFragment.mainListView.setAdapter(adapter);
 
-                                SharedPreferences settings = activity.getSharedPreferences("UserBibleInfo", 0);
-
-                                SharedPreferences.Editor editor = settings.edit();
-
-                                editor.putInt("position", Integer.parseInt(verse[2]));
-
-                                editor.commit();
+                                BibleFragment.mainListView.setSelection(Integer.parseInt(verse[2]) -1);
 
                                 activity.finish();
 

@@ -470,8 +470,6 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
 
                                 return true;
 
-//                                mShareActionProvider.setShareIntent(shareIntent);
-
                             default:
                                 return false;
                         }
@@ -496,24 +494,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
                     }
                 });
 
-                final SharedPreferences settings = getActivity().getSharedPreferences("UserBibleInfo", 0);
-
-                if (settings.getInt("position", 0) > 0) {
-                    mainListView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mainListView.setSelection(settings.getInt("position", 0) - 1);
-
-                            SharedPreferences.Editor editor = settings.edit();
-
-                            editor.putInt("position", 0);
-
-                            editor.commit();
-
-                            BibleFragment.settings.position = 0;
-                        }
-                    });
-                } else if (i == PREVIOUS) {
+                if (i == PREVIOUS) {
                     mainListView.setSelection(chapter.size());
                 } else {
                     mainListView.setSelection(0);
