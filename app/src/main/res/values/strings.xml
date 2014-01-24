@@ -15,19 +15,19 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
     <string name="drawer_open">Slider Menu Opened</string>
     <string name="drawer_close">Slider Menu Closed</string>
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
-        <item >Bible</item>
-        <item >Bookmarks</item>
-        <item >Settings</item>
-        <item >About</item>
-        <item >Communities</item>
-        <item >Pages</item>
-        <item >What\'s Hot</item>
+        <item>Bible</item>
+        <item>Bookmarks</item>
+        <item>Notes</item>
+        <item>Settings</item>
+        <item>About</item>
+        <item>Communities</item>
+        <item>Pages</item>
+        <item>What\'s Hot</item>
     </string-array>
 
     <!-- Nav Drawer List Item Icons -->
@@ -35,6 +35,7 @@
     <array name="nav_drawer_icons">
         <item>@drawable/ic_home</item>
         <item>@drawable/ic_bookmarks</item>
+        <item>@drawable/ic_notes</item>
         <item>@drawable/ic_settings</item>
         <item>@drawable/ic_about</item>
     </array>
@@ -42,5 +43,13 @@
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
     <string name="tag_line">µBible - A Bible created for BISDAK!</string>
+    <string name="no_notes">No Notes Yet</string>
+    <string name="menu_insert">Add Note</string>
+    <string name="menu_delete">Delete Note</string>
+    <string name="title">Title</string>
+    <string name="body">Body</string>
+    <string name="confirm">Confirm</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="title_activity_base">BaseActivity</string>
 
 </resources>

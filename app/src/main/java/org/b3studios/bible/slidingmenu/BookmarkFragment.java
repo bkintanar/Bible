@@ -2,6 +2,7 @@ package org.b3studios.bible.slidingmenu;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -14,6 +15,7 @@ import android.widget.RelativeLayout;
 
 import org.b3studios.bible.R;
 import org.b3studios.bible.SplashScreen;
+import org.b3studios.bible.helper.ThemeHelper;
 import org.b3studios.bible.slidingmenu.adapter.BookmarkListViewAdapter;
 
 import java.util.ArrayList;
@@ -41,13 +43,13 @@ public class BookmarkFragment extends Fragment {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
 
-        if (BibleFragment.settings.getNightMode()) {
-            bookmarkListView.setBackgroundColor(Color.BLACK);
-            bookmarkRelativeLayout.setBackgroundColor(Color.BLACK);
-        } else {
-            bookmarkListView.setBackgroundColor(Color.WHITE);
-            bookmarkRelativeLayout.setBackgroundColor(Color.WHITE);
-        }
+        ThemeHelper themeHelper = new ThemeHelper(getActivity());
+        TypedArray ta =  getActivity().obtainStyledAttributes(themeHelper.getmTheme(), themeHelper.attrs);
+        int backgroundColor = ta.getColor(themeHelper.BACKGROUND_COLOR, Color.BLACK);
+        ta.recycle();
+
+        bookmarkListView.setBackgroundColor(backgroundColor);
+        bookmarkRelativeLayout.setBackgroundColor(backgroundColor);
 
         updateBookmarkTextView();
 
