@@ -43,6 +43,7 @@
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
     <string name="tag_line">µBible - A Bible created for BISDAK!</string>
+
     <string name="no_notes">No Notes Yet</string>
     <string name="menu_insert">Add Note</string>
     <string name="menu_delete">Delete Note</string>
@@ -50,6 +51,5 @@
     <string name="body">Body</string>
     <string name="confirm">Confirm</string>
     <string name="edit_note">Edit Note</string>
-    <string name="title_activity_base">BaseActivity</string>
 
 </resources>
