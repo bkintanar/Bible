@@ -1,12 +1,14 @@
 package org.b3studios.bible.search;
 
 import android.app.Activity;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import org.b3studios.bible.SplashScreen;
 import org.b3studios.bible.helper.DatabaseHelper;
+import org.b3studios.bible.helper.ThemeHelper;
 import org.b3studios.bible.search.adapter.SearchResultAdapter;
 import org.b3studios.bible.slidingmenu.BibleFragment;
 import org.b3studios.bible.slidingmenu.adapter.MainListViewAdapter;
@@ -76,12 +79,19 @@ public class Common {
                                 startSpan = text.indexOf(query, endSpan);
                                 BackgroundColorSpan backColour = new BackgroundColorSpan(Color.YELLOW);
 
+                                ForegroundColorSpan foreColour = new ForegroundColorSpan(Color.BLACK);
+
+
                                 // Need a NEW span object every loop, else it just moves the span
                                 if (startSpan < 0)
                                     break;
                                 endSpan = startSpan + query.length();
                                 spanRange.setSpan(backColour, startSpan, endSpan,
                                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                                if (BibleFragment.settings.nightMode) {
+                                    spanRange.setSpan(foreColour, startSpan, endSpan, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                }
                             }
 
                             // Add Bold text to the verse
@@ -115,7 +125,14 @@ public class Common {
                 SearchResultAdapter arrayListViewAdapter = new SearchResultAdapter(activity, searchResult);
 
                 if (myListView != null) {
+
+                    ThemeHelper themeHelper = new ThemeHelper(activity);
+                    TypedArray ta =  activity.obtainStyledAttributes(themeHelper.getmTheme(), themeHelper.attrs);
+
+                    int backgroundColor = ta.getColor(themeHelper.BACKGROUND_COLOR, Color.BLACK);
+
                     myListView.setAdapter(arrayListViewAdapter);
+                    myListView.setBackgroundColor(backgroundColor);
 
                     myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -127,7 +144,6 @@ public class Common {
 
                                 BibleFragment.settings.setCurrentBook(verse[0]);
                                 BibleFragment.settings.setCurrentChapter(Integer.parseInt(verse[1]));
-//                                BibleFragment.settings.position = Integer.parseInt(verse[2]);
 
                                 BibleFragment.bookTextView.setText(BibleFragment.settings.getCurrentBook() + " " + BibleFragment.settings.getCurrentChapter() + " \u25BC");
 

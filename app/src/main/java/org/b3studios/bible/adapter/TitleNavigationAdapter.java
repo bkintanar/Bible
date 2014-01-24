@@ -2,7 +2,6 @@ package org.b3studios.bible.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +49,7 @@ public class TitleNavigationAdapter extends BaseAdapter {
 
         if (convertView != null) {
             txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
-            txtTitle.setTextColor(Color.WHITE);
+//            txtTitle.setTextColor(Color.WHITE);
         }
 
         txtTitle.setText(spinnerNavItem.get(position).getTitle());
@@ -71,7 +70,7 @@ public class TitleNavigationAdapter extends BaseAdapter {
         }
 
         txtTitle.setText(spinnerNavItem.get(position).getTitle());
-        txtTitle.setTextColor(Color.WHITE);
+//        txtTitle.setTextColor(Color.WHITE);
         return convertView;
     }
 
