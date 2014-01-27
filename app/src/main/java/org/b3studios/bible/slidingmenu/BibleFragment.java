@@ -44,7 +44,7 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 public class BibleFragment extends Fragment implements ActionBar.OnNavigationListener, OnRefreshListener {
 
-    public static int GO_TO_CHAPTER;
+    public static int CHAPTER_TO_DISPLAY;
     // action bar
     protected ActionBar actionBar;
 
@@ -135,11 +135,11 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                     mScrollingDirection = DIRECTION_DOWN;
-                    GO_TO_CHAPTER = NEXT;
+                    CHAPTER_TO_DISPLAY = NEXT;
                 }
                 if (0 == firstVisibleItem) {
                     mScrollingDirection = DIRECTION_UP;
-                    GO_TO_CHAPTER = PREVIOUS;
+                    CHAPTER_TO_DISPLAY = PREVIOUS;
                 }
             }
         });
@@ -232,14 +232,8 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
         // display default view
         goToChapter(0);
 
-        // Create a PullToRefreshAttacher instance
-//        mPullToRefreshAttacher = PullToRefreshAttacher.get(getActivity());
-
         // Retrieve the PullToRefreshLayout from the content view
         mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout);
-
-        // Give the PullToRefreshAttacher to the PullToRefreshLayout, along with a refresh listener.
-//        ptrLayout.setPullToRefreshAttacher(mPullToRefreshAttacher, this);
 
         // Now setup the PullToRefreshLayout
         ActionBarPullToRefresh.from(getActivity())
@@ -519,7 +513,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
     @Override
     public void onRefreshStarted(View view) {
         /**
-         * Simulate Refresh with 4 seconds sleep
+         * Simulate Refresh with 5 seconds sleep
          */
         new AsyncTask<Void, Void, Void>() {
 
@@ -536,7 +530,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
             @Override
             protected void onPostExecute(Void result) {
                 super.onPostExecute(result);
-                goToChapter(GO_TO_CHAPTER);
+                goToChapter(CHAPTER_TO_DISPLAY);
 
                 // Notify PullToRefreshAttacher that the refresh has finished
                 mPullToRefreshLayout.setRefreshComplete();
