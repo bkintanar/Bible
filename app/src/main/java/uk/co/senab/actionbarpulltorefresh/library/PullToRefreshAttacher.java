@@ -74,8 +74,8 @@ public class PullToRefreshAttacher {
     private final int[] mViewLocationResult = new int[2];
     private final Rect mRect = new Rect();
 
-    private final int DIRECTION_UP = 1;
-    private final int DIRECTION_DOWN = -1;
+    private final int PULL_TO_BOTTOM = 1;
+    private final int PULL_TO_TOP = -1;
 
     protected PullToRefreshAttacher(Activity activity, Options options) {
         if (activity == null) {
@@ -281,8 +281,8 @@ public class PullToRefreshAttacher {
                 // We're not currently being dragged so check to see if the user has
                 // scrolled enough
                 if (!mIsBeingDragged && mInitialMotionY > 0f) {
-                    final float yDiff = (BibleFragment.mScrollingDirection == DIRECTION_DOWN) ? mInitialMotionY - y : y - mInitialMotionY;
-                    final float xDiff = (BibleFragment.mScrollingDirection == DIRECTION_DOWN) ? mInitialMotionX - x : x - mInitialMotionX;
+                    final float yDiff = (BibleFragment.mScrollingDirection == PULL_TO_TOP) ? mInitialMotionY - y : y - mInitialMotionY;
+                    final float xDiff = (BibleFragment.mScrollingDirection == PULL_TO_TOP) ? mInitialMotionX - x : x - mInitialMotionX;
 
                     if (yDiff > xDiff && yDiff > mTouchSlop) {
                         mIsBeingDragged = true;
@@ -336,11 +336,11 @@ public class PullToRefreshAttacher {
                 if (delegate != null) {
                     // Now call the delegate, converting the X/Y into the View's co-ordinate system
 
-                    if (BibleFragment.mScrollingDirection == DIRECTION_UP) {
+                    if (BibleFragment.mScrollingDirection == PULL_TO_BOTTOM) {
                         ((DefaultHeaderTransformer) getHeaderTransformer()).setPullText("Swipe down to load previous chapter…");
                         return delegate.isReadyForPull(view, rawX - mRect.left, rawY - mRect.top);
                     }
-                    else if (BibleFragment.mScrollingDirection == DIRECTION_DOWN) {
+                    else if (BibleFragment.mScrollingDirection == PULL_TO_TOP) {
                         ((DefaultHeaderTransformer) getHeaderTransformer()).setPullText("Swipe up to load next chapter…");
                         return delegate.isScrolledToBottom(view);
                     }
@@ -388,10 +388,10 @@ public class PullToRefreshAttacher {
                      * (down). We allow a small scroll up which is the check against
                      * negative touch slop.
                      */
-                    if ((BibleFragment.mScrollingDirection == DIRECTION_DOWN) ? yDx <= mTouchSlop || mLastMotionY == -1f : yDx >= -mTouchSlop) {
+                    if ((BibleFragment.mScrollingDirection == PULL_TO_TOP) ? yDx <= mTouchSlop || mLastMotionY == -1f : yDx >= -mTouchSlop) {
                         onPull(mViewBeingDragged, y);
                         // Only record the y motion if the user has scrolled down.
-                        if ((BibleFragment.mScrollingDirection == DIRECTION_DOWN) ? yDx < 0f || mLastMotionY == -1f : yDx > 0f) {
+                        if ((BibleFragment.mScrollingDirection == PULL_TO_TOP) ? yDx < 0f || mLastMotionY == -1f : yDx > 0f) {
                             mLastMotionY = y;
                         }
                     } else {
@@ -446,7 +446,7 @@ public class PullToRefreshAttacher {
         }
 
         final float pxScrollForRefresh = getScrollNeededForRefresh(view);
-        final float scrollLength = (BibleFragment.mScrollingDirection == DIRECTION_DOWN) ? mPullBeginY - y : y - mPullBeginY;
+        final float scrollLength = (BibleFragment.mScrollingDirection == PULL_TO_TOP) ? mPullBeginY - y : y - mPullBeginY;
 
         if (scrollLength < pxScrollForRefresh) {
             mHeaderTransformer.onPulled(scrollLength / pxScrollForRefresh);

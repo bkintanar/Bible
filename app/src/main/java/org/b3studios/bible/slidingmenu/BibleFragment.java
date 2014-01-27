@@ -71,8 +71,8 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
     public static final String PREFS_NAME = "UserBibleInfo";
 
     public static int mScrollingDirection = 0;
-    public static int DIRECTION_UP = 1;
-    public static int DIRECTION_DOWN = -1;
+    public static int PULL_TO_BOTTOM = 1;
+    public static int PULL_TO_TOP = -1;
 
     String[] sVersion = {"kjv", "adb", "ceb"};
 
@@ -134,11 +134,11 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount) {
-                    mScrollingDirection = DIRECTION_DOWN;
+                    mScrollingDirection = PULL_TO_TOP;
                     CHAPTER_TO_DISPLAY = NEXT;
                 }
-                if (0 == firstVisibleItem) {
-                    mScrollingDirection = DIRECTION_UP;
+                else if (0 == firstVisibleItem) {
+                    mScrollingDirection = PULL_TO_BOTTOM;
                     CHAPTER_TO_DISPLAY = PREVIOUS;
                 }
             }
