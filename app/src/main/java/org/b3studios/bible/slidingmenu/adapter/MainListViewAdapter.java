@@ -9,6 +9,7 @@ import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -157,7 +158,8 @@ public class MainListViewAdapter extends ArrayAdapter<Spannable> {
         for (int i = 0; i < len; i++) {
 
             if (checked.get(i)) {
-                String text = this.getItem(i).toString();
+
+                String text = BibleFragment.mainListView.getItemAtPosition(i).toString();
 
                 String[] split = text.split(" ");
 

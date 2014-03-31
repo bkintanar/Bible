@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Spannable;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -136,8 +137,7 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
                 if (firstVisibleItem + visibleItemCount >= totalItemCount) {
                     mScrollingDirection = PULL_TO_TOP;
                     CHAPTER_TO_DISPLAY = NEXT;
-                }
-                else if (0 == firstVisibleItem) {
+                } else if (0 == firstVisibleItem) {
                     mScrollingDirection = PULL_TO_BOTTOM;
                     CHAPTER_TO_DISPLAY = PREVIOUS;
                 }
@@ -179,6 +179,8 @@ public class BibleFragment extends Fragment implements ActionBar.OnNavigationLis
                         return true;
 
                     case R.id.menu_item_share:
+
+                        Log.i("DEBUG", adapter.getSelectedText());
 
                         String text = adapter.getSelectedText();
 
